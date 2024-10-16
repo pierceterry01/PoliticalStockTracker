@@ -1,3 +1,9 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
 /* Homepage Styling */
 #homepageBody {
     background-color: #262626;
@@ -272,4 +278,101 @@
 
 .back-arrow:hover {
     color: #4A90E2; 
+}
+
+/*Styling for Account Creation Page*/
+.create-account-body {
+    background-color: #262626;
+    display: flex;
+    flex-direction: column;
+    align-items: 0;
+    height: 100vh;
+}
+
+.create-account-header {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    text-align: center; 
+    color: #D9D9D9; 
+    margin: 0; 
+    background-color: #361b59;
+    width: 100%;
+}
+
+.create-account-forms {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #D9D9D9;
+    background-color: #434242;
+    text-align: center;
+    border-radius: 10px;
+    height: 550px;
+    width: 500px;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.create-account-forms h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 26px;
+    margin: 0;
+    padding: 15px;
+    border-radius: 10px 10px 0 0; 
+    margin-top: 15px;
+}
+
+.create-account-form-content {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+}
+
+.create-account-form-group {
+    width: 100%;            
+    text-align: left;      
+    margin-bottom: 30px;   
+}
+
+.create-account-label {
+    display: block;         
+    margin-bottom: 5px;    
+}
+
+.create-account-input {
+    width: 400px;            
+    padding: 10px;         
+    border-radius: 5px;   
+    border: 1px solid #ccc;
+    transition: border-color 0.3s;
+}
+
+.create-account-button {
+    width: 420px; 
+    padding: 10px;
+    border-radius: 5px;
+    border: none; 
+    background-color: #361b59;
+    color: #D9D9D9; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    margin-top: 15px;
+}
+
+.create-account-button:hover {
+    background-color: #512a84; 
+}
+
+.login-link {
+    color: #4A90E2; 
+    text-decoration: none; 
+    margin-top: 10px; 
+    font-size: 14px;
+    display: flex;
+    justify-content: center; 
+    width: 100%; 
+}
+
+.login-link:hover {
+    color: #262626;
 }

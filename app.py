@@ -10,5 +10,9 @@ def home():
 def login():
     return render_template('loginpage.html')
 
+@app.route('/createAccount')
+def createAccount():
+    return render_template('createaccountpage.html')
+    
 if __name__ == '__main__':
     app.run(debug=True)
