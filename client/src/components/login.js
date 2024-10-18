@@ -1,8 +1,16 @@
 import '../styles/styles.css';
 import React from 'react';
-import { Link } from 'react-router-dom';  
+import { Link, useNavigate } from 'react-router-dom';  
 
 function LoginPage() {
+    // TESTING
+    // Circumvents login process and takes user directly to portfolio page
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        event.preventDefault(); 
+        navigate('/portfolio'); 
+    };
     return (
         <div className="login-body">
             <Link to="/" className="back-arrow">&#8592;</Link> 
@@ -13,7 +21,7 @@ function LoginPage() {
                 <h1>Login</h1>
                 <div className="header-line"></div>
                 <div className="login-form-content">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="login-form-group">
                             <label htmlFor="email" className="login-label">Email</label>
                             <input className="login-input" type="text" id="email" name="email" />

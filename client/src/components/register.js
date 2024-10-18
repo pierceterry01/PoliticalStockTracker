@@ -27,6 +27,11 @@ function RegisterPage() {
                             <input className="create-account-input" type="password" id="password" name="password" />
                         </div>
                         <div className="create-account-form-group">
+                            <label htmlFor="confirmPassword" className="create-account-label">Confirm Password</label>
+                            <input className="create-account-input" type="password" id="confirmPassword" name="confirmPassword" />
+
+                        </div>
+                        <div className="create-account-form-group">
                             <input type="submit" value="Create Account" className="create-account-button" />
                         </div>
                         <div className="create-account-form-group">
