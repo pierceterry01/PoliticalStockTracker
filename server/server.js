@@ -169,3 +169,32 @@ app.post('/auth', async (req, res) => {
 app.listen(serverPort, () => {
     console.log(`Backend server listening on port ${serverPort}`)
 });
+
+
+const axios = require('axios');  // Import axios for making api requests
+
+// FINNHUB_API_KEY = EXAMPLEKEY
+
+// Handle the Finnhub API call
+app.get('/api/congressional-trading', async (req, res) => {
+    const { symbol, from, to } = req.query;
+
+    try {
+        const response = await axios.get('https://finnhub.io/api/v1/stock/congressional-trading', {
+            params: {
+                symbol: symbol,
+                from: from,
+                to: to,
+                token: FINNHUB_API_KEY
+            }
+        });
+
+        console.log('Finnhub API response:', response.data);
+
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error fetching data from Finnhub:', error);
+        res.status(500).json({ error: 'Failed to fetch data from Finnhub' });
+    }
+});
+

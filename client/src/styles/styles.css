@@ -217,3 +217,92 @@
 .login-link:hover {
     color: #262626;
 }
+/*Portfolio Styling */
+#portfolioBody {
+    padding: 20px;
+    min-height: 100vh; 
+}
+
+#total-portfolio-value {
+    margin: 20px auto;
+    width: 90%; 
+    max-width: 1200px;
+    color: #D9D9D9; 
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #505050;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    text-align: left;
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; 
+}
+
+/* Table Header Styling */
+th {
+    background-color: #351B59; 
+    color: #D9D9D9; 
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left;
+    padding: 10px; 
+}
+
+/* Table Row and Data Styling */
+td {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #D9D9D9; 
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #333333; 
+}
+
+tr:hover {
+    background-color: #444444; 
+}
+
+td:nth-child(4), 
+td:nth-child(5),
+td:nth-child(3) {
+    text-align: left;
+}
+
+td:nth-child(2), 
+td:nth-child(3) {
+    font-weight: bold;
+}
+
+/* Total Portfolio Value Header */
+#total-portfolio-value h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #0cb400; 
+    font-weight: bold; 
+}
+
+#total-portfolio-value h2 {
+    color: #D9D9D9; 
+}
+
+#total-portfolio-value h2 {
+    color: #0cb400; 
+    font-weight: bold; 
+}
+
+/* Buy and Sell Text Colors */
+.buy {
+    color: green;
+}
+
+.sell {
+    color: red;
+}
