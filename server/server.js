@@ -38,6 +38,62 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+// Assign each stock symbol to their respective sector
+const sectorMapping = {
+    "AAPL": "Information Technology",
+    "MSFT": "Information Technology",
+    "GOOGL": "Communications Services",
+    "TSLA": "Consumer Discretionary",
+    "NVDA": "Information Technology",
+    "AMZN": "Consumer Discretionary",
+    "META": "Communications Services",
+    "NFLX": "Communications Services",
+    "BRK.B": "Financials",
+    "V": "Financials",
+    "JPM": "Financials",
+    "JNJ": "Health Care",
+    "PG": "Consumer Staples",
+    "DIS": "Communications Services",
+    "XOM": "Energy",
+    "KO": "Consumer Staples",
+    "PEP": "Consumer Staples",
+    "BA": "Industrials",
+    "INTC": "Information Technology",
+    "CSCO": "Information Technology",
+    "VZ": "Communications Services",
+    "PFE": "Health Care",
+    "UNH": "Health Care",
+    "WMT": "Consumer Staples",
+    "MA": "Financials",
+    "HD": "Consumer Discretionary",
+    "BABA": "Consumer Discretionary",
+    "PYPL": "Financials",
+    "ORCL": "Information Technology",
+    "ADBE": "Information Technology",
+    "CAT": "Industrials",
+    "BX": "Financials",
+    "LIN": "Materials",
+    "SHW": "Materials",
+    "BSND": "Materials",
+    "MLM": "Materials",
+    "PLD": "Real Estate",
+    "AMT": "Real Estate",
+    "EQIX": "Real Estate",
+    "WELL": "Real Estate",
+    "SPG": "Real Estate",
+    "PSA": "Real Estate",
+    "ETR": "Utilities",
+    "CEG": "Utilities",
+    "GEV": "Utilities",
+    "AWK": "Utilities",
+    "ATO": "Utilities",
+    "TLN": "Utilities",
+    "CVX": "Energy",
+    "COP": "Energy",
+    "TXGE": "Energy",
+    "EOG": "Energy"
+  }
+
 // Validate the registration info.
 const registerValidator = [
     body('user.username', 'Username field cannot be empty.').not().isEmpty(),
@@ -126,8 +182,14 @@ app.post('/auth', async (req, res) => {
     }
 });
 app.get('/api/congressional-trading/symbols', async (req, res) => {
-    const symbols = ['TSLA', 'NVDA', 'AMZN']; // Add symbols to be inserted into the db
+    const symbols = [
+        "AAPL", "MSFT", "GOOGL", "TSLA", "NVDA",
+      ]; // Add symbols to be inserted into the db
     const trades = [];
+    // Stock Sectors
+
+
+  
 
     const fetchTradesForSymbol = async (symbol) => {
         try {
@@ -197,6 +259,48 @@ app.get('/api/trades', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch trades from the database' });
     }
 });
+
+app.get('/api/sector-activity', async (req, res) => {
+    try {
+        // Query database to get symbols (assuming it works)
+        const [trades] = await pool.query('SELECT symbol FROM trades ORDER BY transactionDate DESC LIMIT 100');
+
+        // Object to store sector counts
+        const sectorCounts = {};
+
+        // Loop through the trades and map each symbol to its respective sector
+        trades.forEach(trade => {
+            const sector = sectorMapping[trade.symbol];  // Find the sector for each symbol
+            if (sector) {
+                if (!sectorCounts[sector]) {
+                    sectorCounts[sector] = 0;  // Initialize if not already counted
+                }
+                sectorCounts[sector]++;  // Increment the count for the sector
+            }
+        });
+
+        // Log sector counts to the console for debugging
+        console.log('Sector Counts:', JSON.stringify(sectorCounts, null, 2));
+
+        // Convert sectorCounts to an array for charting purposes
+        const sectorData = Object.keys(sectorCounts).map(sector => ({
+            sector: sector,       // Sector name
+            count: sectorCounts[sector]  // Count of trades in that sector
+        }));
+
+        // Send sector counts data along with sector data in the response
+        res.status(200).json({
+            sectorCounts: sectorCounts,  // Send raw sector counts for debugging
+            sectorData: sectorData      // Send formatted data for charting
+        });
+
+    } catch (error) {
+        console.error('Error fetching sector activity data:', error.message);
+        res.status(500).json({ error: 'Failed to fetch sector activity data' });
+    }
+});
+
+
 
 // Start the server
 app.listen(PORT, () => {
