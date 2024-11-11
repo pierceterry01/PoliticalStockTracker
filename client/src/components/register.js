@@ -1,41 +1,57 @@
-import '../styles/styles.css';
+import '../styles/RegisterPage.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 function RegisterPage() {
     return (
-        <div className="create-account-body">
-            <Link to="/" className="back-arrow">&#8592;</Link> 
-            <header className="create-account-header">
-                <h1>Outsider Trading</h1>
-            </header>
-            <div className="create-account-forms">
-                <h1>Create Account</h1>
-                <div className="header-line"></div>
-                <div className="create-account-form-content">
-                    <form>
-                        <div className="create-account-form-group">
-                            <label htmlFor="username" className="create-account-label">Username</label>
-                            <input className="create-account-input" type="text" id="username" name="username" />
-                        </div>
-                        <div className="create-account-form-group">
-                            <label htmlFor="email" className="create-account-label">Email</label>
-                            <input className="create-account-input" type="text" id="email" name="email" />
-                        </div>
-                        <div className="create-account-form-group">
-                            <label htmlFor="password" className="create-account-label">Password</label>
-                            <input className="create-account-input" type="password" id="password" name="password" />
-                        </div>
-                        <div className="create-account-form-group">
-                            <label htmlFor="confirmPassword" className="create-account-label">Confirm Password</label>
-                            <input className="create-account-input" type="password" id="confirmPassword" name="confirmPassword" />
+        <div className="register-body">
+            {/* Link to go back to the home page */}
+            <Link to="/" className="back-arrow">&#8592; Back to Home</Link>
+            <div className="register-container">
+                {/* Header displaying the app name */}
+                <header className="register-header">
+                    <h1>Outsider Trading</h1>
+                </header>
 
+                {/* Register form content */}
+                <div className="register-form-content">
+                    <h2>Create Your Account</h2>
+                    <div className="header-line"></div> {/* Decorative line under "Create Your Account" */}
+
+                    {/* Registration form */}
+                    <form className="register-form">
+                        {/* Username input field */}
+                        <div className="register-form-group">
+                            <label htmlFor="username" className="register-label">Username</label>
+                            <input className="register-input" type="text" id="username" name="username" required />
                         </div>
-                        <div className="create-account-form-group">
-                            <input type="submit" value="Create Account" className="create-account-button" />
+
+                        {/* Email input field */}
+                        <div className="register-form-group">
+                            <label htmlFor="email" className="register-label">Email</label>
+                            <input className="register-input" type="email" id="email" name="email" required />
                         </div>
-                        <div className="create-account-form-group">
-                            <Link to="/login" className="login-link">Sign in here</Link> 
+
+                        {/* Password input field */}
+                        <div className="register-form-group">
+                            <label htmlFor="password" className="register-label">Password</label>
+                            <input className="register-input" type="password" id="password" name="password" required />
+                        </div>
+
+                        {/* Confirm password input field */}
+                        <div className="register-form-group">
+                            <label htmlFor="confirmPassword" className="register-label">Confirm Password</label>
+                            <input className="register-input" type="password" id="confirmPassword" name="confirmPassword" required />
+                        </div>
+
+                        {/* Submit button */}
+                        <div className="register-form-group">
+                            <input type="submit" value="Create Account" className="register-button" />
+                        </div>
+
+                        {/* Link to go to login page if user has an account */}
+                        <div className="register-form-group">
+                            <p>Already have an account? <Link to="/login" className="login-link">Sign in here</Link></p>
                         </div>
                     </form>
                 </div>
@@ -44,4 +60,4 @@ function RegisterPage() {
     );
 }
 
-export default RegisterPage
+export default RegisterPage;

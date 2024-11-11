@@ -5,6 +5,7 @@ import LoginPage from './components/login';
 import RegisterPage from './components/register';
 import PortfolioPage from './components/portfolio';
 import StockViewPage from './components/stock-view';
+import SettingsPage from './components/settings';
 
 function App() {
   return (
@@ -19,8 +20,8 @@ function App() {
         <Route path="/portfolio" element={<PortfolioPage />} />
 
         <Route path="/stock-view" element={<StockViewPage />} />
-        
 
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </Router>
   );

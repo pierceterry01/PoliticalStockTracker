@@ -1,0 +1,123 @@
+/* General Page Styling */
+.register-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #141414; /* Dark background */
+    color: white; /* White text color for readability */
+}
+
+/* Back arrow styling */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1.2rem;
+    color: #007bff; /* Blue color */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.back-arrow:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+/* Register container styling */
+.register-container {
+    background-color: #222; /* Dark grey background */
+    padding: 40px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    width: 100%;
+    max-width: 400px; /* Limit width for smaller screens */
+    text-align: center;
+}
+
+/* Header styling */
+.register-header h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px; /* Letter spacing for readability */
+    margin-bottom: 30px; /* Spacing below the header */
+}
+
+/* "Create Your Account" section styling */
+.register-form-content h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Decorative line below "Create Your Account" */
+.header-line {
+    width: 60px;
+    height: 3px;
+    background-color: #4B2E83; /* Purple line for brand color */
+    margin: 0 auto 20px auto; /* Centered line with margin below */
+}
+
+/* Form group styling */
+.register-form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align labels to the left */
+    margin-bottom: 20px;
+}
+
+/* Label styling */
+.register-label {
+    font-size: 1rem;
+    color: #ddd; /* Light grey color */
+    margin-bottom: 5px;
+}
+
+/* Input field styling */
+.register-input {
+    padding: 12px;
+    width: 100%; /* Full width of container */
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 2px solid #4B2E83; /* Border color matches brand */
+    background-color: #333; /* Dark background for input */
+    color: white;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus transition */
+}
+
+.register-input:focus {
+    border-color: #6C429A; /* Darker purple on focus */
+    box-shadow: 0 0 10px rgba(108, 66, 154, 0.5); /* Light shadow on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Register button styling */
+.register-button {
+    width: 100%; /* Full width of container */
+    padding: 15px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 25px; /* Rounded button */
+    background-color: #4B2E83; /* Brand color */
+    color: white;
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-button:hover {
+    background-color: #6C429A; /* Darker purple on hover */
+    box-shadow: 0 5px 15px rgba(108, 66, 154, 0.5); /* Shadow effect on hover */
+}
+
+/* Link to sign-in page for existing users */
+.login-link {
+    color: #007bff; /* Blue color */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.login-link:hover {
+    color: #0056b3; /* Darker blue on hover */
+    text-decoration: underline; /* Underline on hover */
+}
