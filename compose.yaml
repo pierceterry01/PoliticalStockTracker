@@ -13,9 +13,17 @@ services:
       context: ./server
     environment:
       NODE_ENV: production
+      DB_HOST: app-db 
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: stock-tracker-db
     ports:
       - 3001:3001
-
+    env_file:
+      - ./server/.env
+    depends_on:
+      - app-db  
+    
   client:
     build:
       context: ./client
@@ -23,10 +31,6 @@ services:
       NODE_ENV: development
     ports: 
       - 3000:3000
-    volumes:
-      - ./client/src:/usr/src/app/src
-      - ./client/public:/usr/src/app/public
-      - ./client/styles:/usr/src/app/styles
 
   app-db:
     container_name: database
@@ -36,13 +40,13 @@ services:
     # secrets:
     #   - db-password
     environment:
-
       #TODO: CHANGE THIS
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: dbpass
+      MYSQL_DATABASE: stock-tracker-db
     ports:
-        -  6603:3306
+        -  3303:3306
     volumes:
         - db-data:/var/lib/mysql
         - ./sql-files:/root/sql-files
