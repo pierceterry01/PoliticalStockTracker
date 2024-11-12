@@ -260,6 +260,8 @@ app.get('/api/trades', async (req, res) => {
     }
 });
 
+// Route to get the sectory activity based on stock symbols
+// (Change eventually to be portfolio specific)
 app.get('/api/sector-activity', async (req, res) => {
     try {
         // Query database to get symbols (assuming it works)
@@ -270,28 +272,25 @@ app.get('/api/sector-activity', async (req, res) => {
 
         // Loop through the trades and map each symbol to its respective sector
         trades.forEach(trade => {
-            const sector = sectorMapping[trade.symbol];  // Find the sector for each symbol
+            const sector = sectorMapping[trade.symbol];
             if (sector) {
                 if (!sectorCounts[sector]) {
-                    sectorCounts[sector] = 0;  // Initialize if not already counted
+                    sectorCounts[sector] = 0;  
                 }
-                sectorCounts[sector]++;  // Increment the count for the sector
+                sectorCounts[sector]++;  
             }
         });
 
-        // Log sector counts to the console for debugging
-        console.log('Sector Counts:', JSON.stringify(sectorCounts, null, 2));
-
         // Convert sectorCounts to an array for charting purposes
         const sectorData = Object.keys(sectorCounts).map(sector => ({
-            sector: sector,       // Sector name
-            count: sectorCounts[sector]  // Count of trades in that sector
+            sector: sector,       
+            count: sectorCounts[sector]  
         }));
 
         // Send sector counts data along with sector data in the response
         res.status(200).json({
-            sectorCounts: sectorCounts,  // Send raw sector counts for debugging
-            sectorData: sectorData      // Send formatted data for charting
+            sectorCounts: sectorCounts,  
+            sectorData: sectorData     
         });
 
     } catch (error) {
@@ -300,8 +299,37 @@ app.get('/api/sector-activity', async (req, res) => {
     }
 });
 
+// Route to get portfolio stock composition based on stock symbols
+// (Change eventually to be portfolio specific)
+app.get('/api/portfolio-composition', async (req, res) => {
+    try {
+        // Query database to get all stock symbols in the portfolio
+        const [trades] = await pool.query('SELECT symbol FROM trades ORDER BY transactionDate DESC LIMIT 100');
 
+        // Object to store symbol counts
+        const symbolCounts = {};
 
+        // Count each symbol
+        trades.forEach(trade => {
+            const symbol = trade.symbol;
+            if (!symbolCounts[symbol]) {
+                symbolCounts[symbol] = 0;  
+            }
+            symbolCounts[symbol]++;  
+        });
+
+        // Format the data as an array for the frontend
+        const data = Object.keys(symbolCounts).map(symbol => ({
+            symbol,
+            count: symbolCounts[symbol],
+        }));
+
+        res.json(data);
+    } catch (error) {
+        console.error("Error fetching portfolio composition data:", error);
+        res.status(500).json({ error: "An error occurred while fetching portfolio composition data." });
+    }
+});
 // Start the server
 app.listen(PORT, () => {
     console.log(`Backend server listening on port ${PORT}`);

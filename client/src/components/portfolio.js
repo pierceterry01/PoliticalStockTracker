@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/styles.css";
-import SectorActivityChart from "../charts/sectorActivity"; // Import the sector chart
+import SectorActivityChart from "../charts/sectorActivity"; 
+import PortfolioCompositionChart from "../charts/portfolioComposition";
 
 function PortfolioPage() {
-  const [trades, setTrades] = useState([]); // State for trades
-  const [sectorData, setSectorData] = useState([]); // State for sector data
+  const [trades, setTrades] = useState([]); 
+  const [sectorData, setSectorData] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [fetchingTrades, setFetchingTrades] = useState(false);
+  const [portfolioData, setPortfolioStockComp] = useState([]);
 
   // Fetch all trades from the backend
   const fetchAllTrades = async () => {
@@ -46,7 +48,7 @@ function PortfolioPage() {
     try {
       const response = await axios.get("http://localhost:3001/api/sector-activity");
       if (response.status === 200 && response.data) {
-        setSectorData(response.data.sectorData); // Update sector data state
+        setSectorData(response.data.sectorData); 
       }
     } catch (error) {
       console.error("Error fetching sector activity data:", error);
@@ -55,9 +57,22 @@ function PortfolioPage() {
     }
   };
 
+   // Fetch Portfolio Stock Composition data from the backend
+   const fetchPortfolioComposition = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/api/portfolio-composition");
+      if (response.status === 200 && response.data) {
+        setPortfolioStockComp(response.data); // Set the portfolio data state
+      }
+    } catch (error) {
+      console.error("Error fetching portfolio composition data:", error);
+    }
+  };
+
   useEffect(() => {
     fetchAllTrades();
-    fetchSectorActivity(); // Fetch sector activity when component mounts
+    fetchSectorActivity();
+    fetchPortfolioComposition();
   }, []);
 
   return (
@@ -126,9 +141,17 @@ function PortfolioPage() {
         <div id="sectorActivity">
           <h3>Sector Activity</h3>
           {sectorData.length > 0 ? (
-            <SectorActivityChart data={sectorData} /> // Donut Chart for sector activity
+            <SectorActivityChart data={sectorData} /> 
           ) : (
             <p>No sector activity data available.</p>
+          )}
+        </div>
+        <div id="portfolioComposition">
+          <h3>Portfolio Composition</h3>
+          {portfolioData.length > 0 ? (
+            <PortfolioCompositionChart data={portfolioData} /> 
+          ) : (
+            <p>No portfolio composition data available.</p>
           )}
         </div>
       </div>
