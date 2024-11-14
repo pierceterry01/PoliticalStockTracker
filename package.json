@@ -5,6 +5,7 @@
     "@radix-ui/react-dropdown-menu": "^2.1.2",
     "@shadcn/ui": "^0.0.4",
     "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "shadcn-ui": "^0.9.2"
   },
