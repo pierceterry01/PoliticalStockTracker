@@ -5,6 +5,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const mysql = require('mysql2/promise');
 const axios = require('axios');
+const cron = require('node-cron');
 
 const app = express();
 
@@ -125,9 +126,34 @@ app.post('/auth', async (req, res) => {
         res.status(401).send();
     }
 });
-app.get('/api/congressional-trading/symbols', async (req, res) => {
-    const symbols = ['TSLA', 'NVDA', 'AMZN']; // Add symbols to be inserted into the db
-    const trades = [];
+
+const fetchTradesAndUpdateDB = async () => {
+    const symbols = [
+        'TSLA', 'NVDA', 'AMZN', 'AAPL', 'MSFT', 'NFLX', 'DIS', 'PYPL',
+        'GOOGL', 'META', 'BABA', 'JPM', 'V', 'MA', 'UNH', 'HD',
+        'PG', 'VZ', 'KO', 'PEP', 'CSCO', 'INTC', 'XOM', 'BA',
+        'GE', 'WMT', 'BAC', 'C', 'GS', 'MRK', 'T', 'IBM',
+        'PFE', 'ABT', 'CVX', 'MMM', 'HON', 'CAT', 'NKE', 'ORCL',
+        'ADBE', 'AMD', 'SBUX', 'MCD', 'LLY', 'CRM', 'WFC', 'COST',
+        'CMCSA', 'QCOM', 'UPS', 'RTX', 'BMY', 'SPGI', 'AVGO', 'TXN',
+        'MO', 'MDLZ', 'NEE', 'LIN', 'LOW', 'BK', 'BLK', 'AXP',
+        'DUK', 'AMT', 'PLD', 'TGT', 'CCI', 'FDX', 'AEP', 'GILD',
+        'GM', 'F', 'EBAY', 'ROKU', 'ZM', 'SNOW', 'SQ', 'SHOP',
+        'TWLO', 'FIS', 'FISV', 'HPE', 'MU', 'SIVB', 'DOCU', 'ATVI',
+        'TTD', 'MTCH', 'U', 'RBLX', 'PINS', 'ETSY', 'LYFT', 'UBER',
+        'DAL', 'UAL', 'RCL', 'MAR', 'NCLH', 'WYNN', 'MGM', 'BRK.B',
+        'JNJ', 'TMO', 'MS', 'USB', 'AMGN', 'CVS', 'ABBV', 'MDT',
+        'DHR', 'ISRG', 'SYK', 'ZTS', 'CI', 'ANTM', 'HUM', 'ELV',
+        'MOH', 'CNC', 'UNP', 'CSX', 'NSC', 'LMT', 'GD', 'NOC',
+        'ITW', 'EMR', 'ETN', 'ROK', 'DOV', 'PH', 'CMI', 'PCAR',
+        'DE', 'PWR', 'JCI', 'XYL', 'NUE', 'STLD', 'CLF', 'FCX',
+        'NEM', 'GOLD', 'FNV', 'WPM', 'RGLD', 'AEM', 'NTR', 'MOS',
+        'CF', 'ADM', 'BG', 'TSN', 'HRL', 'CAG', 'K', 'GIS',
+        'CPB', 'SJM', 'HSY', 'MKC', 'CHD', 'CL', 'KMB', 'EL',
+        'CLX', 'UL', 'RBGLY', 'NSRGY', 'MNST', 'KDP', 'STZ', 'BF.B',
+        'DEO', 'BUD', 'TAP', 'SAM', 'PM', 'BTI', 'IMBBY', 'UVV'
+    ];
+        const trades = [];
 
     const fetchTradesForSymbol = async (symbol) => {
         try {
@@ -135,10 +161,11 @@ app.get('/api/congressional-trading/symbols', async (req, res) => {
                 params: {
                     symbol,
                     token: FINNHUB_API_KEY,
-                    from: '2024-01-01',
+                    from: '2020-01-01',
                     to: '2024-12-31'
                 }
             });
+            console.log(`Data fetched for ${symbol}:`, response.data);
             return response.data.data;
         } catch (error) {
             console.error(`Error fetching trades for ${symbol}:`, error.message);
@@ -179,8 +206,18 @@ app.get('/api/congressional-trading/symbols', async (req, res) => {
             console.error("Error inserting transaction:", insertError.message);
         }
     }
+};
 
+// Route to trigger fetching trades manually
+app.get('/api/congressional-trading/symbols', async (req, res) => {
+    await fetchTradesAndUpdateDB();
     res.status(200).send('Trades for all symbols added to the database.');
+});
+
+// Schedule the fetch to run every 5 minutes
+cron.schedule('*/5 * * * *', async () => {
+    console.log("Running scheduled task to fetch trades...");
+    await fetchTradesAndUpdateDB();
 });
 
 // Route to retrieve the latest 100 trades from the database
@@ -190,10 +227,31 @@ app.get('/api/trades', async (req, res) => {
 
         const [results] = await pool.query('SELECT * FROM trades ORDER BY transactionDate DESC LIMIT 100');
 
-        console.log("Trades fetched from the database:", results);
         res.status(200).json(results);
     } catch (error) {
         console.error('Error fetching trades:', error.message);
+        res.status(500).json({ error: 'Failed to fetch trades from the database' });
+    }
+});
+
+// Route to retrieve trades for a specific politician
+app.get('/api/trades/politician', async (req, res) => {
+    const { politicianName } = req.query;
+
+    if (!politicianName) {
+        return res.status(400).json({ error: 'Politician name is required' });
+    }
+
+    try {
+        console.log(`Fetching trades for politician: ${politicianName}`);
+        const [results] = await pool.query(
+            'SELECT * FROM trades WHERE politicianName = ? ORDER BY transactionDate DESC LIMIT 100',
+            [politicianName]
+        );
+        console.log("Trades fetched from the database:", results);
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error fetching trades for politician:', error.message);
         res.status(500).json({ error: 'Failed to fetch trades from the database' });
     }
 });

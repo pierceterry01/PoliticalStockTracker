@@ -6,33 +6,26 @@ FROM node:${NODE_VERSION}-alpine
 # Use production node environment by default
 ENV NODE_ENV production
 
-
 WORKDIR /usr/src/app
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+# Copy package files first, to install dependencies
+COPY package*.json ./
 
-# Install nodemon and @shadcn/ui globally with root access
-RUN npm install -g nodemon && npm install @shadcn/ui
+# Install dependencies
+RUN npm install
 
-RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
+# Install nodemon and @shadcn/ui globally
+RUN npm install -g nodemon @shadcn/ui
 
-# Run the application as a non-root user.
-USER node
+RUN mkdir -p /usr/src/app/node_modules/.cache && chmod -R 777 /usr/src/app/node_modules/.cache
 
 # Copy the rest of the source files into the image.
-COPY . .
+COPY --chown=node:node . .
 
 # Expose the port that the application listens on
 EXPOSE 3000
 
-# Switch back to non-root user after fixing permissions
+# Switch to non-root user after fixing permissions
 USER node
 
 # Run the application

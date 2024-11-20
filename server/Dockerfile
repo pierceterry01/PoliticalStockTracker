@@ -1,14 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
-ARG NODE_VERSION=22.9.0
-
-# Use Debian-based Node image instead of Alpine to avoid compatibility issues with native modules
+ARG NODE_VERSION=16
 FROM node:${NODE_VERSION}
 
 # Use production node environment by default.
@@ -20,12 +12,12 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --only=production
+RUN npm install
 
-# Rebuild bcrypt to ensure compatibility with the current environment
-RUN npm rebuild bcrypt --build-from-source
+# Rebuild bcryptjs to ensure compatibility with the current environment
+RUN npm rebuild bcryptjs --build-from-source
 
-# Install nodemon for hot-reloading (only needed for development)
+# Install nodemon globally (only needed for development)
 RUN npm install -g nodemon
 
 # Copy the rest of the source files into the image

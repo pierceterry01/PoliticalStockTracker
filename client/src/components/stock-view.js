@@ -27,7 +27,7 @@ import sarahHuckabeeSanders from '../assets/politician-images/sarah-huckabee-san
 import gretchenWhitmer from '../assets/politician-images/gretchen-whitmer.jpg';
 import rickScott from '../assets/politician-images/rick-scott.jpg';
 
-// Sample data with 25 politicians
+// Updated stockData array with the top 10 traders added
 const stockData = [
     { politician: 'Nancy Pelosi', party: 'Democrat', change: '-5%', copiers: 120, lastTraded: '2 days ago', imgSrc: nancyPelosi },
     { politician: 'Mitch McConnell', party: 'Republican', change: '+7%', copiers: 300, lastTraded: '5 hours ago', imgSrc: mitchMcConnell },
@@ -53,8 +53,17 @@ const stockData = [
     { politician: 'Joe Biden', party: 'Democrat', change: '-8%', copiers: 260, lastTraded: '4 weeks ago', imgSrc: joeBiden },
     { politician: 'Sarah Huckabee Sanders', party: 'Republican', change: '+7%', copiers: 130, lastTraded: '5 days ago', imgSrc: sarahHuckabeeSanders },
     { politician: 'Gretchen Whitmer', party: 'Democrat', change: '-4%', copiers: 180, lastTraded: '2 weeks ago', imgSrc: gretchenWhitmer },
-    { politician: 'Rick Scott', party: 'Republican', change: '+5%', copiers: 220, lastTraded: '1 day ago', imgSrc: rickScott },
+    { politician: 'Thomas H Tuberville', party: 'Republican', change: '+5%', copiers: 399, lastTraded: '3 days ago', imgSrc: 'path/to/thomas-h-tuberville.jpg' },
+    { politician: 'Rohit Khanna', party: 'Democrat', change: '+6%', copiers: 170, lastTraded: '2 days ago', imgSrc: 'path/to/rohit-khanna.jpg' },
+    { politician: 'David Roe', party: 'Republican', change: '+4%', copiers: 168, lastTraded: '5 days ago', imgSrc: 'path/to/david-roe.jpg' },
+    { politician: 'Donald Sternoff Beyer', party: 'Democrat', change: '+3%', copiers: 115, lastTraded: '4 days ago', imgSrc: 'path/to/donald-sternoff-beyer.jpg' },
+    { politician: 'Earl Blumenauer', party: 'Democrat', change: '+4%', copiers: 114, lastTraded: '2 days ago', imgSrc: 'path/to/earl-blumenauer.jpg' },
+    { politician: 'Markwayne Mullin', party: 'Republican', change: '-2%', copiers: 98, lastTraded: '3 days ago', imgSrc: 'path/to/markwayne-mullin.jpg' },
+    { politician: 'Diana Harshbarger', party: 'Republican', change: '+7%', copiers: 96, lastTraded: '6 hours ago', imgSrc: 'path/to/diana-harshbarger.jpg' },
+    { politician: 'Shelley M Capito', party: 'Republican', change: '-1%', copiers: 95, lastTraded: '1 day ago', imgSrc: 'path/to/shelley-m-capito.jpg' },
+    { politician: 'Dean Phillips', party: 'Democrat', change: '+6%', copiers: 93, lastTraded: '5 days ago', imgSrc: 'path/to/dean-phillips.jpg' }
 ];
+
 
 // Sorting helper functions
 const sortBy = {
@@ -113,10 +122,12 @@ function StockViewPage() {
                         {sortedData.map((row, index) => (
                             <tr key={index}>
                                 <td>
-                                    <img src={row.imgSrc} alt={row.politician} className="politician-image" />
-                                    <span className={`politician-name ${row.party.toLowerCase()}`}>
-                                        {row.politician}
-                                    </span>
+                                    <Link to={`/portfolio?politicianName=${encodeURIComponent(row.politician)}`}>
+                                            <img src={row.imgSrc} alt={row.politician} className="politician-image" />
+                                            <span className={`politician-name ${row.party.toLowerCase()}`}>
+                                                {row.politician}
+                                        </span>
+                                    </Link>
                                 </td>
                                 <td className="percent-change">{row.change}</td>
                                 <td>{row.copiers}</td>
