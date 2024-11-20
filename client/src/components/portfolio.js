@@ -1,70 +1,78 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/PortfolioPage.css";
 
 function PortfolioPage() {
-  const [data, setData] = useState([]);
-  const [sortedData, setSortedData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: "", direction: "ascending" });
+  const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalPortfolioValue, setTotalPortfolioValue] = useState(0); // Total value of the portfolio
+  const [stockSummary, setStockSummary] = useState([]); // Placeholder for stock summary data
+  const [fetchingTrades, setFetchingTrades] = useState(false); // State for fetching trades
+  const politician = "John Doe"; // Placeholder for the politician's name
 
-  // Function to fetch data from the backend API
-  const fetchData = async () => {
+  // Function to fetch all trades
+  const fetchAllTrades = async () => {
     try {
       setLoading(true);
-      // Replace the URL with your API endpoint
-      const response = await axios.get("http://localhost:3001/api/portfolio");
+      const response = await axios.get("http://localhost:3001/api/trades");
       if (response.status === 200 && response.data) {
-        setData(response.data);
-        setSortedData(response.data);
+        setTrades(response.data);
       } else {
-        setData([]);
-        setSortedData([]);
+        setTrades([]);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setData([]);
-      setSortedData([]);
+      console.error("Error fetching trades:", error);
+      setTrades([]);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // Function to fetch trades for a symbol from the backend API
+  const fetchTradesForSymbol = async (symbol, fromDate, toDate) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/api/congressional-trading`,
+        {
+          params: {
+            symbol: symbol,
+            from: fromDate,
+            to: toDate,
+          },
+        }
+      );
 
-  // Sorting function
-  const handleSort = (key) => {
-    let direction = "ascending";
-    if (
-      sortConfig.key === key &&
-      sortConfig.direction === "ascending"
-    ) {
-      direction = "descending";
-    }
-
-    const sortedArray = [...sortedData].sort((a, b) => {
-      if (key === "politician") {
-        if (a[key] < b[key]) return direction === "ascending" ? -1 : 1;
-        if (a[key] > b[key]) return direction === "ascending" ? 1 : -1;
-        return 0;
-      } else if (key === "lastTraded") {
-        const dateA = new Date(a[key]);
-        const dateB = new Date(b[key]);
-        return direction === "ascending"
-          ? dateA - dateB
-          : dateB - dateA;
+      if (response.status === 200 && response.data && response.data.data) {
+        return response.data.data;
       } else {
-        return direction === "ascending"
-          ? b[key] - a[key]
-          : a[key] - b[key];
+        return [];
       }
-    });
-
-    setSortedData(sortedArray);
-    setSortConfig({ key, direction });
+    } catch (error) {
+      console.error(`Error fetching trades for ${symbol}:`, error);
+      return [];
+    }
   };
+
+  // Function to fetch trades for multiple symbols
+  const fetchTradesForSymbols = async () => {
+    try {
+      setFetchingTrades(true);
+      const response = await axios.get(
+        "http://localhost:3001/api/congressional-trading/symbols"
+      );
+      console.log("Fetch all symbols trades response:", response.data);
+      fetchAllTrades(); // Re-fetch all trades after insertion
+    } catch (error) {
+      console.error("Error fetching trades for symbols:", error);
+    } finally {
+      setFetchingTrades(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllTrades();
+  }, []);
 
   return (
     <div id="portfolioBody">
@@ -72,51 +80,105 @@ function PortfolioPage() {
         Back to Home
       </a>
       <header id="portfolioHeader">
-        <h1>Politicians' Stock Portfolio</h1>
+        <h1>{politician}'s Stock Portfolio</h1>
       </header>
 
-      {/* Trades Details Table */}
-      <div id="trades">
-        <h3>Portfolio Overview</h3>
+      {/* Portfolio summary */}
+      <div id="stock-summary">
         {loading ? (
-          <div>Loading data...</div>
-        ) : sortedData.length > 0 ? (
-          <table id="tradesTable">
+          <div>Loading stock summary...</div>
+        ) : stockSummary.length > 0 ? (
+          <table id="stockSummaryTable">
             <thead>
               <tr>
-                <th onClick={() => handleSort("politician")}>Politician</th>
-                <th onClick={() => handleSort("changeDollar")}>Change $</th>
-                <th onClick={() => handleSort("changePercent")}>Change %</th>
-                <th onClick={() => handleSort("copiers")}>Copiers</th>
-                <th onClick={() => handleSort("lastTraded")}>Last Traded</th>
+                <th>Stock Symbol</th>
+                <th>Estimated Total</th>
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((item, index) => (
+              {stockSummary.map((stock, index) => (
                 <tr key={index}>
-                  <td>{item.politician}</td>
+                  <td>{stock.symbol}</td>
                   <td>
                     $
-                    {item.changeDollar.toLocaleString(undefined, {
+                    {stock.estimatedTotal.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
                   </td>
-                  <td
-                    className={
-                      item.changePercent >= 0 ? "positive" : "negative"
-                    }
-                  >
-                    {item.changePercent.toFixed(2)}%
-                  </td>
-                  <td>{item.copiers}</td>
-                  <td>{new Date(item.lastTraded).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <div>No data available.</div>
+          <div>No stocks found for {politician}.</div>
+        )}
+      </div>
+
+      {/* Display total portfolio value */}
+      <div id="total-portfolio-value">
+        <h2 style={{ color: "green" }}>
+          Total Portfolio Value: $
+          {totalPortfolioValue.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </h2>
+      </div>
+
+      {/* Trades Details Table */}
+      <div id="trades">
+        <h3>All Trades</h3>
+        {loading ? (
+          <div>Loading trades...</div>
+        ) : trades.length > 0 ? (
+          <table id="tradesTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Symbol</th>
+                <th>Asset Name</th>
+                <th>Type</th>
+                <th>Amount Range</th>
+                <th>Stock Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {trades.map((trade, index) => (
+                <tr key={index}>
+                  <td>{trade.transactionDate}</td>
+                  <td>{trade.symbol}</td>
+                  <td>{trade.assetName}</td>
+                  <td
+                    className={
+                      ["buy", "purchase"].includes(
+                        trade.transactionType.toLowerCase()
+                      )
+                        ? "buy"
+                        : "sell"
+                    }
+                  >
+                    {trade.transactionType}
+                  </td>
+                  <td>
+                    $
+                    {trade.amountFrom.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    - $
+                    {trade.amountTo.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>$0.00</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div>No trades found for {politician}.</div>
         )}
       </div>
     </div>

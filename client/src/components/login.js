@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
     // TESTING
-    // Circumvents login process and takes user directly to portfolio page
+    // Circumvents login process and takes user directly to stock-view
     const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault(); 
-        navigate('/portfolio'); 
+        navigate('/stock-view'); 
     };
     return (
         <div className="login-body">
