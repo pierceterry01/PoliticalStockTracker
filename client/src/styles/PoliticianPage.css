@@ -1,0 +1,178 @@
+/* PoliticianPage.css */
+
+/* General Page Styling */
+.politician-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #141414;
+    color: white;
+  }
+  
+  /* Content Section */
+  .politician-content {
+    padding: 40px 60px;
+    flex-grow: 1;
+  }
+  
+  .back-button {
+    color: #007bff;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+  }
+  
+  .back-button:hover {
+    text-decoration: underline;
+  }
+  
+  /* Politician Info Section */
+  .politician-info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .politician-details {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Adjusted Image Size */
+  .politician-image {
+    width: 320px; /* Adjusted size */
+    height: 320px; /* Adjusted size */
+    object-fit: cover;
+    border-radius: 50%;
+    border: 6px solid #4B2E83;
+    margin-right: 40px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+  }
+  
+  .politician-details-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .politician-details-text h1 {
+    font-size: 2.8rem; /* Adjusted font size */
+    margin-bottom: 10px;
+  }
+  
+  .politician-party {
+    font-size: 1.4rem; /* Adjusted font size */
+    margin-bottom: 20px;
+    color: #ccc;
+  }
+  
+  .follow-button {
+    padding: 12px 24px;
+    background: linear-gradient(45deg, #6C429A, #4B2E83);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(108, 66, 154, 0.5);
+  }
+  
+  .follow-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(108, 66, 154, 0.7);
+  }
+  
+  .follow-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(108, 66, 154, 0.5);
+  }
+  
+  .follow-button.following {
+    background: linear-gradient(45deg, #FF5F6D, #FFC371);
+  }
+  
+  .follow-button.following:hover {
+    box-shadow: 0 6px 15px rgba(255, 95, 109, 0.7);
+  }
+  
+  /* Politician Stats */
+  .politician-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .stat-label {
+    display: block;
+    font-size: 1.4rem;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .stat-value.positive {
+    color: #28a745;
+  }
+  
+  .stat-value.negative {
+    color: #dc3545;
+  }
+  
+  /* Data Visualization Placeholder */
+  .data-visualization-placeholder {
+    margin-top: 70px;
+    padding: 70px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .data-visualization-placeholder p {
+    font-size: 1.7rem;
+    color: #ccc;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .politician-content {
+      padding: 20px;
+    }
+  
+    .politician-details {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .politician-image {
+      margin-right: 0;
+      margin-bottom: 20px;
+      width: 250px;
+      height: 250px;
+    }
+  
+    .politician-details-text {
+      align-items: center;
+    }
+  
+    .politician-details-text h1 {
+      font-size: 2.4rem;
+      text-align: center;
+    }
+  
+    .politician-party {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  }
+  
