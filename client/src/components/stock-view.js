@@ -10,12 +10,44 @@ function StockViewPage() {
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchQuery, setSearchQuery] = useState('');
 
-    // Handle sorting based on the column header clicked
-    const handleSort = (key) => {
-        const sorted = [...sortedData].sort(sortBy[key]);
-        setSortKey(key);
-        setSortedData(sorted);
-    };
+  // Handle sorting based on the column header clicked
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortKey === key && sortDirection === 'asc') {
+      direction = 'desc';
+    }
+    setSortKey(key);
+    setSortDirection(direction);
+  };
+
+  // Handle search input change
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+  };
+
+  // Update displayData whenever stockData, searchQuery, sortKey, or sortDirection changes
+  useEffect(() => {
+    let filteredData = stockData.filter((item) =>
+      item.politician.toLowerCase().includes(searchQuery)
+    );
+
+    if (sortKey) {
+      filteredData.sort((a, b) => {
+        let res;
+        if (sortKey === 'politician') {
+          res = a.politician.localeCompare(b.politician);
+        } else if (sortKey === 'lastTraded') {
+          res = new Date(a.lastTraded) - new Date(b.lastTraded);
+        } else {
+          res = a[sortKey] - b[sortKey];
+        }
+        return sortDirection === 'asc' ? res : -res;
+      });
+    }
+
+    setDisplayData(filteredData);
+  }, [searchQuery, sortKey, sortDirection]);
 
   return (
     <div className="stock-view-page">
