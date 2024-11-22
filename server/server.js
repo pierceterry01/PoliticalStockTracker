@@ -39,6 +39,44 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+const sectorMapping = {
+    "AAPL": "Information Technology", "MSFT": "Information Technology", "NVDA": "Information Technology",
+    "CSCO": "Information Technology", "INTC": "Information Technology", "ORCL": "Information Technology",
+    "ADBE": "Information Technology", "AMD": "Information Technology", "IBM": "Information Technology",
+    "QCOM": "Information Technology", "TXN": "Information Technology", "AVGO": "Information Technology",
+    "HPE": "Information Technology", "MU": "Information Technology", "SNOW": "Information Technology",
+    "SHOP": "Information Technology", "TWLO": "Information Technology", "DOCU": "Information Technology",
+    "TTD": "Information Technology", "U": "Information Technology", "PINS": "Information Technology",
+    "TSLA": "Consumer Discretionary", "AMZN": "Consumer Discretionary", "NFLX": "Consumer Discretionary",
+    "DIS": "Consumer Discretionary", "BABA": "Consumer Discretionary", "HD": "Consumer Discretionary",
+    "NKE": "Consumer Discretionary", "SBUX": "Consumer Discretionary", "MCD": "Consumer Discretionary",
+    "TGT": "Consumer Discretionary", "RCL": "Consumer Discretionary", "MAR": "Consumer Discretionary",
+    "NCLH": "Consumer Discretionary", "WYNN": "Consumer Discretionary", "MGM": "Consumer Discretionary",
+    "GM": "Consumer Discretionary", "F": "Consumer Discretionary", "EBAY": "Consumer Discretionary",
+    "ETSY": "Consumer Discretionary", "LYFT": "Consumer Discretionary", "UBER": "Consumer Discretionary",
+    "DAL": "Consumer Discretionary", "UAL": "Consumer Discretionary",
+    "GOOGL": "Communications Services", "META": "Communications Services", "VZ": "Communications Services",
+    "CMCSA": "Communications Services", "ATVI": "Communications Services", "RBLX": "Communications Services",
+    "ROKU": "Communications Services", "ZM": "Communications Services",
+    "JPM": "Financials", "V": "Financials", "MA": "Financials", "BRK.B": "Financials", "BAC": "Financials",
+    "C": "Financials", "GS": "Financials", "MS": "Financials", "USB": "Financials", "BLK": "Financials",
+    "BK": "Financials", "AXP": "Financials", "SPGI": "Financials",
+    "UNH": "Health Care", "JNJ": "Health Care", "PFE": "Health Care", "MRK": "Health Care", "ABT": "Health Care",
+    "CVS": "Health Care", "ABBV": "Health Care", "MDT": "Health Care", "DHR": "Health Care", "ISRG": "Health Care",
+    "SYK": "Health Care", "ZTS": "Health Care", "LLY": "Health Care", "CI": "Health Care", "ANTM": "Health Care",
+    "HUM": "Health Care", "ELV": "Health Care", "MOH": "Health Care", "CNC": "Health Care", "GILD": "Health Care",
+    "PG": "Consumer Staples", "KO": "Consumer Staples", "PEP": "Consumer Staples", "WMT": "Consumer Staples",
+    "MDLZ": "Consumer Staples", "TAP": "Consumer Staples", "GIS": "Consumer Staples", "CPB": "Consumer Staples",
+    "K": "Consumer Staples", "SJM": "Consumer Staples", "HSY": "Consumer Staples", "MKC": "Consumer Staples",
+    "CL": "Consumer Staples", "CLX": "Consumer Staples", "STZ": "Consumer Staples", "MNST": "Consumer Staples",
+    "XOM": "Energy", "CVX": "Energy", "NEE": "Energy",
+    "BA": "Industrials", "CAT": "Industrials", "GE": "Industrials", "MMM": "Industrials", "HON": "Industrials",
+    "RTX": "Industrials", "UPS": "Industrials",
+    "LIN": "Materials",
+    "DUK": "Utilities", "AEP": "Utilities",
+    "AMT": "Real Estate", "PLD": "Real Estate"
+};
+
 // Validate the registration info.
 const registerValidator = [
     body('user.username', 'Username field cannot be empty.').not().isEmpty(),
@@ -255,6 +293,176 @@ app.get('/api/trades/politician', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch trades from the database' });
     }
 });
+
+// Data Visualization
+// Route to get portfolio stock composition 
+// Counts the stock symbols for the given poltician
+app.get('/api/portfolio-composition', async (req, res) => {
+    const { politicianName } = req.query;
+
+    try {
+        // Query trades that adjusts for the selected politician page
+        const [trades] = await pool.query(`
+            SELECT symbol 
+            FROM trades
+            WHERE politicianName = ?
+            ORDER BY transactionDate DESC 
+        `, [politicianName]);
+
+        // Object to store the symbol counts
+        const symbolCounts = {};
+
+        // Count each symbol that's retrieved
+        trades.forEach((trade) => {
+            const symbol = trade.symbol;
+            if (!symbolCounts[symbol]) {
+                symbolCounts[symbol] = 0;
+            }
+            symbolCounts[symbol]++;
+        });
+
+        // Convert the count object to an array 
+        // sort by the count in descending order
+        const sortedData = Object.keys(symbolCounts)
+            .map((symbol) => ({
+                symbol,
+                count: symbolCounts[symbol],
+            }))
+            .sort((a, b) => b.count - a.count); 
+
+        // Get the top 5 stock symbols with the most trades
+        const topSymbols = sortedData.slice(0, 5);
+
+        res.json(topSymbols);
+    } catch (error) {
+        res.status(500).json({ error: "An error has occurred when attempting to retrieve the portfolio stock composition data." });
+    }
+});
+
+// Route to obtain the sector activity data
+// Each symbol is assigned to their respective stock sector using the sectorMapping array
+app.get('/api/sector-activity', async (req, res) => {
+    const { politicianName } = req.query;
+    try {
+        const [trades] = await pool.query(`
+            SELECT symbol 
+            FROM trades
+            WHERE politicianName = ?
+            ORDER BY transactionDate DESC 
+        `, [politicianName]);
+
+        // Object to store the sector counts
+        const sectorCounts = {};
+
+        // Loop through the retrieved trades and map each symbol to its respective sector
+        trades.forEach(trade => {
+            const sector = sectorMapping[trade.symbol];
+            if (sector) {
+                if (!sectorCounts[sector]) {
+                    sectorCounts[sector] = 0;  
+                }
+                sectorCounts[sector]++;  
+            }
+        });
+
+        // Reformat sectorCounts for charting
+        const sectorData = Object.keys(sectorCounts).map(sector => ({
+            sector: sector,
+            count: sectorCounts[sector]
+        }));
+
+        // Get the top 5 sectors
+        const topSectors = sectorData.sort((a, b) => b.count - a.count).slice(0, 5);
+
+        res.status(200).json({
+            sectorCounts: sectorCounts,  
+            sectorData: topSectors     
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: 'An error has occurred when attempting to retrieve the sector activity data' });
+    }
+});
+
+// Route to obtain the trade volume data for the last 4 years, grouped by quarters
+app.get('/api/trade-volume', async (req, res) => {
+    try {
+      const { politicianName } = req.query;
+  
+      // Get the current date and get the date from 4 years ago
+      const endDate = moment().format('YYYY-MM-DD');
+      const startDate = moment().subtract(4, 'years').startOf('year').format('YYYY-MM-DD');
+  
+      // Generate an array of quarters for the last 4 years (2021-2024, 4 quarters per year)
+      const allQuarters = [];
+      for (let year = moment().year(); year > moment().subtract(4, 'years').year(); year--) {
+        for (let quarter = 1; quarter <= 4; quarter++) {
+          allQuarters.push(`${year}-Q${quarter}`);
+        }
+      }
+  
+      // Query trades
+      const [trades] = await pool.query(
+        `SELECT transactionDate, transactionType, amountFrom, amountTo
+         FROM trades
+         WHERE politicianName = ? AND
+         transactionDate BETWEEN ? AND ?
+         ORDER BY transactionDate`,
+        [politicianName, startDate, endDate]
+      );
+  
+      const quarterlyData = {};
+      allQuarters.forEach((quarter) => {
+        quarterlyData[quarter] = { purchaseVolume: 0, saleVolume: 0, tradeCount: 0 };
+      });
+  
+      // Process the trades and populate them into quarterlyData
+      trades.forEach((trade) => {
+        const quarter = moment(trade.transactionDate).quarter();
+        const year = moment(trade.transactionDate).year();
+        const quarterLabel = `${year}-Q${quarter}`;
+  
+        // Volume Calculation (amountFrom + amountTo) / 2
+        // Represents a midpoint/estimate
+        const amountFrom = parseFloat(trade.amountFrom);
+        const amountTo = parseFloat(trade.amountTo);
+        const volume = (amountFrom + amountTo) / 2;
+  
+        // Checks the transaction type and assigns it accordingly (purchase or sale)
+        if (trade.transactionType === 'Purchase') {
+          quarterlyData[quarterLabel].purchaseVolume += volume;
+          // 3 types of sale trades present in the data, counting all three of them as a sale trade
+        } else if (['Sale', 'Sale (Partial)', 'Sale (Full)'].includes(trade.transactionType)) {
+          quarterlyData[quarterLabel].saleVolume += volume;
+        }
+  
+        // Count total trades (Purchases and Sales)
+        // For the line graph
+        quarterlyData[quarterLabel].tradeCount += 1;
+      });
+  
+      // Reformat the data for charting
+      const result = allQuarters.map((quarter) => ({
+        interval: quarter,
+        purchaseVolume: quarterlyData[quarter].purchaseVolume,
+        saleVolume: quarterlyData[quarter].saleVolume,
+        tradeCount: quarterlyData[quarter].tradeCount,  // Total trade count
+      }));
+  
+      // Handle if there is no trade data for a politician
+      const hasTradeVolumeData = result.some(
+        (entry) => entry.purchaseVolume > 0 || entry.saleVolume > 0 || entry.tradeCount > 0
+      );
+  
+      if (!hasTradeVolumeData) {
+        return res.status(200).json({ Volume: [] });
+      }
+  
+      res.status(200).json({ data: result });
+    } catch (error) {
+      res.status(500).json({ error: 'An error has occurred when attempting to retrieve the trading volume data' });
+    }
+  });
 
 // Start the server
 app.listen(PORT, () => {
