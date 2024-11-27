@@ -33,7 +33,7 @@ function SectorActivityChart({ data }) {
       
       legend: {
         display: true, 
-        position: "right", 
+        position: "top", 
         labels: {
           color: "white", 
           boxWidth: 15, 
@@ -53,7 +53,7 @@ function SectorActivityChart({ data }) {
   };
 
   return (
-    <div className="sector-activity-chart" style={{ position: 'relative', width: '400px', height: '400px' }}>
+    <div className="sector-activity-chart" style={{ position: 'relative', width: '325px', height: '325x' }}>
       <h3 className="chart-header">Most Traded Sectors</h3>
       <Doughnut data={chartData} options={options} />
     </div>

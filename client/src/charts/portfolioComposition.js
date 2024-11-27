@@ -29,7 +29,7 @@ function PortfolioCompositionChart({ data }) {
     plugins: {
       legend: {
         display: true, 
-        position: "right", 
+        position: "top", 
         labels: {
           color: "white", 
           boxWidth: 15, 
@@ -48,7 +48,7 @@ function PortfolioCompositionChart({ data }) {
   };
 
   return (
-    <div className="portfolio-composition-chart" style={{position: 'relative', width: '310px', height: '310px' }}>
+    <div className="portfolio-composition-chart" style={{position: 'relative', width: '300px', height: '300px' }}>
       <h3 className="chart-header">Most Traded Issuers</h3>
       <Pie data={chartData} options={options} /> 
     </div>

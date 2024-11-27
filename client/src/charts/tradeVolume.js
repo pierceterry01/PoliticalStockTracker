@@ -1,9 +1,9 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
-import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, LineElement, CategoryScale, LinearScale} from "chart.js";
+import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, LineElement, CategoryScale, LinearScale, PointElement} from "chart.js";
 
 // Register necessary components for Chart.js
-ChartJS.register(Title, Tooltip, Legend, BarElement, LineElement, CategoryScale, LinearScale);
+ChartJS.register(Title, Tooltip, Legend, BarElement, LineElement, CategoryScale, LinearScale, PointElement);
 
 // Reformat number display to be K for thousands and M for millions
 // Only effects the display
@@ -85,8 +85,7 @@ const TradeVolumeChart = ({ data }) => {
           label: function (tooltipItem) {
             const value = tooltipItem.raw;
             const formattedValue = NumberReformat(value); 
-            const quarter = tooltipItem.label; 
-            return `${tooltipItem.dataset.label}: ${formattedValue} (${quarter})`;
+            return `${tooltipItem.dataset.label}: ${formattedValue}`;
           },
         },
       },
@@ -131,7 +130,7 @@ const TradeVolumeChart = ({ data }) => {
   };
 
   return (
-    <div className="trade-volume-chart" style={{ height: "325px", width: "900px" }}>
+    <div className="trade-volume-chart" style={{ height: "750px", width: "900px" }}>
       <h3 className="chart-header">Trade Volume</h3>
       <Bar data={chartData} options={chartOptions} />
     </div>

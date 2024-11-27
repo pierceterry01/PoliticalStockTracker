@@ -129,14 +129,6 @@
     color: #dc3545;
   }
   
-  /* Data Visualization Placeholder */
-  .data-visualization-placeholder {
-    margin-top: 70px;
-    padding: 70px;
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    text-align: center;
-  }
   
   .data-visualization-placeholder p {
     font-size: 1.7rem;
