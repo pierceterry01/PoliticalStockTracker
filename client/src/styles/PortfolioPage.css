@@ -1,130 +1,186 @@
-/* General Page Styling */
+@import './common.css';
+
 .portfolio-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Full viewport height */
-    background-color: #141414; /* Dark background */
-    color: white; /* White text color */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #141414;
+  color: white;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* Header Styling */
-.portfolio-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 60px;
-    background-color: #4B2E83; /* Purple background */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow effect */
-}
-
-.logo {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: white;
-    letter-spacing: 1px;
-    text-decoration: none;
-}
-
-.header-icons {
-    display: flex;
-    align-items: center;
-}
-
-/* Styling for profile, settings, and stock view button */
-.profile, .settings, .btn-stock-view {
-    display: flex;
-    align-items: center;
-    margin-left: 20px;
-    background-color: transparent;
-    border: none;
-    font-size: 1rem;
-    color: white;
-    cursor: pointer;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.profile:hover, .btn-stock-view:hover, .settings:hover {
-    background-color: #6C429A; /* Darker purple on hover */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-}
-
-.profile-icon, .settings-icon {
-    font-size: 1.5rem;
-    margin-right: 8px;
-}
-
-.profile-name {
-    font-size: 1.1rem;
-}
-
-/* Styling for the stock view button */
-.btn-stock-view {
-    background-color: #ffffff33; /* Semi-transparent white */
-    color: white;
-    font-weight: bold;
-    border-radius: 25px;
-    padding: 10px 20px;
-    text-transform: uppercase;
-}
-
-.btn-stock-view:hover {
-    background-color: #ffffff55;
-}
-
-/* Sidebar Styling */
+/* Content */
 .portfolio-content {
-    display: flex;
-    flex-grow: 1;
+  display: flex;
+  flex-grow: 1;
 }
 
-.portfolio-sidebar {
-    width: 20%; /* Sidebar occupies 20% of the page width */
-    background-color: #1e1e1e; /* Dark background for sidebar */
-    padding: 30px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Shadow for separation */
-}
-
-.sidebar-section {
-    margin-bottom: 40px;
+/* Sidebar */
+.sidebar {
+  width: 25%;
+  background-color: #1e1e1e;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .total-assets {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: #4B2E83; /* Purple color for total assets */
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.stock-list {
-    list-style: none;
-    padding: 0; /* Remove default list padding */
+.total-assets h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff; 
 }
 
-.stock-list li {
-    margin: 10px 0;
-    font-size: 1.2rem; /* List item font size */
+.assets-value {
+  font-size: 2.5rem;
+  color: #00ff7f;
+  margin-top: 10px;
 }
 
-/* Main Content */
-.portfolio-main {
-    width: 80%; /* Main content occupies 80% of the page width */
-    padding: 40px;
+.sidebar-section {
+  margin-bottom: 30px;
 }
 
-.portfolio-data {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.sidebar-section h3 {
+  margin-bottom: 10px;
+  color: #ffffff; 
+  font-size: 1.2rem;
 }
 
-.portfolio-chart {
-    max-width: 80%;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Shadow for depth */
-    transition: transform 0.3s ease;
+.stock-returns-list,
+.politician-returns-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.portfolio-chart:hover {
-    transform: scale(1.05); /* Zoom effect on hover */
+.stock-returns-list li,
+.politician-returns-list li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.politician-returns-list li {
+  display: flex;
+  align-items: center;
+}
+
+.politician-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.main-content {
+  width: 75%;
+  padding: 20px 40px;
+  box-sizing: border-box;
+}
+
+.graph-container {
+  background-color: #1e1e1e;
+  padding: 20px;
+  margin-bottom: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.graph-placeholder {
+  background-color: #2a2a2a;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaaaaa;
+  font-size: 1.2rem;
+  border-radius: 4px;
+}
+
+/* Trades Table */
+#trades h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #ffffff; 
+}
+
+#tradesTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#tradesTable th,
+#tradesTable td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+#tradesTable thead {
+  background-color: #333333; 
+}
+
+#tradesTable th {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+#tradesTable tbody tr {
+  border-bottom: 1px solid #444444;
+}
+
+#tradesTable tbody tr:nth-of-type(even) {
+  background-color: #1e1e1e;
+}
+
+#tradesTable tbody tr:nth-of-type(odd) {
+  background-color: #2e2e2e;
+}
+
+#tradesTable tbody tr:hover {
+  background-color: #3a3a3a;
+}
+
+.buy-type {
+  color: #28a745; /* Green for positive change */
+  font-weight: bold;
+}
+
+.sell-type {
+  color: #dc3545; /* Red for negative change */
+  font-weight: bold;
+}
+
+/* Loading and No Data Messages */
+.loading,
+.no-data {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .portfolio-content {
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .main-content {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .total-assets h2,
+  .assets-value {
+    font-size: 1.5rem;
+  }
+
+  .graph-placeholder {
+    height: 200px;
+  }
 }

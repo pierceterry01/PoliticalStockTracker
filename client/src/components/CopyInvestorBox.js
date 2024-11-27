@@ -1,39 +1,85 @@
-// CopyInvestorBox.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/CopyInvestorBox.css';
 
-function CopyInvestorBox({ investorData, onClose, onInvest }) {
-  // State variables
+function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
   const [step, setStep] = useState(1);
 
-  // Investment amount and stop-loss
-  const [investAmount, setInvestAmount] = useState(1000);
-  const [stopLossAmount, setStopLossAmount] = useState(900);
+  // Initialize state w/ existing data if editing
+  const [investAmount, setInvestAmount] = useState(
+    isEditing ? investorData.investAmount : 1000
+  );
+  const [stopLossAmount, setStopLossAmount] = useState(
+    isEditing ? investorData.stopLossAmount : 900
+  );
 
-  // Sector selection
-  const allSectors = [
-    'Energy',
-    'Materials',
-    'Industrials',
-    'Consumer Discretionary',
-    'Consumer Staples',
-    'Health Care',
-    'Financials',
-    'Information Technology',
-    'Communication Services',
-    'Utilities',
-    'Real Estate',
-  ];
+  const allSectors = {
+    Energy: 'ENGY',
+    Materials: 'MATR',
+    Industrials: 'INDU',
+    'Consumer Discretionary': 'CDIS',
+    'Consumer Staples': 'CSTP',
+    'Health Care': 'HLTH',
+    Financials: 'FINL',
+    'Information Technology': 'INFT',
+    'Communication Services': 'CMNC',
+    Utilities: 'UTIL',
+    'Real Estate': 'REAL',
+  };
 
-  const [selectedSectors, setSelectedSectors] = useState([...allSectors]); // Default to all sectors
+  const [selectedSectors, setSelectedSectors] = useState(
+    isEditing ? investorData.sectors : Object.keys(allSectors)
+  );
+  const [sectorAllocations, setSectorAllocations] = useState(
+    isEditing ? investorData.sectorAllocations : {}
+  );
 
-  // Investment allocation per sector
-  const [sectorAllocations, setSectorAllocations] = useState({});
+  // Synchronize sectorAllocations with selectedSectors
+  useEffect(() => {
+    setSectorAllocations((prevAllocations) => {
+      const newAllocations = {};
+      selectedSectors.forEach((sector) => {
+        if (prevAllocations.hasOwnProperty(sector)) {
+          newAllocations[sector] = prevAllocations[sector];
+        } else {
+          // Assign default allocation (0 or equal allocation)
+          newAllocations[sector] = 0;
+        }
+      });
+      return newAllocations;
+    });
+  }, [selectedSectors]);
 
-  // Handle Next button click
+  // Initialize allocations when entering Step 3
+  useEffect(() => {
+    if (step === 3) {
+      if (Object.keys(sectorAllocations).length === 0) {
+        // Initialize allocations to equal percentages
+        const equalAllocation = (100 / selectedSectors.length).toFixed(2);
+        const allocations = {};
+        selectedSectors.forEach((sector) => {
+          allocations[sector] = parseFloat(equalAllocation);
+        });
+        setSectorAllocations(allocations);
+      } else {
+        // Adjust allocations to sum up to 100%
+        const total = Object.values(sectorAllocations).reduce(
+          (acc, val) => acc + parseFloat(val || 0),
+          0
+        );
+        if (total !== 100) {
+          const adjustedAllocations = {};
+          selectedSectors.forEach((sector) => {
+            adjustedAllocations[sector] =
+              (sectorAllocations[sector] / total) * 100;
+          });
+          setSectorAllocations(adjustedAllocations);
+        }
+      }
+    }
+  }, [step, selectedSectors, sectorAllocations]);
+
   const handleNextClick = () => {
     if (step === 1) {
-      // Validate invest amount and stop-loss
       if (investAmount <= 0 || stopLossAmount <= 0) {
         alert('Please enter valid amounts.');
         return;
@@ -44,18 +90,10 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
         alert('Please select at least one sector.');
         return;
       }
-      // Initialize allocations to equal percentages
-      const equalAllocation = (100 / selectedSectors.length).toFixed(2);
-      const allocations = {};
-      selectedSectors.forEach((sector) => {
-        allocations[sector] = parseFloat(equalAllocation);
-      });
-      setSectorAllocations(allocations);
     }
     if (step === 3) {
-      // Validate allocations sum to 100%
-      const totalAllocation = Object.values(sectorAllocations).reduce(
-        (acc, val) => acc + parseFloat(val),
+      const totalAllocation = selectedSectors.reduce(
+        (acc, sector) => acc + parseFloat(sectorAllocations[sector] || 0),
         0
       );
       if (Math.round(totalAllocation) !== 100) {
@@ -70,27 +108,25 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
     }
   };
 
-  // Handle Back button click
   const handleBackClick = () => {
     if (step > 1) {
       setStep((prev) => prev - 1);
     }
   };
 
-  // Handle Invest button click
   const handleInvestClick = () => {
-    // Prepare investment data
     const investmentData = {
+      politicianName: investorData.politicianName || investorData.politician,
+      imgSrc: investorData.imgSrc,
+      party: investorData.party,
+      sectors: selectedSectors,
       investAmount,
-      stopLossAmount,
-      selectedSectors,
       sectorAllocations,
+      stopLossAmount,
     };
-    // Call onInvest prop function
     onInvest(investmentData);
   };
 
-  // Handle sector selection
   const toggleSector = (sector) => {
     setSelectedSectors((prev) => {
       if (prev.includes(sector)) {
@@ -101,7 +137,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
     });
   };
 
-  // Handle allocation change
   const handleAllocationChange = (sector, value) => {
     const val = parseFloat(value) || 0;
     setSectorAllocations((prev) => ({
@@ -156,14 +191,14 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
             <div className="sector-selection">
               <h3>Select Sectors to Follow:</h3>
               <div className="sector-list">
-                {allSectors.map((sector) => (
-                  <label key={sector} className="sector-item">
+                {Object.keys(allSectors).map((sector) => (
+                  <label key={sector} className="sector-item" title={sector}>
                     <input
                       type="checkbox"
                       checked={selectedSectors.includes(sector)}
                       onChange={() => toggleSector(sector)}
                     />
-                    <span>{sector}</span>
+                    <span>{allSectors[sector]}</span>
                   </label>
                 ))}
               </div>
@@ -171,6 +206,12 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
           </>
         );
       case 3:
+        // Calculate total allocation for selected sectors
+        const totalAllocation = selectedSectors.reduce(
+          (acc, sector) => acc + parseFloat(sectorAllocations[sector] || 0),
+          0
+        );
+
         return (
           <>
             <div className="allocation-setting">
@@ -196,12 +237,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
                 ))}
               </div>
               <div className="total-allocation">
-                Total Allocation:{" "}
-                {Object.values(sectorAllocations).reduce(
-                  (acc, val) => acc + parseFloat(val || 0),
-                  0
-                ).toFixed(2)}
-                %
+                Total Allocation: {totalAllocation.toFixed(2)}%
               </div>
             </div>
           </>
@@ -220,19 +256,14 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
 
       {/* Header Section */}
       <div className="header-section">
-        <h2>Copy this Investor</h2>
+        <h2>{isEditing ? 'Edit Investment' : 'Copy this Investor'}</h2>
         <div className="investor-info">
-          <img src={investorData.imgSrc} alt={investorData.politician} />
-          <span className="investor-name">{investorData.politician}</span>
-        </div>
-        <div className="investor-return">
-          <span
-            className={`return-percentage ${
-              investorData.changePercent >= 0 ? 'positive' : 'negative'
-            }`}
-          >
-            {investorData.changePercent >= 0 ? '+' : ''}
-            {investorData.changePercent}% over 12 months
+          <img
+            src={investorData.imgSrc}
+            alt={investorData.politicianName || investorData.politician}
+          />
+          <span className="investor-name">
+            {investorData.politicianName || investorData.politician}
           </span>
         </div>
       </div>
@@ -248,7 +279,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest }) {
           </button>
         )}
         <button className="next-button" onClick={handleNextClick}>
-          {step < 3 ? 'Next' : 'Invest'}
+          {step < 3 ? 'Next' : isEditing ? 'Save' : 'Invest'}
         </button>
       </div>
     </div>

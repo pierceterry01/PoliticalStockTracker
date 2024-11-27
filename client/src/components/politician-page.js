@@ -1,46 +1,77 @@
-// PoliticianPage.js
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import stockData from '../data/stockData';
 import '../styles/PoliticianPage.css';
-
-// Import the CopyInvestorBox component
 import CopyInvestorBox from './CopyInvestorBox';
 
 function PoliticianPage() {
   const { politicianName } = useParams();
   const decodedName = decodeURIComponent(politicianName);
+  const navigate = useNavigate();
 
   const politicianData = stockData.find(
     (p) => p.politician === decodedName
   );
 
-  // State for the follow button
   const [isFollowing, setIsFollowing] = useState(false);
-
-  // State to control the visibility of the CopyInvestorBox
   const [showCopyInvestorBox, setShowCopyInvestorBox] = useState(false);
 
-  // Function to handle the Follow button click
   const handleFollowClick = () => {
     if (!isFollowing) {
-      // Show the CopyInvestorBox when the user clicks 'Follow'
       setShowCopyInvestorBox(true);
     } else {
-      // If already following, allow the user to unfollow
       setIsFollowing(false);
+      // Remove from localStorage if unfollowing
+      const investments = JSON.parse(localStorage.getItem('investments')) || [];
+      const updatedInvestments = investments.filter(
+        (inv) => inv.politicianName !== politicianData.politician
+      );
+      localStorage.setItem('investments', JSON.stringify(updatedInvestments));
     }
   };
 
-  // Function to handle closing the CopyInvestorBox
   const handleCloseCopyInvestorBox = () => {
     setShowCopyInvestorBox(false);
   };
 
-  // Function to handle Invest action
-  const handleInvest = () => {
+  const handleInvest = (investmentData) => {
     setIsFollowing(true);
     setShowCopyInvestorBox(false);
+
+    const politicianInvestment = {
+      politicianName: politicianData.politician,
+      imgSrc: politicianData.imgSrc,
+      party: politicianData.party,
+      sectors: investmentData.sectors,
+      investAmount: investmentData.investAmount,
+      sectorAllocations: investmentData.sectorAllocations,
+      stopLossAmount: investmentData.stopLossAmount,
+    };
+
+    // Get existing investments from localStorage
+    let existingInvestments = JSON.parse(localStorage.getItem('investments')) || [];
+
+    // Check if politician already followed
+    const isAlreadyInvested = existingInvestments.some(
+      (inv) => inv.politicianName === politicianInvestment.politicianName
+    );
+
+    if (!isAlreadyInvested) {
+      // Add new investment
+      existingInvestments.push(politicianInvestment);
+    } else {
+      // Update existing investment
+      existingInvestments = existingInvestments.map((inv) =>
+        inv.politicianName === politicianInvestment.politicianName
+          ? politicianInvestment
+          : inv
+      );
+    }
+
+    // Save updated investments to localStorage
+    localStorage.setItem('investments', JSON.stringify(existingInvestments));
+
+    navigate('/following');
   };
 
   if (!politicianData) {
@@ -66,9 +97,7 @@ function PoliticianPage() {
             />
             <div className="politician-details-text">
               <h1>{politicianData.politician}</h1>
-              <p className="politician-party">
-                {politicianData.party}
-              </p>
+              <p className="politician-party">{politicianData.party}</p>
               <button
                 className={`follow-button ${isFollowing ? 'following' : ''}`}
                 onClick={handleFollowClick}
@@ -77,18 +106,9 @@ function PoliticianPage() {
               </button>
             </div>
           </div>
-          <div className="politician-stats">
-            {/* ... existing stats code ... */}
-          </div>
-        </div>
-
-        {/* Placeholder for Data Visualization */}
-        <div className="data-visualization-placeholder">
-          <p>Data visualization coming soon...</p>
         </div>
       </div>
-
-      {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
+      {/* CopyInvestorBox Popup */}
       {showCopyInvestorBox && (
         <div className="copy-investor-popup">
           <div
@@ -99,7 +119,7 @@ function PoliticianPage() {
             <CopyInvestorBox
               investorData={politicianData}
               onClose={handleCloseCopyInvestorBox}
-              onInvest={handleInvest} // Pass the handleInvest function
+              onInvest={handleInvest}
             />
           </div>
         </div>

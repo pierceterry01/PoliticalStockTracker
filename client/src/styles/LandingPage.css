@@ -1,8 +1,7 @@
-/* Global Styles */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif; /* Set font for modern, clean look */
+    font-family: 'Roboto', sans-serif;
     background-color: #141414;
     color: white;
 }
@@ -16,14 +15,14 @@ body {
     color: white;
 }
 
-/* Header styles */
+/* Header */
 .landing-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 60px; /* Added padding for visual comfort */
-    background-color: #4B2E83; /* Purple background */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    padding: 20px 60px; 
+    background-color: #4B2E83; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
 }
 
 /* Header logo title */
@@ -31,7 +30,7 @@ body {
     font-size: 2.2rem;
     font-weight: bold;
     color: #fff;
-    letter-spacing: 1px; /* Letter spacing for readability */
+    letter-spacing: 1px; 
 }
 
 /* Login button */
@@ -39,17 +38,17 @@ body {
     padding: 12px 30px;
     border-radius: 25px;
     background-color: white;
-    color: #4B2E83; /* Matching header color */
+    color: #4B2E83; 
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
-    transition: background-color 0.3s, box-shadow 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s, box-shadow 0.3s ease; 
 }
 
 /* Login button hover */
 .login-btn:hover {
     background-color: #ececec;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
 }
 
 /* Hero Section */
@@ -57,22 +56,22 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 60px 80px; /* Space around hero content */
+    padding: 60px 80px; 
     flex-grow: 1;
 }
 
 /* Hero text styling */
 .hero-text {
-    max-width: 500px; /* Limit text width */
+    max-width: 500px; 
 }
 
 .hero-text h1 {
-    font-size: 4rem; /* Large headline */
+    font-size: 4rem; 
     font-weight: bold;
     margin-bottom: 20px;
     line-height: 1.2;
     color: white;
-    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.6); /* Text shadow for readability */
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.6); 
 }
 
 .hero-text p {
@@ -82,7 +81,7 @@ body {
     line-height: 1.6;
 }
 
-/* Sign-up button styling */
+/* Sign-up button */
 .signup-btn {
     padding: 15px 40px;
     background-color: #4B2E83;
@@ -92,24 +91,24 @@ body {
     font-weight: bold;
     text-decoration: none;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Depth effect */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
     position: relative;
 }
 
 /* Sign-up button hover */
 .signup-btn:hover {
     background-color: #6C429A;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); 
 }
 
 /* Loading Spinner */
 .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.2); /* Light border */
-    border-top: 4px solid white; /* Visible spinning color */
+    border: 4px solid rgba(255, 255, 255, 0.2); 
+    border-top: 4px solid white; 
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    animation: spin 1s linear infinite; /* Infinite spin animation */
+    animation: spin 1s linear infinite; 
 }
 
 /* Spinner animation */
@@ -127,12 +126,11 @@ body {
     transition: transform 0.3s ease; /* Smooth scaling */
 }
 
-/* Hero Image hover effect */
+/* Image hover effect */
 .hero-image img:hover {
-    transform: scale(1.05); /* Slight zoom */
+    transform: scale(1.05); 
 }
 
-/* Responsive Design for smaller screens */
 @media screen and (max-width: 768px) {
     .hero-section {
         flex-direction: column;
@@ -146,7 +144,7 @@ body {
     }
 
     .hero-text h1 {
-        font-size: 3rem; /* Smaller font on mobile */
+        font-size: 3rem; 
     }
 
     .signup-btn {

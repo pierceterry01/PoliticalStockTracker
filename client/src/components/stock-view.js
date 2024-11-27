@@ -1,8 +1,7 @@
-// stock-view.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom'; 
 import '../styles/StockViewPage.css';
-import stockData from '../data/stockData'; // Import stockData from a separate file
+import stockData from '../data/stockData'; 
 
 function StockViewPage() {
   const [displayData, setDisplayData] = useState(stockData);
@@ -10,7 +9,7 @@ function StockViewPage() {
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Handle sorting based on the column header clicked
+  // Handle sorting based on column header clicked
   const handleSort = (key) => {
     let direction = 'asc';
     if (sortKey === key && sortDirection === 'asc') {
@@ -26,7 +25,7 @@ function StockViewPage() {
     setSearchQuery(query);
   };
 
-  // Update displayData whenever stockData, searchQuery, sortKey, or sortDirection changes
+  // Update displayData when: stockData, searchQuery, sortKey, or sortDirection changes
   useEffect(() => {
     let filteredData = stockData.filter((item) =>
       item.politician.toLowerCase().includes(searchQuery)
@@ -58,7 +57,7 @@ function StockViewPage() {
           <input
             type="text"
             placeholder="Search Politicians"
-            className="search-input"
+            className="custom-input"
             value={searchQuery}
             onChange={handleSearch}
           />
@@ -76,7 +75,7 @@ function StockViewPage() {
             </tr>
           </thead>
           <tbody>
-            {/* Mapping over displayData to render each row */}
+            {/* Map over displayData --> render each row */}
             {displayData.length > 0 ? (
               displayData.map((row, index) => (
                 <tr key={index}>
@@ -86,7 +85,7 @@ function StockViewPage() {
                       alt={row.politician}
                       className="politician-image"
                     />
-                    {/* Wrap the politician's name with Link */}
+                    {/* Wrap politician's name with Link (TO CLICK ON!! WOAH!!) */}
                     <Link
                       to={`/politician/${encodeURIComponent(row.politician)}`}
                       className={`politician-name ${row.party.toLowerCase()}`}

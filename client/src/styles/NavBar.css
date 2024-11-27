@@ -1,60 +1,65 @@
-/* NavBar.css */
-
 .nav-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 60px;
-    background-color: #4B2E83;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .logo {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: white;
-    letter-spacing: 1px;
-    text-decoration: none;
-  }
-  
-  .nav-links {
-    display: flex;
-    align-items: center;
-  }
-  
-  .nav-links a {
-    margin: 0 15px;
-    color: white;
-    text-decoration: none;
-    font-size: 1.1rem;
-  }
-  
-  .nav-links a:hover {
-    text-decoration: underline;
-  }
-  
-  .header-icons {
-    display: flex;
-    align-items: center;
-  }
-  
-  .profile {
-    display: flex;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-  }
-  
-  .profile:hover {
-    text-decoration: underline;
-  }
-  
-  .profile-icon {
-    font-size: 1.5rem;
-    margin-right: 8px;
-  }
-  
-  .profile-name {
-    font-size: 1.1rem;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: #4B2E83; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+.profile:hover {
+  text-decoration: underline;
+}
+
+.profile-icon {
+  font-size: 1.5rem;
+  margin-right: 8px;
+}
+
+.profile-name {
+  font-size: 1.1rem;
+}
+
+.profile-picture {
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}

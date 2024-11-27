@@ -1,0 +1,190 @@
+.politician-card {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #4B2E83;
+  width: 250px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  align-items: center; 
+  color: white;
+}
+
+.politician-header {
+  text-align: center; 
+  margin-bottom: 15px; 
+}
+
+.politician-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #4B2E83;
+  display: block;
+  object-fit: cover;
+  margin: 0 auto 10px auto; 
+}
+
+.politician-info {
+  text-align: center;
+}
+
+.politician-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.politician-party {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* Main Content */
+.politician-content {
+  flex-grow: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Investment Info Section */
+.investment-info {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.investment-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.investment-item .label {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.investment-item .value {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Sectors List */
+.sectors-list {
+  height: 60px; 
+  overflow-y: auto; /* Enable scrolling if content overflows */
+  padding: 5px;
+  background-color: #2b2b2b;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  text-align: left; 
+}
+
+.sectors-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sectors-list::-webkit-scrollbar-thumb {
+  background-color: #4B2E83;
+  border-radius: 3px;
+}
+
+.sectors-list span {
+  display: block;
+  color: #ccc;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+/* Performance */
+.performance-section {
+  margin-top: 15px;
+  text-align: center; 
+}
+
+.performance-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.performance-values {
+  display: flex;
+  gap: 10px;
+  justify-content: center; /* Center metrics under title */
+}
+
+.performance-item {
+  text-align: center;
+}
+
+.performance-item .time-frame {
+  display: block;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.performance-item .percent-change {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.percent-change.positive {
+  color: #28a745; 
+}
+
+.percent-change.negative {
+  color: #dc3545; 
+}
+
+/* Card Actions */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%; 
+  margin-top: auto; 
+}
+
+.edit-button,
+.unfollow-button {
+  flex: 1;
+  padding: 10px 0;
+  background: linear-gradient(45deg, #6C429A, #4B2E83);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.edit-button:hover,
+.unfollow-button:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+  .politician-card {
+    width: 100%;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .edit-button,
+  .unfollow-button {
+    width: 100%;
+  }
+}

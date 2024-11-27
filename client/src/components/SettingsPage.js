@@ -1,38 +1,55 @@
-// SettingsPage.js
-import React, { useState } from 'react';
+// src/components/SettingsPage.js
+import React, { useState, useContext } from 'react';
 import '../styles/SettingsPage.css';
+import UserContext from './UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function SettingsPage() {
-  const [displayName, setDisplayName] = useState('John Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
+  const { user, setUser } = useContext(UserContext);
+  const [displayName, setDisplayName] = useState(user.displayName);
+  const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
   const [timeZone, setTimeZone] = useState('GMT');
-  const [darkMode, setDarkMode] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(user.profilePicture);
 
   const navigate = useNavigate();
 
-  // Handle file upload for profile picture
   const handleProfilePictureChange = (event) => {
-    setProfilePicture(URL.createObjectURL(event.target.files[0]));
+    const file = event.target.files[0];
+    if (file) {
+      const newProfilePicture = URL.createObjectURL(file);
+      setProfilePicture(newProfilePicture);
+    }
   };
 
-  // Handle dark/light mode toggle
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle('dark-mode', !darkMode);
+  const handleConfirmChanges = () => {
+    setUser({
+      ...user,
+      displayName,
+      email,
+      profilePicture,
+    });
+
+    // SHOULD PROBABLY ADD FUNCTIONS TO HANDLE PASSWORD AND TIME CHANGE UPDATES
+
+    alert('Changes have been saved.');
+    navigate('/'); // Redirect if desired
   };
 
   const handleDeleteAccount = () => {
     if (window.confirm('Are you sure you want to delete your account?')) {
-      console.log('Account deleted');
+      setUser({
+        displayName: '',
+        email: '',
+        profilePicture: null,
+      });
+      localStorage.removeItem('user');
+      navigate('/');
     }
   };
 
   return (
     <div className="settings-page">
-      {/* Main Content */}
       <main className="settings-main">
         {/* Profile Settings */}
         <section className="settings-section">
@@ -42,24 +59,47 @@ function SettingsPage() {
             <input
               type="text"
               id="displayName"
+              className="custom-input"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
             />
           </div>
           <div className="settings-item">
             <label htmlFor="profilePicture">Profile Picture</label>
-            <input type="file" id="profilePicture" onChange={handleProfilePictureChange} />
-            {profilePicture && <img src={profilePicture} alt="Profile" className="profile-preview" />}
+            <input
+              type="file"
+              id="profilePicture"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+            />
+            {profilePicture && (
+              <img
+                src={profilePicture}
+                alt="Profile"
+                className="profile-preview"
+              />
+            )}
           </div>
           <div className="settings-item">
             <label htmlFor="timeZone">Time Zone</label>
-            <select id="timeZone" value={timeZone} onChange={(e) => setTimeZone(e.target.value)}>
+            <select
+              id="timeZone"
+              className="custom-input"
+              value={timeZone}
+              onChange={(e) => setTimeZone(e.target.value)}
+            >
               <option value="GMT">GMT</option>
               <option value="PST">PST</option>
               <option value="EST">EST</option>
               <option value="CET">CET</option>
               <option value="IST">IST</option>
             </select>
+          </div>
+          {/* Confirm Changes Button */}
+          <div className="confirm-changes-section">
+            <button className="confirm-changes-btn" onClick={handleConfirmChanges}>
+              Confirm Changes
+            </button>
           </div>
         </section>
 
@@ -71,6 +111,7 @@ function SettingsPage() {
             <input
               type="email"
               id="email"
+              className="custom-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -80,6 +121,7 @@ function SettingsPage() {
             <input
               type="password"
               id="password"
+              className="custom-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -89,19 +131,7 @@ function SettingsPage() {
           </button>
         </section>
 
-        {/* Appearance Settings */}
-        <section className="settings-section">
-          <h2>Appearance</h2>
-          <div className="dark-mode-switch">
-            <label htmlFor="darkMode">Dark Mode</label>
-            <input
-              type="checkbox"
-              id="darkMode"
-              checked={darkMode}
-              onChange={toggleDarkMode}
-            />
-          </div>
-        </section>
+        
       </main>
     </div>
   );

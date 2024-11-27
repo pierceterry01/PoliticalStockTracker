@@ -10,16 +10,15 @@ function LandingPage() {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            // Redirect logic or sign-up flow here
-        }, 2000); // Simulated loading time
+        }, 2000); 
     };
 
     return (
         <div className="landing-page">
-            {/* Header Section */}
+            {/* Header*/}
             <header className="landing-header">
                 <div className="logo-title">
-                    <h1>Outsider Trading</h1> {/* Main title */}
+                    <h1>Outsider Trading</h1>
                 </div>
                 <div className="header-actions">
                     {/* Login button */}
@@ -33,7 +32,7 @@ function LandingPage() {
                     <h1>Track Politicians, Trade Smarter.</h1> {/* Hero headline */}
                     <p>Make informed financial decisions by staying ahead of insider trading trends from political figures. Sign up today to gain access to real-time insights.</p> {/* Hero subtext */}
                     
-                    {/* Signup button with spinner when loading */}
+                    {/* Signup button w/ spinner when loading */}
                     <Link to="/register" className="btn signup-btn" onClick={handleSignUpClick}>
                         {isLoading ? <div className="spinner"></div> : 'Get Started'} {/* Show spinner if loading */}
                     </Link>

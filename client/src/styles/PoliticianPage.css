@@ -1,6 +1,3 @@
-/* PoliticianPage.css */
-
-/* General Page Styling */
 .politician-page {
     display: flex;
     flex-direction: column;
@@ -9,14 +6,14 @@
     color: white;
   }
   
-  /* Content Section */
+  /* Content */
   .politician-content {
     padding: 40px 60px;
     flex-grow: 1;
   }
   
   .back-button {
-    color: #007bff;
+    color: #4B2E83;
     text-decoration: none;
     margin-top: 20px;
     display: inline-block;

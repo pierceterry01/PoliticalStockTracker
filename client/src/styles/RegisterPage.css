@@ -1,11 +1,10 @@
-/* General Page Styling */
 .register-body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
-    background-color: #141414; /* Dark background */
-    color: white; /* White text color for readability */
+    height: 100vh; 
+    background-color: #141414; 
+    color: white; 
 }
 
 /* Back arrow styling */
@@ -14,36 +13,36 @@
     top: 20px;
     left: 20px;
     font-size: 1.2rem;
-    color: #007bff; /* Blue color */
+    color: #4B2E83;
     text-decoration: none;
-    transition: color 0.3s ease; /* Smooth color transition */
+    transition: color 0.3s ease; 
 }
 
 .back-arrow:hover {
-    color: #0056b3; /* Darker blue on hover */
+    color: #6C429A;
 }
 
-/* Register container styling */
+/* Register container */
 .register-container {
-    background-color: #222; /* Dark grey background */
+    background-color: #222; 
     padding: 40px;
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
     width: 100%;
     max-width: 400px; /* Limit width for smaller screens */
     text-align: center;
 }
 
-/* Header styling */
+/* Header */
 .register-header h1 {
     font-size: 2.2rem;
     font-weight: bold;
     color: white;
-    letter-spacing: 1px; /* Letter spacing for readability */
-    margin-bottom: 30px; /* Spacing below the header */
+    letter-spacing: 1px; 
+    margin-bottom: 30px; 
 }
 
-/* "Create Your Account" section styling */
+/* "Create Your Account" */
 .register-form-content h2 {
     font-size: 1.8rem;
     font-weight: bold;
@@ -55,69 +54,69 @@
 .header-line {
     width: 60px;
     height: 3px;
-    background-color: #4B2E83; /* Purple line for brand color */
-    margin: 0 auto 20px auto; /* Centered line with margin below */
+    background-color: #4B2E83; 
+    margin: 0 auto 20px auto;
 }
 
-/* Form group styling */
+/* Form group */
 .register-form-group {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align labels to the left */
+    align-items: flex-start;
     margin-bottom: 20px;
 }
 
 /* Label styling */
 .register-label {
     font-size: 1rem;
-    color: #ddd; /* Light grey color */
+    color: #ddd;
     margin-bottom: 5px;
 }
 
-/* Input field styling */
+/* Input field */
 .register-input {
     padding: 12px;
-    width: 100%; /* Full width of container */
+    width: 100%; 
     font-size: 1rem;
     border-radius: 5px;
-    border: 2px solid #4B2E83; /* Border color matches brand */
-    background-color: #333; /* Dark background for input */
+    border: 2px solid #4B2E83; 
+    background-color: #333; 
     color: white;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus transition */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-input:focus {
-    border-color: #6C429A; /* Darker purple on focus */
-    box-shadow: 0 0 10px rgba(108, 66, 154, 0.5); /* Light shadow on focus */
-    outline: none; /* Remove default outline */
+    border-color: #6C429A;
+    box-shadow: 0 0 10px rgba(108, 66, 154, 0.5); 
+    outline: none;
 }
 
-/* Register button styling */
+/* Register button */
 .register-button {
-    width: 100%; /* Full width of container */
+    width: 100%; 
     padding: 15px;
     font-size: 1.2rem;
     border: none;
-    border-radius: 25px; /* Rounded button */
-    background-color: #4B2E83; /* Brand color */
+    border-radius: 25px; 
+    background-color: #4B2E83; 
     color: white;
-    cursor: pointer; /* Pointer cursor on hover */
+    cursor: pointer; 
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-button:hover {
-    background-color: #6C429A; /* Darker purple on hover */
-    box-shadow: 0 5px 15px rgba(108, 66, 154, 0.5); /* Shadow effect on hover */
+    background-color: #6C429A; 
+    box-shadow: 0 5px 15px rgba(108, 66, 154, 0.5); 
 }
 
 /* Link to sign-in page for existing users */
 .login-link {
     color: #007bff; /* Blue color */
     text-decoration: none;
-    transition: color 0.3s ease; /* Smooth color transition */
+    transition: color 0.3s ease; 
 }
 
 .login-link:hover {
-    color: #0056b3; /* Darker blue on hover */
-    text-decoration: underline; /* Underline on hover */
+    color: #0056b3; 
+    text-decoration: underline; 
 }

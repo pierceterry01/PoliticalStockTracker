@@ -1,115 +1,103 @@
-/* General Page Styling */
+@import './common.css';
+
 .stock-view-page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #141414;
-    color: white;
-  }
-  
-  /* Main Content Section */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #141414;
+  color: white;
+}
+
+/* Content */
+.stock-view-content {
+  padding: 40px 60px;
+  flex-grow: 1;
+}
+
+/* Search Bar */
+.search-bar {
+  margin-bottom: 20px;
+}
+
+/* Data Table */
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 15px;
+  text-align: left;
+}
+
+.stock-table th {
+  background-color: #4B2E83;
+  color: white;
+  cursor: pointer;
+}
+
+.stock-table tr:nth-child(even) {
+  background-color: #1e1e1e;
+}
+
+.stock-table tr:nth-child(odd) {
+  background-color: #2e2e2e;
+}
+
+.stock-table td {
+  color: white;
+}
+
+.politician-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.politician-name {
+  vertical-align: middle;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.politician-name.democrat {
+  color: #3b9eff; /* Blue for Democrats */
+}
+
+.politician-name.republican {
+  color: #ff4b4b; /* Red for Republicans */
+}
+
+.percent-change.positive {
+  color: #28a745; /* Green for GAINING MONEY!! LETS GO!! */
+}
+
+.percent-change.negative {
+  color: #dc3545; /* Red for LOSING MONEY!! */
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
   .stock-view-content {
-    padding: 40px 60px;
-    flex-grow: 1;
+    padding: 20px;
   }
-  
-  /* Search Bar */
-  .search-bar {
-    margin-bottom: 20px;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 30px;
-    background-color: #1e1e1e;
-    color: white;
-    outline: none;
-  }
-  
-  /* Data Table */
-  .stock-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
+
   .stock-table th,
   .stock-table td {
-    padding: 15px;
-    text-align: left;
+    padding: 10px;
   }
-  
-  .stock-table th {
-    background-color: #4B2E83;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .stock-table tr:nth-child(even) {
-    background-color: #1e1e1e;
-  }
-  
-  .stock-table tr:nth-child(odd) {
-    background-color: #2e2e2e;
-  }
-  
-  .stock-table td {
-    color: white;
-  }
-  
+
   .politician-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 10px;
+    width: 40px;
+    height: 40px;
   }
-  
-  .politician-name {
-    vertical-align: middle;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-  }
-  
-  .politician-name.democrat {
-    color: #3b9eff; /* Blue for Democrats */
-  }
-  
-  .politician-name.republican {
-    color: #ff4b4b; /* Red for Republicans */
-  }
-  
-  .percent-change.positive {
-    color: #28a745; /* Green for positive change */
-  }
-  
-  .percent-change.negative {
-    color: #dc3545; /* Red for negative change */
-  }
-  
-  .no-results {
-    text-align: center;
-    padding: 20px;
-    font-size: 1.2rem;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .stock-view-content {
-      padding: 20px;
-    }
-  
-    .stock-table th,
-    .stock-table td {
-      padding: 10px;
-    }
-  
-    .politician-image {
-      width: 40px;
-      height: 40px;
-    }
-  }
-  
+}

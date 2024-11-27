@@ -1,15 +1,15 @@
+// src/components/PortfolioPage.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import "../styles/PortfolioPage.css";
 
 function PortfolioPage() {
   const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalPortfolioValue, setTotalPortfolioValue] = useState(0); // Total value of the portfolio
-  const [stockSummary, setStockSummary] = useState([]); // Placeholder for stock summary data
-  const [fetchingTrades, setFetchingTrades] = useState(false); // State for fetching trades
-  const politician = "John Doe"; // Placeholder for the politician's name
+  const [totalPortfolioValue, setTotalPortfolioValue] = useState(900000); // Total value of the portfolio ($900,000 should be replaced with USER ACCOUNT DATA)
+  const [stockSummary, setStockSummary] = useState([]); // Placeholder for right now
+  const [fetchingTrades, setFetchingTrades] = useState(false); // Also a Placeholder :)
+  const politician = "John Doe"; // John Doe is my favorite Politician! We should definitely put him in office since he is a totally real politician and not just a placeholder value
 
   // Function to fetch all trades
   const fetchAllTrades = async () => {
@@ -29,157 +29,126 @@ function PortfolioPage() {
     }
   };
 
-  // Function to fetch trades for a symbol from the backend API
-  const fetchTradesForSymbol = async (symbol, fromDate, toDate) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/api/congressional-trading`,
-        {
-          params: {
-            symbol: symbol,
-            from: fromDate,
-            to: toDate,
-          },
-        }
-      );
-
-      if (response.status === 200 && response.data && response.data.data) {
-        return response.data.data;
-      } else {
-        return [];
-      }
-    } catch (error) {
-      console.error(`Error fetching trades for ${symbol}:`, error);
-      return [];
-    }
-  };
-
-  // Function to fetch trades for multiple symbols
-  const fetchTradesForSymbols = async () => {
-    try {
-      setFetchingTrades(true);
-      const response = await axios.get(
-        "http://localhost:3001/api/congressional-trading/symbols"
-      );
-      console.log("Fetch all symbols trades response:", response.data);
-      fetchAllTrades(); // Re-fetch all trades after insertion
-    } catch (error) {
-      console.error("Error fetching trades for symbols:", error);
-    } finally {
-      setFetchingTrades(false);
-    }
-  };
-
   useEffect(() => {
     fetchAllTrades();
   }, []);
 
   return (
-    <div id="portfolioBody">
-      <a href="/" className="back-button">
-        Back to Home
-      </a>
-      <header id="portfolioHeader">
-        <h1>{politician}'s Stock Portfolio</h1>
-      </header>
+    <div className="portfolio-page">
+      <div className="portfolio-content">
+        <aside className="sidebar">
+          {/* Total Assets */}
+          <div className="total-assets">
+            <h2>Total Assets:</h2>
+            <p className="assets-value">
+              $
+              {totalPortfolioValue.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
+          </div>
 
-      {/* Portfolio summary */}
-      <div id="stock-summary">
-        {loading ? (
-          <div>Loading stock summary...</div>
-        ) : stockSummary.length > 0 ? (
-          <table id="stockSummaryTable">
-            <thead>
-              <tr>
-                <th>Stock Symbol</th>
-                <th>Estimated Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stockSummary.map((stock, index) => (
-                <tr key={index}>
-                  <td>{stock.symbol}</td>
-                  <td>
-                    $
-                    {stock.estimatedTotal.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div>No stocks found for {politician}.</div>
-        )}
-      </div>
+          {/* Stock Returns */}
+          <div className="sidebar-section">
+            <h3>Stock Returns</h3>
+            <ul className="stock-returns-list">
+              <li>MSFT</li>
+              <li>NVDA</li>
+              <li>TSLA</li>
+              {/* ONLY FOR DISPLAY PURPOSES ATM */}
+            </ul>
+          </div>
 
-      {/* Display total portfolio value */}
-      <div id="total-portfolio-value">
-        <h2 style={{ color: "green" }}>
-          Total Portfolio Value: $
-          {totalPortfolioValue.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </h2>
-      </div>
+          {/* Politician Returns */}
+          <div className="sidebar-section">
+            <h3>Politician Returns</h3>
+            <ul className="politician-returns-list">
+              <li>
+                <img
+                  src="https://via.placeholder.com/40"
+                  alt="Politician 1"
+                  className="politician-photo"
+                />
+                <span>Politician 1</span>
+              </li>
+              <li>
+                <img
+                  src="https://via.placeholder.com/40"
+                  alt="Politician 2"
+                  className="politician-photo"
+                />
+                <span>Politician 2</span>
+              </li>
+              {/* THIS IS JUST FOR DISPLAY PURPOSES CURRENTLY, NEED TO IMPLEMENT ACTUAL FUNCTIONALITY */}
+            </ul>
+          </div>
+        </aside>
 
-      {/* Trades Details Table */}
-      <div id="trades">
-        <h3>All Trades</h3>
-        {loading ? (
-          <div>Loading trades...</div>
-        ) : trades.length > 0 ? (
-          <table id="tradesTable">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Symbol</th>
-                <th>Asset Name</th>
-                <th>Type</th>
-                <th>Amount Range</th>
-                <th>Stock Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {trades.map((trade, index) => (
-                <tr key={index}>
-                  <td>{trade.transactionDate}</td>
-                  <td>{trade.symbol}</td>
-                  <td>{trade.assetName}</td>
-                  <td
-                    className={
-                      ["buy", "purchase"].includes(
-                        trade.transactionType.toLowerCase()
-                      )
-                        ? "buy"
-                        : "sell"
-                    }
-                  >
-                    {trade.transactionType}
-                  </td>
-                  <td>
-                    $
-                    {trade.amountFrom.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    - $
-                    {trade.amountTo.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </td>
-                  <td>$0.00</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div>No trades found for {politician}.</div>
-        )}
+        {/* Main Area */}
+        <main className="main-content">
+          {/* Placeholder for Graph/Visualization (PIERCE LOOK HERE!) */}
+          <div className="graph-container">
+            <div className="graph-placeholder">
+              <p>Graph/Visualization Placeholder</p>
+            </div>
+          </div>
+          {/* Trades Details Table */}
+          <div id="trades">
+            <h3>All Trades</h3>
+            {loading ? (
+              <div className="loading">Loading trades...</div>
+            ) : trades.length > 0 ? (
+              <table id="tradesTable">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Symbol</th>
+                    <th>Asset Name</th>
+                    <th>Type</th>
+                    <th>Amount Range</th>
+                    <th>Stock Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {trades.map((trade, index) => (
+                    <tr key={index}>
+                      <td>{trade.transactionDate}</td>
+                      <td>{trade.symbol}</td>
+                      <td>{trade.assetName}</td>
+                      <td
+                        className={
+                          ["buy", "purchase"].includes(
+                            trade.transactionType.toLowerCase()
+                          )
+                            ? "buy-type"
+                            : "sell-type"
+                        }
+                      >
+                        {trade.transactionType}
+                      </td>
+                      <td>
+                        $
+                        {trade.amountFrom.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        - $
+                        {trade.amountTo.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td>$0.00</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="no-data">No trades found for {politician}.</div>
+            )}
+          </div>
+        </main>
       </div>
     </div>
   );
