@@ -34,6 +34,7 @@ function PortfolioPage() {
   }, []);
 
   return (
+<<<<<<< HEAD
     <div className="portfolio-page">
       <div className="portfolio-content">
         <aside className="sidebar">
@@ -48,6 +49,15 @@ function PortfolioPage() {
               })}
             </p>
           </div>
+=======
+    <div className="portfolioBody">
+      <a href="/" className="home-button">
+        Back to Home
+      </a>
+      <header id="portfolioHeader">
+        <h1>{politician}'s Stock Portfolio</h1>
+      </header>
+>>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
 
           {/* Stock Returns */}
           <div className="sidebar-section">

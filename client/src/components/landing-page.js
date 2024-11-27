@@ -15,6 +15,7 @@ function LandingPage() {
 
     return (
         <div className="landing-page">
+<<<<<<< HEAD
             {/* Header*/}
             <header className="landing-header">
                 <div className="logo-title">
@@ -25,6 +26,9 @@ function LandingPage() {
                     <Link to="/login" className="btn login-btn">Login</Link>
                 </div>
             </header>
+=======
+            
+>>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
 
             {/* Hero Section */}
             <div className="hero-section">

@@ -8,7 +8,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.6",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "react-scripts": "^5.0.1",
@@ -41,6 +43,9 @@
     ]
   },
   "devDependencies": {
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   }
 }

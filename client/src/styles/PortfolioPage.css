@@ -9,7 +9,95 @@
   font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
+<<<<<<< HEAD
 /* Content */
+=======
+.portfolioBody {
+    padding-top: 25px;
+    margin-left: 20px;
+}
+
+.home-button {
+    margin-top: 100px;
+    padding: 10px 20px;
+    background-color: #4B2E83;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+.home-button:hover {
+    background-color:#6C429A
+}
+  
+/* Header Styling */
+#portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background-color: #4B2E83; /* Purple background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow effect */
+}
+
+.logo {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+}
+
+/* Styling for profile, settings, and stock view button */
+.profile, .settings, .btn-stock-view {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile:hover, .btn-stock-view:hover, .settings:hover {
+    background-color: #6C429A; /* Darker purple on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.profile-icon, .settings-icon {
+    font-size: 1.5rem;
+    margin-right: 8px;
+}
+
+.profile-name {
+    font-size: 1.1rem;
+}
+
+/* Styling for the stock view button */
+.btn-stock-view {
+    background-color: #ffffff33; /* Semi-transparent white */
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+.btn-stock-view:hover {
+    background-color: #ffffff55;
+}
+
+/* Sidebar Styling */
+>>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
 .portfolio-content {
   display: flex;
   flex-grow: 1;
