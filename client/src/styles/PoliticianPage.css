@@ -23,7 +23,7 @@
     text-decoration: underline;
   }
   
-  /* Politician Info Section */
+  /* Politician Info */
   .politician-info-section {
     display: flex;
     flex-direction: column;
@@ -35,10 +35,10 @@
     align-items: center;
   }
   
-  /* Adjusted Image Size */
+  /* Image Size */
   .politician-image {
-    width: 320px; /* Adjusted size */
-    height: 320px; /* Adjusted size */
+    width: 320px; 
+    height: 320px; 
     object-fit: cover;
     border-radius: 50%;
     border: 6px solid #4B2E83;
@@ -53,12 +53,12 @@
   }
   
   .politician-details-text h1 {
-    font-size: 2.8rem; /* Adjusted font size */
+    font-size: 2.8rem; 
     margin-bottom: 10px;
   }
   
   .politician-party {
-    font-size: 1.4rem; /* Adjusted font size */
+    font-size: 1.4rem; 
     margin-bottom: 20px;
     color: #ccc;
   }
@@ -126,13 +126,20 @@
     color: #dc3545;
   }
   
+  /* Data Visualization Placeholder */
+  .data-visualization-placeholder {
+    margin-top: 70px;
+    padding: 70px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    text-align: center;
+  }
   
   .data-visualization-placeholder p {
     font-size: 1.7rem;
     color: #ccc;
   }
   
-  /* Responsive Design */
   @media (max-width: 768px) {
     .politician-content {
       padding: 20px;

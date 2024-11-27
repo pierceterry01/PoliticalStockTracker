@@ -9,9 +9,6 @@
   font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
-<<<<<<< HEAD
-/* Content */
-=======
 .portfolioBody {
     padding-top: 25px;
     margin-left: 20px;
@@ -97,7 +94,6 @@
 }
 
 /* Sidebar Styling */
->>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
 .portfolio-content {
   display: flex;
   flex-grow: 1;

@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import stockData from '../data/stockData';
 import '../styles/PoliticianPage.css';
-<<<<<<< HEAD
-=======
 import '../styles/chartSection.css';
 import PortfolioCompositionChart from '../charts/portfolioComposition.js';
 import SectorActivityChart from '../charts/sectorActivity.js';
 import TradeVolumeChart from '../charts/tradeVolume.js';
 
 // Import the CopyInvestorBox component
->>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
 import CopyInvestorBox from './CopyInvestorBox';
 
 
@@ -23,8 +20,6 @@ function PoliticianPage() {
     (p) => p.politician === decodedName
   );
 
-<<<<<<< HEAD
-=======
   // Sample Data Visualization Data
   const portfolioCompData = [
     { "symbol": "CLF", "count": 57 },
@@ -87,7 +82,6 @@ function PoliticianPage() {
     
 
   // State for the follow button
->>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
   const [isFollowing, setIsFollowing] = useState(false);
   const [showCopyInvestorBox, setShowCopyInvestorBox] = useState(false);
 
@@ -181,13 +175,7 @@ function PoliticianPage() {
               </button>
             </div>
           </div>
-<<<<<<< HEAD
-        </div>
-      </div>
-      {/* CopyInvestorBox Popup */}
-=======
           <div className="politician-stats">
-            {/* ... existing stats code ... */}
           </div>
         </div>
 
@@ -232,7 +220,6 @@ function PoliticianPage() {
       </div>
       
       {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
->>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
       {showCopyInvestorBox && (
         <div className="copy-investor-popup">
           <div

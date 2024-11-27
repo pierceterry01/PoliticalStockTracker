@@ -47,17 +47,9 @@ body {
 
   
 .login-btn:hover {
-<<<<<<< HEAD
     background-color: #ececec;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
 }
-=======
-    background-color: #6C429A; /* Darker purple on hover */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Shadow on hover */
-    border-radius: 10px;
-  }
-  
->>>>>>> 37f3ec4bb8205aa2620159cc936c5785ff459581
 
 /* Hero Section */
 .hero-section {

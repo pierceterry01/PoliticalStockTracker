@@ -1,4 +1,3 @@
-// src/components/LoginPage.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/LoginPage.css'; // Ensure this imports LoginPage.css
