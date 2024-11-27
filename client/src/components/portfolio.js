@@ -75,8 +75,8 @@ function PortfolioPage() {
   }, []);
 
   return (
-    <div id="portfolioBody">
-      <a href="/" className="back-button">
+    <div className="portfolioBody">
+      <a href="/" className="home-button">
         Back to Home
       </a>
       <header id="portfolioHeader">

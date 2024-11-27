@@ -27,10 +27,14 @@
     color: white;
     text-decoration: none;
     font-size: 1.1rem;
+    padding: 10px 20px;
   }
   
   .nav-links a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: #6C429A; /* Darker purple on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
   }
   
   .header-icons {
@@ -46,7 +50,7 @@
   }
   
   .profile:hover {
-    text-decoration: underline;
+    text-decoration: none;
   }
   
   .profile-icon {
@@ -58,3 +62,21 @@
     font-size: 1.1rem;
   }
   
+/* Login button styling */
+.login-btn {
+  color: white;
+  background-color: transparent; /* Transparent background initially */
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  margin-left: 10px;
+  display: inline-block; /* Ensure the link is block-level to accept background */
+  transition: background-color 0.3s, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.login-btn:hover {
+  background-color: blue; /* Darker purple on hover */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Shadow on hover */
+  border-radius: 10px;
+}

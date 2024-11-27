@@ -7,8 +7,26 @@
     color: white; /* White text color */
 }
 
+.portfolioBody {
+    padding-top: 25px;
+    margin-left: 20px;
+}
+
+.home-button {
+    margin-top: 100px;
+    padding: 10px 20px;
+    background-color: #4B2E83;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+.home-button:hover {
+    background-color:#6C429A
+}
+  
 /* Header Styling */
-.portfolio-header {
+#portfolio-header {
     display: flex;
     justify-content: space-between;
     align-items: center;

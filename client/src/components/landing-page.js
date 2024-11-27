@@ -16,16 +16,7 @@ function LandingPage() {
 
     return (
         <div className="landing-page">
-            {/* Header Section */}
-            <header className="landing-header">
-                <div className="logo-title">
-                    <h1>Outsider Trading</h1> {/* Main title */}
-                </div>
-                <div className="header-actions">
-                    {/* Login button */}
-                    <Link to="/login" className="btn login-btn">Login</Link>
-                </div>
-            </header>
+            
 
             {/* Hero Section */}
             <div className="hero-section">

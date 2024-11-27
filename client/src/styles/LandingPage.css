@@ -46,11 +46,13 @@ body {
     transition: background-color 0.3s, box-shadow 0.3s ease; /* Smooth transition */
 }
 
-/* Login button hover */
+  
 .login-btn:hover {
-    background-color: #ececec;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow on hover */
-}
+    background-color: #6C429A; /* Darker purple on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Shadow on hover */
+    border-radius: 10px;
+  }
+  
 
 /* Hero Section */
 .hero-section {
