@@ -4,6 +4,9 @@
     min-height: 100vh;
     background-color: #141414;
     color: white;
+    overflow-x: hidden;
+    margin: 0; /* Remove any default margin from body */
+    padding: 0;
   }
   
   /* Content */
@@ -36,10 +39,10 @@
   }
   
   /* Image Size */
-  .politician-image {
-    width: 320px; 
-    height: 320px; 
-    object-fit: cover;
+  .politician-page .politician-image {
+    width: 200px; /* Set a larger size for the politician-page */
+    height: 200px; /* Set the height accordingly */
+    object-fit: cover; /* Ensures the image maintains its aspect ratio */
     border-radius: 50%;
     border: 6px solid #4B2E83;
     margin-right: 40px;
@@ -54,7 +57,7 @@
   
   .politician-details-text h1 {
     font-size: 2.8rem; 
-    margin-bottom: 10px;
+    margin-bottom: -10px;
   }
   
   .politician-party {
@@ -73,6 +76,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(108, 66, 154, 0.5);
+    margin-left: -10px;
   }
   
   .follow-button:hover {
@@ -126,19 +130,6 @@
     color: #dc3545;
   }
   
-  /* Data Visualization Placeholder */
-  .data-visualization-placeholder {
-    margin-top: 70px;
-    padding: 70px;
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    text-align: center;
-  }
-  
-  .data-visualization-placeholder p {
-    font-size: 1.7rem;
-    color: #ccc;
-  }
   
   @media (max-width: 768px) {
     .politician-content {

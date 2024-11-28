@@ -14,14 +14,19 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  font-size: 1.2rem;
-  color: #4B2E83;
+  font-size: 16px !important;
+  color: white !important;
+  background-color: #4B2E83;
+  padding: 10px 20px;
+  border-radius: 10px;
   text-decoration: none;
   transition: color 0.3s ease; 
 }
 
+
 .back-arrow:hover {
-  color: #6C429A;
+  background-color: #6C429A;
+  cursor: pointer;
 }
 
 /* Login container */
@@ -83,12 +88,13 @@
   padding: 15px;
   font-size: 1.2rem;
   border: none;
-  border-radius: 25px; 
+  border-radius: 20px; 
   background-color: #4B2E83; 
   color: white;
   cursor: pointer; 
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 
 .login-button:hover {

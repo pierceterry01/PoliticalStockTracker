@@ -79,19 +79,20 @@ function StockViewPage() {
             {displayData.length > 0 ? (
               displayData.map((row, index) => (
                 <tr key={index}>
-                  <td>
-                    <img
-                      src={row.imgSrc}
-                      alt={row.politician}
-                      className="politician-image"
-                    />
-                    {/* Wrap politician's name with Link (TO CLICK ON!! WOAH!!) */}
-                    <Link
-                      to={`/politician/${encodeURIComponent(row.politician)}`}
-                      className={`politician-name ${row.party.toLowerCase()}`}
-                    >
-                      {row.politician}
-                    </Link>
+                  <td className="image-name-cell">
+                    <div className="politician-info">
+                      <img
+                        src={row.imgSrc}
+                        alt={row.politician}
+                        className="politician-image"
+                      />
+                      <Link
+                        to={`/politician/${encodeURIComponent(row.politician)}`}
+                        className={`politician-name ${row.party.toLowerCase()}`}
+                      >
+                        {row.politician}
+                      </Link>
+                    </div>
                   </td>
                   <td>${row.changeDollar.toLocaleString()}</td>
                   <td

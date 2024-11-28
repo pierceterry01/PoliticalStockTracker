@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/LandingPage.css';
-import landingPageImage from '../assets/images/landing-page-image.png';
+import landingPageImage from '../assets/images/united-states-capitol-6401252_640.jpg';
 
 function LandingPage() {
     const [isLoading, setIsLoading] = useState(false);

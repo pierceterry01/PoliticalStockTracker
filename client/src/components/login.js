@@ -13,7 +13,7 @@ function LoginPage() {
 
   return (
     <div className="login-body">
-      <Link to="/" className="back-arrow">&#8592; Back</Link>
+      <Link to="/" className="back-arrow">&#8592; Back to Home</Link>
       <div className="login-container">
         <div className="login-header">
           <h1>Outsider Trading</h1>

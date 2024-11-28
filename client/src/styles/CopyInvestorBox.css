@@ -94,11 +94,13 @@
   text-align: center;
 }
 
+/* Adding margin between input fields */
 .amount-input-group,
 .allocation-input-group {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;  
 }
 
 .amount-input-group .input-prefix,
@@ -110,7 +112,7 @@
 
 .amount-input-group input,
 .allocation-input-group input {
-  width: 150px;
+  width: 125px;
   height: 40px;
   font-size: 18px;
   border: 2px solid #4B2E83;
@@ -118,6 +120,8 @@
   background-color: #2b2b2b;
   color: white;
   padding: 0 10px;
+  margin-right: 20px; 
+  margin-top: 10px;
 }
 
 .amount-input-group input:focus,
@@ -205,11 +209,23 @@
   font-size: 16px;
   color: #ccc;
   flex: 1;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .allocation-input-group {
   display: flex;
   align-items: center;
+}
+
+label[for="invest-amount-input"] {
+  margin-left: 37%;
+  margin-bottom: 10px;
+}
+
+label[for="stop-loss-amount-input"] {
+  margin-left: 18%;
+  
 }
 
 .allocation-input-group input {
@@ -218,6 +234,8 @@
   text-align: right;
   font-size: 16px;
   margin-right: 5px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .allocation-input-group span {
@@ -239,6 +257,15 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+}
+/* Move labels further to the right */
+.amount-input-group label,
+.allocation-input-group label {
+  text-align: left;  
+  font-size: 18px;
+  color: #ccc;
+  margin-left: 100px;  
+  margin-bottom: 5px; 
 }
 
 .progress-step {

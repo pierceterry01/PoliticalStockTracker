@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #000000;
+  background-color: #1e1e1e;
   color: #ffffff;            
 }
 
@@ -12,7 +12,7 @@
 .settings-main {
   flex-grow: 1;
   padding: 40px 60px;
-  background-color: #000000; 
+  background-color: #1e1e1e; 
 }
 
 .settings-section {

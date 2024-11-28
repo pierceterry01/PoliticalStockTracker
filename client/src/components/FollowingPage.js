@@ -10,6 +10,7 @@ function FollowingPage() {
   const [searchTerm, setSearchTerm] = useState(''); // Added searchTerm state
 
   useEffect(() => {
+    // Fetch the following data HERE
     const investments = JSON.parse(localStorage.getItem('investments')) || [];
     setFollowingData(investments);
   }, []);

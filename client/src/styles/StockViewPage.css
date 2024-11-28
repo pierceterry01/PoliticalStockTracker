@@ -27,8 +27,9 @@
 
 .stock-table th,
 .stock-table td {
-  padding: 15px;
+  padding: 25px;
   text-align: left;
+  vertical-align: middle; /* Ensure content is centered vertically */
 }
 
 .stock-table th {
@@ -47,29 +48,50 @@
 
 .stock-table td {
   color: white;
+  height: 70px; /* Fix the height of the rows */
+}
+
+/* Make sure all images are in the same position */
+.image-name-cell {
+  display: flex;
+  align-items: center; /* Vertically center image and name */
+}
+
+.politician-info {
+  display: flex;
+  align-items: center; /* Vertically center image and name */
 }
 
 .politician-image {
-  width: 50px;
+  width: 50px; /* Set image size */
   height: 50px;
-  border-radius: 50%;
-  vertical-align: middle;
-  margin-right: 10px;
+  border-radius: 50%; /* Round image */
+  object-fit: cover; /* Prevent stretching */
+  margin-right: 15px; /* Space between image and name */
 }
 
 .politician-name {
-  vertical-align: middle;
   font-weight: bold;
   color: white;
   text-decoration: none;
+  margin-left: 20px;
 }
+
 
 .politician-name.democrat {
   color: #3b9eff; /* Blue for Democrats */
 }
 
+.politician-name.democrat:hover {
+  color: #9accff; 
+}
+
 .politician-name.republican {
   color: #ff4b4b; /* Red for Republicans */
+}
+
+.politician-name.republican:hover {
+  color: #ff7979; 
 }
 
 .percent-change.positive {
@@ -88,16 +110,14 @@
 
 @media (max-width: 768px) {
   .stock-view-content {
-    padding: 20px;
+    padding: 50px;
   }
 
-  .stock-table th,
-  .stock-table td {
-    padding: 10px;
-  }
+  
 
   .politician-image {
     width: 40px;
     height: 40px;
   }
+
 }

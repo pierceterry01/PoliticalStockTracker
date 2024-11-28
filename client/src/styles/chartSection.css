@@ -1,71 +1,71 @@
 .chart-section {
-    margin-top: 70px;
-    padding: 70px;
-    background-color: #1e1e1e;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;  
-    gap: 30px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  
- 
-  .metrics {
-    display: flex; 
-    justify-content: space-between; 
-    width: 100%; 
-    margin-bottom: 30px; 
-  }
-  
-  .box {
-    background-color: #2b2b2b; 
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    flex: 1; 
-    margin: 0 10px; 
-    box-sizing: border-box;
-  }
-  
-  .chart-header {
-    text-align: center;
-  }
+  margin-top: 40px; 
+  padding: 40px; 
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  width: 90%; 
+  box-sizing: border-box;
+  overflow: hidden;
+}
 
-  .content {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .left-side, .right-side {
-    box-sizing: border-box;
-  }
-  
-  .left-side {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-    width: 48%;
-  }
-  
-  .right-side {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 65%; 
-  }
-  
-  .tradeVolume {
-    margin-bottom: 30px;
-    height: 400px; 
-    width: 100%; 
-  }
-  
-  .portfolioComp, .sectorActivity {
-    margin-bottom: 30px;
-  }
-  
+.metrics {
+  display: flex; 
+  justify-content: space-between; 
+  width: 100%; 
+  margin-bottom: 20px; 
+}
+
+.box {
+  background-color: #2b2b2b; 
+  color: white;
+  padding: 15px; 
+  border-radius: 10px;
+  text-align: center;
+  flex: 1; 
+  margin: 0 8px; 
+  box-sizing: border-box;
+}
+
+.chart-header {
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.left-side, .right-side {
+  box-sizing: border-box;
+}
+
+.left-side {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 48%;
+}
+
+.right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 60%; 
+}
+
+.tradeVolume {
+  margin-bottom: 20px; 
+  margin-right: 20px;
+  height: 300px; 
+  width: 100%; 
+}
+
+.portfolioComp, .sectorActivity {
+  margin-bottom: 20px; 
+  margin-left: 20px;
+}
