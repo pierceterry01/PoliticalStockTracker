@@ -464,6 +464,48 @@ app.get('/api/trade-volume', async (req, res) => {
     }
   });
 
+  // Route to get the number of trades for a specific politician
+app.get('/api/trade-count', async (req, res) => {
+    const { politicianName } = req.query;
+
+    try {
+        // Query to count trades for the selected politician
+        const [result] = await pool.query(`
+            SELECT COUNT(*) AS tradeCount
+            FROM trades
+            WHERE politicianName = ?
+        `, [politicianName]);
+
+        const tradeCount = result[0].tradeCount;
+
+        res.json({ politicianName, tradeCount });
+    } catch (error) {
+        res.status(500).json({ error: "An error has occurred when attempting to retrieve the trade count." });
+    }
+});
+
+// Route to get the number of unique symbols for a specific politician
+app.get('/api/issuer-count', async (req, res) => {
+    const { politicianName } = req.query;
+
+    try {
+        // Query to count distinct symbols for the selected politician
+        const [result] = await pool.query(`
+            SELECT COUNT(DISTINCT symbol) AS issuerCount
+            FROM trades
+            WHERE politicianName = ?
+        `, [politicianName]);
+
+        const issuerCount = result[0].issuerCount;
+
+        res.json({ politicianName, issuerCount });
+    } catch (error) {
+        res.status(500).json({ error: "An error has occurred when attempting to retrieve the unique symbol count." });
+    }
+});
+
+
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Backend server listening on port ${PORT}`);
