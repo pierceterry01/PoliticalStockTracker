@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px; 
-  width: 90%; 
+  width: 91%; 
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -47,8 +47,9 @@
 .left-side {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 50px;
   width: 48%;
+  margin-right: 20px;
 }
 
 .right-side {
@@ -56,16 +57,9 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 60%; 
+  margin-right: 60px;
+  margin-bottom: 40px;
 }
 
-.tradeVolume {
-  margin-bottom: 20px; 
-  margin-right: 20px;
-  height: 300px; 
-  width: 100%; 
-}
 
-.portfolioComp, .sectorActivity {
-  margin-bottom: 20px; 
-  margin-left: 20px;
-}
+
