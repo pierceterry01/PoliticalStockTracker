@@ -25,6 +25,10 @@ function PoliticianPage() {
   const [portfolioCompData, setPortfolioCompData] = useState([]);
   const [loadingPortfolioData, setLoadingPortfolioData] = useState(true);
 
+  // State for sector activity data
+  const [sectorActivityData, setSectorActivityData] = useState([]);
+  const [loadingSectorData, setLoadingSectorData] = useState(true);
+
   // State for trade and issuer counts
   const [tradeCount, setTradeCount] = useState(null);
   const [issuerCount, setIssuerCount] = useState(null);
@@ -41,15 +45,25 @@ function PoliticianPage() {
     fetchMetrics();
   }, [decodedName]);
   
+  // Fetch sector activity data
+  useEffect(() => {
+    const fetchSectorData = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/sector-activity', {
+                params: { politicianName: decodedName },
+            });
+            console.log("Sector activity data fetched:", response.data);
+            setSectorActivityData(response.data.sectorData);
+        } catch (error) {
+            console.error('Error fetching sector activity data:', error);
+        } finally {
+            setLoadingSectorData(false);
+        }
+    };
 
-  // Other chart sample data
-  const sectorActivityData = [
-    { sector: "Information Technology", count: 93 },
-    { sector: "Industrials", count: 15 },
-    { sector: "Health Care", count: 31 },
-    { sector: "Consumer Discretionary", count: 38 },
-    { sector: "Energy", count: 15 },
-  ];
+    fetchSectorData();
+}, [decodedName]);
+
 
   const tradeVolumeData = [
     { interval: "2024-Q1", purchaseVolume: 24001.5, saleVolume: 911513, tradeCount: 29 },
@@ -224,7 +238,9 @@ function PoliticianPage() {
                 )}
               </div>
               <div className="sectorActivity">
-                {sectorActivityData.length > 0 ? (
+                {loadingSectorData ? (
+                  <div>Loading Sector Activity...</div>
+                ) : sectorActivityData.length > 0 ? (
                   <SectorActivityChart data={sectorActivityData} />
                 ) : (
                   <div>No sector activity data available.</div>

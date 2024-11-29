@@ -7,6 +7,7 @@ const mysql = require('mysql2/promise');
 const axios = require('axios');
 const cron = require('node-cron');
 const portfolioRoutes = require('./routes/portfolioRoutes');
+const sectorRoutes = require('./routes/sectorRoutes');
 
 
 const app = express();
@@ -507,9 +508,7 @@ app.get('/api/issuer-count', async (req, res) => {
 });
 
 app.use('/api', portfolioRoutes(pool)); 
-
-
-
+app.use('/api', sectorRoutes(pool, sectorMapping));
 
 // Start the server
 app.listen(PORT, () => {
