@@ -6,6 +6,8 @@ const { body, validationResult } = require('express-validator');
 const mysql = require('mysql2/promise');
 const axios = require('axios');
 const cron = require('node-cron');
+const portfolioRoutes = require('./routes/portfolioRoutes');
+
 
 const app = express();
 
@@ -167,7 +169,7 @@ app.post('/auth', async (req, res) => {
 
 const fetchTradesAndUpdateDB = async () => {
     const symbols = [
-        'TSLA', 'NVDA', 'AMZN', 'AAPL', 'MSFT', 'NFLX', 'DIS', 'PYPL',
+        'WFC','TSLA', 'NVDA', 'AMZN', 'AAPL', 'MSFT', 'NFLX', 'DIS', 'PYPL',
         'GOOGL', 'META', 'BABA', 'JPM', 'V', 'MA', 'UNH', 'HD',
         'PG', 'VZ', 'KO', 'PEP', 'CSCO', 'INTC', 'XOM', 'BA',
         'GE', 'WMT', 'BAC', 'C', 'GS', 'MRK', 'T', 'IBM',
@@ -503,6 +505,9 @@ app.get('/api/issuer-count', async (req, res) => {
         res.status(500).json({ error: "An error has occurred when attempting to retrieve the unique symbol count." });
     }
 });
+
+app.use('/api', portfolioRoutes(pool)); 
+
 
 
 

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import stockData from '../data/stockData';
 import '../styles/PoliticianPage.css';
 import '../styles/chartSection.css';
@@ -20,42 +21,63 @@ function PoliticianPage() {
     (p) => p.politician === decodedName
   );
 
-  // Sample Data Visualization Data
-  const portfolioCompData = [
-    { "symbol": "CLF", "count": 57 },
-    { "symbol": "PYPL", "count": 29 },
-    { "symbol": "INTC", "count": 24 },
-    { "symbol": "QCOM", "count": 23 },
-    { "symbol": "GOLD", "count": 16 }
+  // State for portfolio composition data
+  const [portfolioCompData, setPortfolioCompData] = useState([]);
+  const [loadingPortfolioData, setLoadingPortfolioData] = useState(true);
+
+  // State for trade and issuer counts
+  const [tradeCount, setTradeCount] = useState(null);
+  const [issuerCount, setIssuerCount] = useState(null);
+
+  // Fetch data for trade and issuer counts
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      const tradeCountResponse = await axios.get('http://localhost:3001/api/trade-count', { params: { politicianName: decodedName } });
+      const issuerCountResponse = await axios.get('http://localhost:3001/api/issuer-count', { params: { politicianName: decodedName } });
+      setTradeCount(tradeCountResponse.data.tradeCount);
+      setIssuerCount(issuerCountResponse.data.issuerCount);
+    };
+    fetchMetrics();
+  }, [decodedName]);
+  
+
+  // Other chart sample data
+  const sectorActivityData = [
+    { sector: "Information Technology", count: 93 },
+    { sector: "Industrials", count: 15 },
+    { sector: "Health Care", count: 31 },
+    { sector: "Consumer Discretionary", count: 38 },
+    { sector: "Energy", count: 15 },
   ];
 
-  const sectorActivityData = [
-      { sector: "Information Technology", count: 93 },
-      { sector: "Industrials", count: 15 },
-      { sector: "Health Care", count: 31 },
-      { sector: "Consumer Discretionary", count: 38 },
-      { sector: "Energy", count: 15 },
-    ];
-  
   const tradeVolumeData = [
-    { "interval": "2024-Q1", "purchaseVolume": 24001.5, "saleVolume": 911513, "tradeCount": 29 },
-    { "interval": "2024-Q2", "purchaseVolume": 577509.5, "saleVolume": 1900513, "tradeCount": 45 },
-    { "interval": "2024-Q3", "purchaseVolume": 0, "saleVolume": 105502, "tradeCount": 4 },
-    { "interval": "2024-Q4", "purchaseVolume": 0, "saleVolume": 227503.5, "tradeCount": 7 },
-    { "interval": "2023-Q1", "purchaseVolume": 290502, "saleVolume": 96504.5, "tradeCount": 13 },
-    { "interval": "2023-Q2", "purchaseVolume": 1649012.5, "saleVolume": 1039015, "tradeCount": 55 },
-    { "interval": "2023-Q3", "purchaseVolume": 1021008.5, "saleVolume": 646505.5, "tradeCount": 28 },
-    { "interval": "2023-Q4", "purchaseVolume": 750510, "saleVolume": 717511, "tradeCount": 42 },
-    { "interval": "2022-Q1", "purchaseVolume": 377509.5, "saleVolume": 518014, "tradeCount": 47 },
-    { "interval": "2022-Q2", "purchaseVolume": 1322006.5, "saleVolume": 791003.5, "tradeCount": 20 },
-    { "interval": "2022-Q3", "purchaseVolume": 258001.5, "saleVolume": 81002, "tradeCount": 7 },
-    { "interval": "2022-Q4", "purchaseVolume": 1628509.5, "saleVolume": 1100511, "tradeCount": 41 },
-    { "interval": "2021-Q1", "purchaseVolume": 121004.5, "saleVolume": 112505.5, "tradeCount": 20 },
-    { "interval": "2021-Q2", "purchaseVolume": 91001.5, "saleVolume": 129503.5, "tradeCount": 10 },
-    { "interval": "2021-Q3", "purchaseVolume": 387505, "saleVolume": 245005, "tradeCount": 20 },
-    { "interval": "2021-Q4", "purchaseVolume": 489004.5, "saleVolume": 212504.5, "tradeCount": 18 }
+    { interval: "2024-Q1", purchaseVolume: 24001.5, saleVolume: 911513, tradeCount: 29 },
+    { interval: "2024-Q2", purchaseVolume: 577509.5, saleVolume: 1900513, tradeCount: 45 },
+    { interval: "2024-Q3", purchaseVolume: 0, saleVolume: 105502, tradeCount: 4 },
+    { interval: "2024-Q4", purchaseVolume: 0, saleVolume: 227503.5, tradeCount: 7 },
   ];
-  
+
+  // Fetch portfolio composition data
+  useEffect(() => {
+    const fetchPortfolioData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/portfolio-composition', {
+          params: { politicianName: decodedName },
+        });
+        
+        
+        setPortfolioCompData(response.data);
+      } catch (error) {
+        console.error('Error fetching portfolio composition data:', error);
+      } finally {
+        setLoadingPortfolioData(false);
+      }
+    };
+
+    fetchPortfolioData();
+  }, [decodedName]);
+
   // Calculate total trade volume
   const totalTradeVolume = tradeVolumeData.reduce(
     (total, item) => total + item.purchaseVolume + item.saleVolume,
@@ -69,6 +91,9 @@ function PoliticianPage() {
       ? totalTradeVolume / tradeVolumeData.length
       : 0;
   
+  
+
+
 
   const formatNumber = (number) => {
     if (number >= 1000000) {
@@ -80,6 +105,9 @@ function PoliticianPage() {
     return number.toFixed(2);
   };
     
+    
+
+
 
   // State for the follow button
   const [isFollowing, setIsFollowing] = useState(false);
@@ -175,24 +203,21 @@ function PoliticianPage() {
               </button>
             </div>
           </div>
-          <div className="politician-stats">
-          </div>
         </div>
 
-
-
-        {/* Data Visualization Section */}
         <div className="chart-section">
           <div className="metrics">
-            <div className="box trades">Trades: (x)</div>
-            <div className="box issuers">Issuers: (x)</div>
+            <div className="box trades">Trades: {tradeCount !== null ? tradeCount : 'Loading...'}</div>
+            <div className="box issuers">Issuers: {issuerCount !== null ? issuerCount : 'Loading...'}</div>
             <div className="box total-volume">Total Volume: {formatNumber(totalTradeVolume)}</div>
             <div className="box avg-quarterly-volume">Avg. Quarterly Volume: {formatNumber(averageQuarterlyVolume)}</div>
           </div>
           <div className="content">
             <div className="left-side">
               <div className="portfolioComp">
-                {portfolioCompData.length > 0 ? (
+                {loadingPortfolioData ? (
+                  <div>Loading Portfolio Composition...</div>
+                ) : portfolioCompData.length > 0 ? (
                   <PortfolioCompositionChart data={portfolioCompData} />
                 ) : (
                   <div>No portfolio composition data available.</div>
@@ -219,6 +244,9 @@ function PoliticianPage() {
         </div>
       </div>
       
+      
+      {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
+
       {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
       {showCopyInvestorBox && (
         <div className="copy-investor-popup">
