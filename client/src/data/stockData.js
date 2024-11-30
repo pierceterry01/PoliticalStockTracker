@@ -66,7 +66,7 @@ const stockData = [
   { politician: 'Chuck Schumer', party: 'Democrat', changeDollar: 3000, changePercent: 3, copiers: 210, lastTraded: '2023-11-16', imgSrc: chuckSchumer },
   { politician: 'Alan Lowenthal', party: 'Democrat', changeDollar: 6000, changePercent: 2, copiers: 76, lastTraded: '2023-12-15', imgSrc: alanlowenthal },
   { politician: 'Blake Moore', party: 'Republican', changeDollar: 6000, changePercent: 2, copiers: 76, lastTraded: '2023-12-15', imgSrc: blakemoore },
-  { politician: 'Cindy Axne', party: 'Republican', changeDollar: 6000, changePercent: 2, copiers: 76, lastTraded: '2023-12-15', imgSrc: cindyaxne },
+  { politician: 'Cindy Axne', party: 'Democrat', changeDollar: 6000, changePercent: 2, copiers: 76, lastTraded: '2023-12-15', imgSrc: cindyaxne },
   { politician: 'Daniel Goldman', party: 'Democrat', changeDollar: 6000, changePercent: 2, copiers: 76, lastTraded: '2023-12-15', imgSrc: danielgoldman },
   { politician: 'David Roe', party: 'Republican', changeDollar: 6000, changePercent: 2, copiers: 76, lastTraded: '2023-12-15', imgSrc: davidroe },
   { politician: 'Kevin McCarthy', party: 'Republican', changeDollar: -2000, changePercent: -2, copiers: 150, lastTraded: '2023-11-14', imgSrc: kevinMcCarthy },
