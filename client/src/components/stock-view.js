@@ -81,6 +81,7 @@ function StockViewPage() {
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page after search
   };
 
   // Update filteredData and sort the displayData accordingly
@@ -188,6 +189,36 @@ function StockViewPage() {
             )}
           </tbody>
         </table>
+
+        {/* Page Change Control */}
+        <div className="page-change-controls">
+          <button
+            className="page-button"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              className={`page-button ${
+                currentPage === index + 1 ? 'active' : ''
+              }`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            className="page-button"
+            // Set previous button to disabled when on first page
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
