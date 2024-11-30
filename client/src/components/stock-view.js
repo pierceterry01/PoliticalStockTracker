@@ -10,21 +10,28 @@ function StockViewPage() {
   const [sortDirection, setSortDirection] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
   // Fetch the latest trade data and volume data
   useEffect(() => {
     const fetchData = async () => {
       try {
-         const latestTradeResponse = await axios.get(
+        // Fetch the latest trade dates
+        const latestTradeResponse = await axios.get(
           "http://localhost:3001/api/latest-trade-data"
         );
         const latestTradeData = latestTradeResponse.data;
 
-         const tradeDateMap = latestTradeData.reduce((acc, item) => {
+        // Create a map of politician names to their last traded date
+        const tradeDateMap = latestTradeData.reduce((acc, item) => {
           acc[item.politicianName] = item.lastTraded;
           return acc;
         }, {});
 
-         const updatedData = await Promise.all(
+        // Fetch total trade volume for each politician
+        const updatedData = await Promise.all(
           stockData.map(async (politician) => {
             try {
               const response = await axios.get(
@@ -41,7 +48,7 @@ function StockViewPage() {
               return {
                 ...politician,
                 lastTraded: tradeDateMap[politician.politician] || politician.lastTraded,
-                totalVolume: totalTradeVolume,  
+                totalVolume: totalTradeVolume,
               };
             } catch (error) {
               console.error(
@@ -51,7 +58,7 @@ function StockViewPage() {
               return {
                 ...politician,
                 lastTraded: tradeDateMap[politician.politician] || politician.lastTraded,
-                totalVolume: 0,  
+                totalVolume: 0,
               };
             }
           })
@@ -65,7 +72,7 @@ function StockViewPage() {
     };
 
     fetchData();
-  }, []);  
+  }, []);
 
   // Handle sorting based on column header clicked
   const handleSort = (key) => {
@@ -91,7 +98,8 @@ function StockViewPage() {
       item.politician.toLowerCase().includes(searchQuery)
     );
 
-     if (sortKey) {
+    // Sort the filtered data
+    if (sortKey) {
       filteredData.sort((a, b) => {
         let res;
         if (sortKey === "politician") {
@@ -111,6 +119,13 @@ function StockViewPage() {
   };
 
   const filteredData = getFilteredAndSortedData();
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const pageData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="stock-view-page">
@@ -140,8 +155,8 @@ function StockViewPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
-              filteredData.map((row, index) => (
+            {pageData.length > 0 ? (
+              pageData.map((row, index) => (
                 <tr key={index}>
                   <td className="image-name-cell">
                     <div className="politician-info">
@@ -203,7 +218,7 @@ function StockViewPage() {
             <button
               key={index}
               className={`page-button ${
-                currentPage === index + 1 ? 'active' : ''
+                currentPage === index + 1 ? "active" : ""
               }`}
               onClick={() => setCurrentPage(index + 1)}
             >
@@ -212,7 +227,6 @@ function StockViewPage() {
           ))}
           <button
             className="page-button"
-            // Set previous button to disabled when on first page
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(currentPage + 1)}
           >
