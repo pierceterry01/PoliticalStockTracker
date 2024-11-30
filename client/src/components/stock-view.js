@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import '../styles/StockViewPage.css';
-import stockData from '../data/stockData'; 
+import stockData from '../data/stockData';
 
 function StockViewPage() {
   const [displayData, setDisplayData] = useState(stockData);
   const [sortKey, setSortKey] = useState('');
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Seperated into different pages for better display
+  // User can shift between pages of politicians
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  // Calculate page data
+  const pageData = displayData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(displayData.length / itemsPerPage);
 
   // Handle sorting based on column header clicked
   const handleSort = (key) => {
@@ -23,9 +36,10 @@ function StockViewPage() {
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page after search
   };
 
-  // Update displayData when: stockData, searchQuery, sortKey, or sortDirection changes
+  // Update displayData when stockData, searchQuery, sortKey, or sortDirection changes
   useEffect(() => {
     let filteredData = stockData.filter((item) =>
       item.politician.toLowerCase().includes(searchQuery)
@@ -75,9 +89,9 @@ function StockViewPage() {
             </tr>
           </thead>
           <tbody>
-            {/* Map over displayData --> render each row */}
-            {displayData.length > 0 ? (
-              displayData.map((row, index) => (
+            {/* Render the data on different pages */}
+            {pageData.length > 0 ? (
+              pageData.map((row, index) => (
                 <tr key={index}>
                   <td className="image-name-cell">
                     <div className="politician-info">
@@ -116,6 +130,36 @@ function StockViewPage() {
             )}
           </tbody>
         </table>
+
+        {/* Page Change Control */}
+        <div className="page-change-controls">
+          <button
+            className="page-button"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              className={`page-button ${
+                currentPage === index + 1 ? 'active' : ''
+              }`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            className="page-button"
+            // Set previous button to disabled when on first page
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
