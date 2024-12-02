@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/CopyInvestorBox.css';
 
+
 function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
   const [step, setStep] = useState(1);
+
 
   // Initialize state w/ existing data if editing
   const [investAmount, setInvestAmount] = useState(
@@ -11,6 +13,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
   const [stopLossAmount, setStopLossAmount] = useState(
     isEditing ? investorData.stopLossAmount : 900
   );
+
 
   const allSectors = {
     Energy: 'ENGY',
@@ -26,12 +29,14 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     'Real Estate': 'REAL',
   };
 
+
   const [selectedSectors, setSelectedSectors] = useState(
     isEditing ? investorData.sectors : Object.keys(allSectors)
   );
   const [sectorAllocations, setSectorAllocations] = useState(
     isEditing ? investorData.sectorAllocations : {}
   );
+
 
   // Synchronize sectorAllocations with selectedSectors
   useEffect(() => {
@@ -48,6 +53,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       return newAllocations;
     });
   }, [selectedSectors]);
+
 
   // Initialize allocations when entering Step 3
   useEffect(() => {
@@ -77,6 +83,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       }
     }
   }, [step, selectedSectors, sectorAllocations]);
+
 
   const handleNextClick = () => {
     if (step === 1) {
@@ -108,11 +115,13 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     }
   };
 
+
   const handleBackClick = () => {
     if (step > 1) {
       setStep((prev) => prev - 1);
     }
   };
+
 
   const handleInvestClick = () => {
     const investmentData = {
@@ -127,6 +136,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     onInvest(investmentData);
   };
 
+
   const toggleSector = (sector) => {
     setSelectedSectors((prev) => {
       if (prev.includes(sector)) {
@@ -137,6 +147,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     });
   };
 
+
   const handleAllocationChange = (sector, value) => {
     const val = parseFloat(value) || 0;
     setSectorAllocations((prev) => ({
@@ -144,6 +155,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       [sector]: val,
     }));
   };
+
 
   const renderStepContent = () => {
     switch (step) {
@@ -165,6 +177,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
                 />
               </div>
             </div>
+
 
             {/* Stop-Loss Amount */}
             <div className="stop-loss-setting">
@@ -212,6 +225,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
           0
         );
 
+
         return (
           <>
             <div className="allocation-setting">
@@ -247,12 +261,14 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     }
   };
 
+
   return (
     <div className="copy-investor-box">
       {/* Close Button */}
       <button className="close-button" onClick={onClose} aria-label="Close">
         &times;
       </button>
+
 
       {/* Header Section */}
       <div className="header-section">
@@ -268,8 +284,10 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
         </div>
       </div>
 
+
       {/* Body Section */}
       <div className="body-section">{renderStepContent()}</div>
+
 
       {/* Footer Section */}
       <div className="footer-section">
@@ -285,5 +303,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     </div>
   );
 }
+
 
 export default CopyInvestorBox;

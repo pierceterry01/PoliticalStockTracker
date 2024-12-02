@@ -3,34 +3,41 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import stockData from "../data/stockData";
 import "../styles/PoliticianPage.css";
-import "../styles/chartSection.css";
+import "../styles/chartSectionPolitician.css";
 import PortfolioCompositionChart from "../charts/portfolioComposition.js";
 import SectorActivityChart from "../charts/sectorActivity.js";
 import TradeVolumeChart from "../charts/tradeVolume.js";
 
+
 // Import the CopyInvestorBox component
 import CopyInvestorBox from "./CopyInvestorBox";
+
 
 function PoliticianPage() {
   const { politicianName } = useParams();
   const decodedName = decodeURIComponent(politicianName);
   const navigate = useNavigate();
 
+
   const politicianData = stockData.find((p) => p.politician === decodedName);
+
 
   // States for charts
   const [portfolioCompData, setPortfolioCompData] = useState([]);
   const [sectorActivityData, setSectorActivityData] = useState([]);
   const [tradeVolumeData, setTradeVolumeData] = useState([]);
 
+
   // States for loading
   const [loadingPortfolioData, setLoadingPortfolioData] = useState(true);
   const [loadingSectorData, setLoadingSectorData] = useState(true);
   const [loadingVolumeData, setLoadingVolumeData] = useState(true);
 
+
   // State for trade and issuer counts
   const [tradeCount, setTradeCount] = useState(null);
   const [issuerCount, setIssuerCount] = useState(null);
+
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -47,6 +54,7 @@ function PoliticianPage() {
     };
     fetchMetrics();
   }, [decodedName]);
+
 
   // Fetch trade volume data
   useEffect(() => {
@@ -66,8 +74,10 @@ function PoliticianPage() {
       }
     };
 
+
     fetchTradeVolumeData();
   }, [decodedName]);
+
 
   // Fetch sector activity data
   useEffect(() => {
@@ -88,8 +98,10 @@ function PoliticianPage() {
       }
     };
 
+
     fetchSectorData();
   }, [decodedName]);
+
 
   // Fetch portfolio composition data
   useEffect(() => {
@@ -102,6 +114,7 @@ function PoliticianPage() {
           }
         );
 
+
         setPortfolioCompData(response.data);
       } catch (error) {
         console.error("Error fetching portfolio composition data:", error);
@@ -110,14 +123,17 @@ function PoliticianPage() {
       }
     };
 
+
     fetchPortfolioData();
   }, [decodedName]);
+
 
   // Calculate total trade volume
   const totalTradeVolume = tradeVolumeData.reduce(
     (total, item) => total + item.purchaseVolume + item.saleVolume,
     0
   );
+
 
    useEffect(() => {
     if (politicianData && totalTradeVolume) {
@@ -132,9 +148,11 @@ function PoliticianPage() {
     }
   }, [politicianData, totalTradeVolume]);
 
+
   // Calculate average quarterly trade volume
   const averageQuarterlyVolume =
     tradeVolumeData.length > 0 ? totalTradeVolume / tradeVolumeData.length : 0;
+
 
   const formatNumber = (number) => {
     if (number >= 1000000) {
@@ -146,9 +164,11 @@ function PoliticianPage() {
     return number.toFixed(2);
   };
 
+
   // State for the follow button
   const [isFollowing, setIsFollowing] = useState(false);
   const [showCopyInvestorBox, setShowCopyInvestorBox] = useState(false);
+
 
   const handleFollowClick = () => {
     if (!isFollowing) {
@@ -164,13 +184,16 @@ function PoliticianPage() {
     }
   };
 
+
   const handleCloseCopyInvestorBox = () => {
     setShowCopyInvestorBox(false);
   };
 
+
   const handleInvest = (investmentData) => {
     setIsFollowing(true);
     setShowCopyInvestorBox(false);
+
 
     const politicianInvestment = {
       politicianName: politicianData.politician,
@@ -182,14 +205,17 @@ function PoliticianPage() {
       stopLossAmount: investmentData.stopLossAmount,
     };
 
+
     // Get existing investments from localStorage
     let existingInvestments =
       JSON.parse(localStorage.getItem("investments")) || [];
+
 
     // Check if politician already followed
     const isAlreadyInvested = existingInvestments.some(
       (inv) => inv.politicianName === politicianInvestment.politicianName
     );
+
 
     if (!isAlreadyInvested) {
       // Add new investment
@@ -203,11 +229,14 @@ function PoliticianPage() {
       );
     }
 
+
     // Save updated investments to localStorage
     localStorage.setItem("investments", JSON.stringify(existingInvestments));
 
+
     navigate("/following");
   };
+
 
   if (!politicianData) {
     return (
@@ -218,6 +247,7 @@ function PoliticianPage() {
       </div>
     );
   }
+  
 
   return (
     <div className="politician-page">
@@ -243,8 +273,9 @@ function PoliticianPage() {
           </div>
         </div>
 
-        <div className="chart-section">
-          <div className="metrics">
+
+        <div className="chart-section-politician">
+          <div className="metrics-politician">
             <div className="box trades">
               Trades: {tradeCount !== null ? tradeCount : "Loading..."}
             </div>
@@ -258,8 +289,8 @@ function PoliticianPage() {
               Avg. Quarterly Volume: {formatNumber(averageQuarterlyVolume)}
             </div>
           </div>
-          <div className="content">
-            <div className="left-side">
+          <div className="chart-content-politician">
+            <div className="left-side-politician">
               <div className="portfolioComp">
                 {loadingPortfolioData ? (
                   <div>Loading Portfolio Composition...</div>
@@ -279,7 +310,7 @@ function PoliticianPage() {
                 )}
               </div>
             </div>
-            <div className="right-side">
+            <div className="right-side-politician">
               <div className="tradeVolume">
                 {loadingVolumeData ? (
                   <div>Loading Trade Volume...</div>
@@ -294,7 +325,8 @@ function PoliticianPage() {
         </div>
       </div>
 
-      {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
+
+
 
       {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
       {showCopyInvestorBox && (
@@ -315,5 +347,6 @@ function PoliticianPage() {
     </div>
   );
 }
+
 
 export default PoliticianPage;

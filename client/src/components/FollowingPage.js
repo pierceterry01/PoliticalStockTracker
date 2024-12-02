@@ -3,17 +3,30 @@ import '../styles/FollowingPage.css';
 import PoliticianCard from './PoliticianCard';
 import CopyInvestorBox from './CopyInvestorBox';
 
+
 function FollowingPage() {
   const [followingData, setFollowingData] = useState([]);
   const [showCopyInvestorBox, setShowCopyInvestorBox] = useState(false);
   const [selectedPolitician, setSelectedPolitician] = useState(null);
   const [searchTerm, setSearchTerm] = useState(''); // Added searchTerm state
+  const [aggregatedSectors, setAggregatedSectors] = useState([]); // Add this line to define the state for aggregated sectors
 
   useEffect(() => {
     // Fetch the following data HERE
     const investments = JSON.parse(localStorage.getItem('investments')) || [];
     setFollowingData(investments);
+    updateTotalInvestment(investments);
   }, []);
+
+  // Updates the total investment for the user portfolio
+  const updateTotalInvestment = (investments) => {
+    const totalInvestment = investments.reduce(
+      (total, item) => total + (item.investmentAmount || 0),
+      0
+    );
+    localStorage.setItem('totalInvestment', totalInvestment);
+  };
+
 
   const handleUnfollow = (politicianName) => {
     const updatedInvestments = followingData.filter(
@@ -43,12 +56,38 @@ function FollowingPage() {
     setFollowingData(updatedInvestments);
     localStorage.setItem('investments', JSON.stringify(updatedInvestments));
     setShowCopyInvestorBox(false);
+    updateTotalInvestment(updatedInvestments);
   };
 
   // Filter followingData based on searchTerm
   const filteredData = followingData.filter((politician) =>
     politician.politicianName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const aggregateSectorAllocations = (followingData) => {
+    const sectorAggregates = {};
+
+    followingData.forEach((investment) => {
+      const { sectorAllocations } = investment;
+      Object.keys(sectorAllocations).forEach((sector) => {
+        const allocation = sectorAllocations[sector];
+        sectorAggregates[sector] = (sectorAggregates[sector] || 0) + allocation;
+      });
+    });
+
+    setAggregatedSectors(
+      Object.entries(sectorAggregates).map(([sector, allocation]) => ({
+        sector,
+        allocation,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    if (followingData.length) {
+      aggregateSectorAllocations(followingData);
+    }
+  }, [followingData]);
 
   return (
     <div className="following-page">
