@@ -129,9 +129,6 @@ module.exports = (pool) => {
         } else if (type.includes("sale") || type.includes("sell")) {
           quarterlyData[quarterKey].saleVolume += volume;
         } else if (type.includes("exchange")) {
-           console.warn(
-            `Exchange transaction type: ${transactionType}, categorized as neutral.`
-          );
         } else {
           console.warn(`Unknown transaction type: ${transactionType}`);
         }
@@ -171,7 +168,6 @@ module.exports = (pool) => {
           GROUP BY politicianName
       `);
 
-      console.log("Fetched latest trade dates for politicians:", latestTrades);
       res.status(200).json(latestTrades);
     } catch (error) {
       console.error(
@@ -187,6 +183,87 @@ module.exports = (pool) => {
         });
     }
   });
+
+  // Endpoint to get individual transactions for a politician
+  router.get("/stocks", async (req, res) => {
+    const { politicianName } = req.query;
+  
+    if (!politicianName) {
+      return res.status(400).json({ error: "Politician name is required" });
+    }
+  
+    try {
+      const query = `
+        SELECT 
+        t.symbol AS symbol,
+        t.assetName AS assetName,
+        ROUND(AVG((t.amountFrom + t.amountTo) / 2), 2) AS averagePrice,
+        MAX(t.filingDate) AS filingDate,
+        MAX(t.transactionDate) AS transactionDate,
+        t.transactionType AS transactionType
+        FROM trades t
+        WHERE t.politicianName = ?
+        GROUP BY t.symbol, t.assetName, t.transactionType
+        ORDER BY transactionDate DESC;
+
+
+      `;
+  
+      const [results] = await pool.execute(query, [politicianName]);
+  
+      res.json(results);
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      res.status(500).json({ error: "An error occurred while fetching transactions." });
+    }
+  });
+  
+
+
+  /*
+
+  router.get("/current-stock-price", async (req, res) => {
+    const { symbol } = req.query;
+  
+    if (!symbol) {
+      return res.status(400).json({ error: "Stock symbol is required" });
+    }
+  
+    try {
+      console.log(`Requesting stock price for symbol: ${symbol}`);
+      const response = await axios.get("https://finnhub.io/api/v1/quote", {
+        params: {
+          symbol: symbol,
+          token: process.env.FINNHUB_API_KEY,
+        },
+      });
+      console.log("Finnhub API response:", response.data);
+  
+      const { c: currentPrice, h: highPrice, l: lowPrice, o: openPrice } = response.data;
+  
+      if (!currentPrice) {
+        return res.status(404).json({ error: "Current stock price not available." });
+      }
+  
+      res.status(200).json({
+        symbol,
+        currentPrice,
+        highPrice,
+        lowPrice,
+        openPrice,
+      });
+    } catch (error) {
+      console.error("Error fetching current stock price:", error);
+      res.status(500).json({
+        error: "An error occurred while fetching the current stock price.",
+        details: error.message,
+      });
+    }
+  });
+  
+  */
+
+  
 
   return router;
 };

@@ -38,6 +38,68 @@ function PoliticianPage() {
   const [tradeCount, setTradeCount] = useState(null);
   const [issuerCount, setIssuerCount] = useState(null);
 
+  const [transactions, setTransactions] = useState([]);
+  const [loadingTransactions, setLoadingTransactions] = useState(true);
+
+
+   
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/api/stocks", {
+          params: { politicianName: decodedName },
+        });
+        setTransactions(response.data);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      } finally {
+        setLoadingTransactions(false);
+      }
+    };
+  
+    fetchTransactions();
+  }, [decodedName]);
+  
+
+
+
+  const fetchUpdatedTransactions = async () => {
+    try {
+      const response = await axios.get(`/api/stocks?politicianName=${politicianName}`);
+      const transactions = response.data;
+
+      // Fetch asset names for transactions missing them
+      const updatedTransactions = await Promise.all(transactions.map(async (transaction) => {
+        if (!transaction.assetName) {
+          const finnhubResponse = await axios.get(`https://finnhub.io/api/v1/search`, {
+            params: {
+              q: transaction.symbol,
+              token: process.env.REACT_APP_FINNHUB_API_KEY
+            }
+          });
+          const assetName = finnhubResponse.data.result[0]?.description || 'Unknown';
+          return { ...transaction, assetName };
+        }
+        return transaction;
+      }));
+
+      setTransactions(updatedTransactions);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+
+  fetchUpdatedTransactions();
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -89,7 +151,6 @@ function PoliticianPage() {
             params: { politicianName: decodedName },
           }
         );
-        console.log("Sector activity data fetched:", response.data);
         setSectorActivityData(response.data.sectorData);
       } catch (error) {
         console.error("Error fetching sector activity data:", error);
@@ -325,6 +386,40 @@ function PoliticianPage() {
         </div>
       </div>
 
+      <div className="transactions-section">
+  <h2>Individual Transactions</h2>
+  {loadingTransactions ? (
+    <div>Loading transactions...</div>
+  ) : transactions.length > 0 ? (
+    <table className="transactions-table">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Asset Name</th>
+          <th>Transaction Type</th>
+          <th>Transaction Volume</th>
+          <th>Transaction Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {transactions.map((transaction, index) => (
+          <tr key={index}>
+            <td>{transaction.symbol}</td>
+            <td>{transaction.assetName}</td>
+            <td>{transaction.transactionType}</td>
+            <td>${parseFloat(transaction.averagePrice).toFixed(2)}</td>
+            <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <div>No transactions found for this politician.</div>
+  )}
+</div>
+
+
+
 
 
 
@@ -347,6 +442,5 @@ function PoliticianPage() {
     </div>
   );
 }
-
 
 export default PoliticianPage;
