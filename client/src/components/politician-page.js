@@ -64,38 +64,29 @@ function PoliticianPage() {
 
 
 
-  const fetchUpdatedTransactions = async () => {
-    try {
-      const response = await axios.get(`/api/stocks?politicianName=${politicianName}`);
-      const transactions = response.data;
-
-      // Fetch asset names for transactions missing them
-      const updatedTransactions = await Promise.all(transactions.map(async (transaction) => {
-        if (!transaction.assetName) {
-          const finnhubResponse = await axios.get(`https://finnhub.io/api/v1/search`, {
-            params: {
-              q: transaction.symbol,
-              token: process.env.REACT_APP_FINNHUB_API_KEY
-            }
-          });
-          const assetName = finnhubResponse.data.result[0]?.description || 'Unknown';
-          return { ...transaction, assetName };
+  // Fetch updated transactions with missing asset names filled in
+  useEffect(() => {
+    const fetchUpdatedTransactions = async () => {
+      try {
+        console.log("Fetching updated transactions for:", decodedName);
+        const response = await axios.get("http://localhost:3001/api/updated-stocks", {
+          params: { politicianName: decodedName },
+        });  
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          setTransactions(response.data);
+        } else {
+          console.warn("No transactions found for:", decodedName);
         }
-        return transaction;
-      }));
-
-      setTransactions(updatedTransactions);
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-    }
-  };
-
-  fetchUpdatedTransactions();
-
-
-
-
-
+      } catch (error) {
+        console.error("Error fetching updated transactions:", error);
+      } finally {
+        setLoadingTransactions(false);
+      }
+    };
+  
+    fetchUpdatedTransactions();
+  }, [decodedName]);
+  
 
 
 
@@ -334,7 +325,6 @@ function PoliticianPage() {
           </div>
         </div>
 
-
         <div className="chart-section-politician">
           <div className="metrics-politician">
             <div className="box trades">
@@ -387,7 +377,7 @@ function PoliticianPage() {
       </div>
 
       <div className="transactions-section">
-  <h2>Individual Transactions</h2>
+  <h2>Recent Transactions</h2>
   {loadingTransactions ? (
     <div>Loading transactions...</div>
   ) : transactions.length > 0 ? (
@@ -397,31 +387,47 @@ function PoliticianPage() {
           <th>Symbol</th>
           <th>Asset Name</th>
           <th>Transaction Type</th>
-          <th>Transaction Volume</th>
+          <th>~Transaction Volume</th>
           <th>Transaction Date</th>
         </tr>
       </thead>
       <tbody>
-        {transactions.map((transaction, index) => (
-          <tr key={index}>
-            <td>{transaction.symbol}</td>
-            <td>{transaction.assetName}</td>
-            <td>{transaction.transactionType}</td>
-            <td>${parseFloat(transaction.averagePrice).toFixed(2)}</td>
-            <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
-          </tr>
-        ))}
-      </tbody>
+  {transactions.map((transaction, index) => {
+    let className = "";
+    if (
+      transaction.transactionType.toLowerCase().includes("buy") ||
+      transaction.transactionType.toLowerCase().includes("purchase") ||
+      transaction.transactionType.toLowerCase().includes("Receive")
+    ) {
+      className = "positive";
+    } else if (
+      transaction.transactionType.toLowerCase().includes("sell") ||
+      transaction.transactionType.toLowerCase().includes("exchange") ||
+      transaction.transactionType.toLowerCase().includes("sale")
+    ) {
+      className = "negative";
+    }
+
+    return (
+      <tr key={index}>
+        <td>{transaction.symbol}</td>
+        <td>{transaction.assetName}</td>
+        <td>{transaction.transactionType}</td>
+        <td className={className}>
+          ${parseFloat(transaction.averagePrice).toFixed(2)}
+        </td>
+        <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
+      </tr>
+    );
+  })}
+</tbody>
+
+
     </table>
   ) : (
     <div>No transactions found for this politician.</div>
   )}
 </div>
-
-
-
-
-
 
       {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
       {showCopyInvestorBox && (

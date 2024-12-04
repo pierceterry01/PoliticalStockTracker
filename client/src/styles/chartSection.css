@@ -1,5 +1,6 @@
 .chart-section {
   margin-top: 40px; 
+  margin: 40px auto;
   padding: 40px; 
   background-color: #1e1e1e;
   border-radius: 10px;
@@ -9,6 +10,7 @@
   width: 91%; 
   box-sizing: border-box;
   overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .metrics {
