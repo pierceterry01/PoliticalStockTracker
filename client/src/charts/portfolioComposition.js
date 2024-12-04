@@ -4,10 +4,15 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function PortfolioCompositionChart({ data }) {
-  if (!data.length) {
-    return <p>Loading Portfolio Composition...</p>; // Show this while waiting for data
-  }
+function PortfolioCompositionChart() {
+  // Sample data for testing purposes
+  const data = [
+    { symbol: "AAPL", count: 50 },
+    { symbol: "GOOGL", count: 30 },
+    { symbol: "AMZN", count: 20 },
+    { symbol: "MSFT", count: 40 },
+    { symbol: "TSLA", count: 10 }
+  ];
 
   const totalStocks = data.reduce((total, item) => total + item.count, 0);
 

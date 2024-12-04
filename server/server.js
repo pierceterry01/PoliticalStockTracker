@@ -206,7 +206,6 @@ const fetchTradesAndUpdateDB = async () => {
                     to: '2024-12-31'
                 }
             });
-            console.log(`Data fetched for ${symbol}:`, response.data);
             return response.data.data;
         } catch (error) {
             console.error(`Error fetching trades for ${symbol}:`, error.message);
@@ -289,7 +288,6 @@ app.get('/api/trades/politician', async (req, res) => {
             'SELECT * FROM trades WHERE politicianName = ? ORDER BY transactionDate DESC LIMIT 100',
             [politicianName]
         );
-        console.log("Trades fetched from the database:", results);
         res.status(200).json(results);
     } catch (error) {
         console.error('Error fetching trades for politician:', error.message);
@@ -387,85 +385,6 @@ app.get('/api/sector-activity', async (req, res) => {
     }
 });
 
-// Route to obtain the trade volume data for the last 4 years, grouped by quarters
-app.get('/api/trade-volume', async (req, res) => {
-    try {
-      const { politicianName } = req.query;
-  
-      // Get the current date and get the date from 4 years ago
-      const endDate = moment().format('YYYY-MM-DD');
-      const startDate = moment().subtract(4, 'years').startOf('year').format('YYYY-MM-DD');
-  
-      // Generate an array of quarters for the last 4 years (2021-2024, 4 quarters per year)
-      const allQuarters = [];
-      for (let year = moment().year(); year > moment().subtract(4, 'years').year(); year--) {
-        for (let quarter = 1; quarter <= 4; quarter++) {
-          allQuarters.push(`${year}-Q${quarter}`);
-        }
-      }
-  
-      // Query trades
-      const [trades] = await pool.query(
-        `SELECT transactionDate, transactionType, amountFrom, amountTo
-         FROM trades
-         WHERE politicianName = ? AND
-         transactionDate BETWEEN ? AND ?
-         ORDER BY transactionDate`,
-        [politicianName, startDate, endDate]
-      );
-  
-      const quarterlyData = {};
-      allQuarters.forEach((quarter) => {
-        quarterlyData[quarter] = { purchaseVolume: 0, saleVolume: 0, tradeCount: 0 };
-      });
-  
-      // Process the trades and populate them into quarterlyData
-      trades.forEach((trade) => {
-        const quarter = moment(trade.transactionDate).quarter();
-        const year = moment(trade.transactionDate).year();
-        const quarterLabel = `${year}-Q${quarter}`;
-  
-        // Volume Calculation (amountFrom + amountTo) / 2
-        // Represents a midpoint/estimate
-        const amountFrom = parseFloat(trade.amountFrom);
-        const amountTo = parseFloat(trade.amountTo);
-        const volume = (amountFrom + amountTo) / 2;
-  
-        // Checks the transaction type and assigns it accordingly (purchase or sale)
-        if (trade.transactionType === 'Purchase') {
-          quarterlyData[quarterLabel].purchaseVolume += volume;
-          // 3 types of sale trades present in the data, counting all three of them as a sale trade
-        } else if (['Sale', 'Sale (Partial)', 'Sale (Full)'].includes(trade.transactionType)) {
-          quarterlyData[quarterLabel].saleVolume += volume;
-        }
-  
-        // Count total trades (Purchases and Sales)
-        // For the line graph
-        quarterlyData[quarterLabel].tradeCount += 1;
-      });
-  
-      // Reformat the data for charting
-      const result = allQuarters.map((quarter) => ({
-        interval: quarter,
-        purchaseVolume: quarterlyData[quarter].purchaseVolume,
-        saleVolume: quarterlyData[quarter].saleVolume,
-        tradeCount: quarterlyData[quarter].tradeCount,  // Total trade count
-      }));
-  
-      // Handle if there is no trade data for a politician
-      const hasTradeVolumeData = result.some(
-        (entry) => entry.purchaseVolume > 0 || entry.saleVolume > 0 || entry.tradeCount > 0
-      );
-  
-      if (!hasTradeVolumeData) {
-        return res.status(200).json({ Volume: [] });
-      }
-  
-      res.status(200).json({ data: result });
-    } catch (error) {
-      res.status(500).json({ error: 'An error has occurred when attempting to retrieve the trading volume data' });
-    }
-  });
 
   // Route to get the number of trades for a specific politician
 app.get('/api/trade-count', async (req, res) => {
@@ -506,7 +425,80 @@ app.get('/api/issuer-count', async (req, res) => {
         res.status(500).json({ error: "An error has occurred when attempting to retrieve the unique symbol count." });
     }
 });
-
+app.get('/api/updated-stocks', async (req, res) => {
+    const { politicianName } = req.query;
+    if (!politicianName) {
+      return res.status(400).json({ error: 'Politician name is required' });
+    }
+  
+    try {
+      // Fetch transactions from the database
+      console.log("Fetching transactions for:", politicianName);
+      const query = `
+        SELECT 
+          t.symbol AS symbol,
+          t.assetName AS assetName,
+          ROUND(AVG((t.amountFrom + t.amountTo) / 2), 2) AS averagePrice,
+          MAX(t.filingDate) AS filingDate,
+          MAX(t.transactionDate) AS transactionDate,
+          t.transactionType AS transactionType
+        FROM trades t
+        WHERE t.politicianName = ?
+        GROUP BY t.symbol, t.assetName, t.transactionType
+        ORDER BY transactionDate DESC;
+      `;
+      const [transactions] = await pool.query(query, [politicianName]);
+    
+      const assetNameCache = new Map();
+  
+      // Fetch missing asset names from Finnhub
+      const updatedTransactions = await Promise.all(transactions.map(async (transaction) => {
+        if (!transaction.assetName || transaction.assetName.trim() === "") {
+          const symbol = transaction.symbol;
+  
+          // Check if the asset name is already in cache
+          if (assetNameCache.has(symbol)) {
+            return { ...transaction, assetName: assetNameCache.get(symbol) };
+          }
+  
+          try {
+            const response = await axios.get(`https://finnhub.io/api/v1/search`, {
+              params: { q: symbol, token: process.env.FINNHUB_API_KEY },
+            });
+  
+  
+            const assetName = response.data.result[0]?.description || 'Unknown';
+            assetNameCache.set(symbol, assetName);
+  
+            if (assetName !== 'Unknown') {
+              // Update the database with the new assetName
+              const updateResult = await pool.query(
+                'UPDATE trades SET assetName = ? WHERE symbol = ? AND politicianName = ?',
+                [assetName, symbol, politicianName]
+              );
+              console.log(`Database updated for symbol ${symbol} with assetName: ${assetName}`, updateResult);
+            }
+  
+            return { ...transaction, assetName };
+          } catch (error) {
+            console.error(`Error fetching asset name for symbol ${symbol}:`, error.message);
+            return { ...transaction, assetName: 'Unknown' };
+          }
+        }
+  
+        return transaction;
+      }));
+  
+      console.log("Updated transactions:", updatedTransactions);
+  
+      res.status(200).json(updatedTransactions);
+    } catch (error) {
+      console.error('Error fetching or updating transactions:', error.message);
+      res.status(500).json({ error: 'An error occurred while updating transactions.' });
+    }
+  });
+  
+  
 app.use('/api', portfolioRoutes(pool)); 
 app.use('/api', sectorRoutes(pool, sectorMapping));
 

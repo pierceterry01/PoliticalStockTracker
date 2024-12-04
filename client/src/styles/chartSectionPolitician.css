@@ -1,0 +1,86 @@
+.chart-section-politician {
+  margin-top: 40px;
+  padding: 40px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 90%;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.metrics-politician {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+
+.box {
+  background-color: #2b2b2b;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  flex: 1;
+  margin: 0 8px;
+  box-sizing: border-box;
+}
+
+
+.chart-header {
+  text-align: center;
+}
+
+
+.chart-content-politician {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.left-side-politician, .right-side-politician {
+  box-sizing: border-box;
+}
+
+
+.left-side-politician {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 48%;
+}
+
+
+.right-side-politician {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 60%;
+}
+
+
+.tradeVolume {
+  margin-bottom: 20px;
+  margin-right: 60px;
+  height: 300px;
+  width: 100%;
+}
+
+
+.portfolioComp {
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.sectorActivity {
+  margin-bottom: 20px;
+  margin-left: 15px;
+}

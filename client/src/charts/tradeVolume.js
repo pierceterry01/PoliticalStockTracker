@@ -130,7 +130,7 @@ const TradeVolumeChart = ({ data }) => {
   };
 
   return (
-    <div className="trade-volume-chart" style={{ height: "700px", width: "825px" }}>
+    <div className="trade-volume-chart" style={{ height: "700px", width: "775px" }}>
       <h3 className="chart-header">Trade Volume</h3>
       <Bar data={chartData} options={chartOptions} />
     </div>
