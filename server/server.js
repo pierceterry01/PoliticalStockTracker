@@ -408,6 +408,42 @@ app.get('/api/trade-count', async (req, res) => {
     }
 });
 
+   // Route to get the change dollar and change percent
+   app.get('/api/change-dollar-percent', async (req, res) => {
+    const { politicianName } = req.query;
+
+    try {
+        // Query to calculate the total of all trades for the politician
+        const [totalResult] = await pool.query(`
+            SELECT ROUND(SUM((amountFrom + amountTo) / 2), 2) AS totalChange
+            FROM trades
+            WHERE politicianName = ?
+        `, [politicianName]);
+
+        const totalChange = totalResult[0].totalChange || 0;
+
+        // Query to get the most recent trade for the politician
+        const [recentResult] = await pool.query(`
+            SELECT ROUND((amountFrom + amountTo) / 2, 2) AS recentChange, transactionType
+            FROM trades
+            WHERE politicianName = ?
+            ORDER BY transactionDate DESC
+            LIMIT 1
+        `, [politicianName]);
+
+        const recentChange = recentResult[0] ? recentResult[0].recentChange : 0;
+        const transactionType = recentResult[0] ? recentResult[0].transactionType : null;
+        
+        const percentage = totalChange > 0 
+    ? parseFloat(((recentChange / totalChange) * 100).toFixed(2)) 
+    : 0;
+
+        res.json({ politicianName, changedollar: recentChange, percentage, transactionType });
+    } catch (error) {
+        res.status(500).json({ error: "An error has occurred when attempting to retrieve the change dollar percentage." });
+    }
+});
+
 // Route to get the number of unique symbols for a specific politician
 app.get('/api/issuer-count', async (req, res) => {
     const { politicianName } = req.query;
@@ -499,8 +535,7 @@ app.get('/api/updated-stocks', async (req, res) => {
       res.status(500).json({ error: 'An error occurred while updating transactions.' });
     }
   });
-  
-  
+ 
 app.use('/api', portfolioRoutes(pool)); 
 app.use('/api', sectorRoutes(pool, sectorMapping));
 

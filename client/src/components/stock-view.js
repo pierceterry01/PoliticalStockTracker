@@ -14,6 +14,17 @@ function StockViewPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  // Format number function
+  const formatNumber = (number) => {
+    if (number >= 1000000) {
+      return (number / 1000000).toFixed(1) + "M";
+    }
+    if (number >= 1000) {
+      return (number / 1000).toFixed(1) + "K";
+    }
+    return number.toFixed(2);
+  };
+
   // Fetch the latest trade data and volume data
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +34,7 @@ function StockViewPage() {
           "http://localhost:3001/api/latest-trade-data"
         );
         const latestTradeData = latestTradeResponse.data;
+
 
         // Create a map of politician names to their last traded date
         const tradeDateMap = latestTradeData.reduce((acc, item) => {
@@ -45,10 +57,20 @@ function StockViewPage() {
                 0
               );
 
+              const changePercentResponse = await axios.get(
+                "http://localhost:3001/api/change-dollar-percent",
+                { params: { politicianName: politician.politician } }
+              );
+              
+              const { changedollar = 0, percentage = 0, transactionType } = changePercentResponse.data; 
+
               return {
                 ...politician,
                 lastTraded: tradeDateMap[politician.politician] || politician.lastTraded,
                 totalVolume: totalTradeVolume,
+                changeDollar: changedollar,
+                changePercent: percentage,
+                transactionType,
               };
             } catch (error) {
               console.error(
@@ -59,6 +81,9 @@ function StockViewPage() {
                 ...politician,
                 lastTraded: tradeDateMap[politician.politician] || politician.lastTraded,
                 totalVolume: 0,
+                changeDollar: 0,
+                changePercent: 0,
+                transactionType: null,
               };
             }
           })
@@ -108,6 +133,10 @@ function StockViewPage() {
           res = new Date(a.lastTraded) - new Date(b.lastTraded);
         } else if (sortKey === "totalVolume") {
           res = a.totalVolume - b.totalVolume;
+        } else if (sortKey === "changeDollar") {
+          res = a.changeDollar - b.changeDollar;
+        } else if (sortKey === "changePercent") {
+          res = a.changePercent - b.changePercent;        
         } else {
           res = a[sortKey] - b[sortKey];
         }
@@ -173,15 +202,17 @@ function StockViewPage() {
                       </Link>
                     </div>
                   </td>
-                  <td>${row.changeDollar.toLocaleString()}</td>
-                  <td
+                   <td>${formatNumber(row.changeDollar)}</td>
+                   <td
                     className={`percent-change ${
-                      row.changePercent >= 0 ? "positive" : "negative"
+                      row.transactionType === "Purchase" || row.transactionType === "buy" ? "positive" : 
+                      row.transactionType === "Sale" || row.transactionType === "Sale (Partial)" || row.transactionType === "sell"
+                      || row.transactionType === "Sale (Full)" || row.transactionType === "Sell (PARTIAL)" ? "negative" : ""
                     }`}
                   >
-                    {row.changePercent > 0 ? "+" : ""}
-                    {row.changePercent}%
+                    {row.changePercent !== undefined ? `${row.changePercent}%` : "N/A"}
                   </td>
+
                   <td>{row.copiers}</td>
                   <td>
                     {row.lastTraded
