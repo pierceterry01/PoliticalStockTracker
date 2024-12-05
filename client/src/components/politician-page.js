@@ -8,31 +8,25 @@ import PortfolioCompositionChart from "../charts/portfolioComposition.js";
 import SectorActivityChart from "../charts/sectorActivity.js";
 import TradeVolumeChart from "../charts/tradeVolume.js";
 
-
 // Import the CopyInvestorBox component
 import CopyInvestorBox from "./CopyInvestorBox";
-
 
 function PoliticianPage() {
   const { politicianName } = useParams();
   const decodedName = decodeURIComponent(politicianName);
   const navigate = useNavigate();
 
-
   const politicianData = stockData.find((p) => p.politician === decodedName);
-
 
   // States for charts
   const [portfolioCompData, setPortfolioCompData] = useState([]);
   const [sectorActivityData, setSectorActivityData] = useState([]);
   const [tradeVolumeData, setTradeVolumeData] = useState([]);
 
-
   // States for loading
   const [loadingPortfolioData, setLoadingPortfolioData] = useState(true);
   const [loadingSectorData, setLoadingSectorData] = useState(true);
   const [loadingVolumeData, setLoadingVolumeData] = useState(true);
-
 
   // State for trade and issuer counts
   const [tradeCount, setTradeCount] = useState(null);
@@ -40,9 +34,6 @@ function PoliticianPage() {
 
   const [transactions, setTransactions] = useState([]);
   const [loadingTransactions, setLoadingTransactions] = useState(true);
-
-
-   
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -57,21 +48,20 @@ function PoliticianPage() {
         setLoadingTransactions(false);
       }
     };
-  
     fetchTransactions();
   }, [decodedName]);
   
-
-
-
   // Fetch updated transactions with missing asset names filled in
   useEffect(() => {
     const fetchUpdatedTransactions = async () => {
       try {
         console.log("Fetching updated transactions for:", decodedName);
-        const response = await axios.get("http://localhost:3001/api/updated-stocks", {
-          params: { politicianName: decodedName },
-        });  
+        const response = await axios.get(
+          "http://localhost:3001/api/updated-stocks",
+          {
+            params: { politicianName: decodedName },
+          }
+        );
         if (Array.isArray(response.data) && response.data.length > 0) {
           setTransactions(response.data);
         } else {
@@ -83,14 +73,9 @@ function PoliticianPage() {
         setLoadingTransactions(false);
       }
     };
-  
+
     fetchUpdatedTransactions();
   }, [decodedName]);
-  
-
-
-
-
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -107,7 +92,6 @@ function PoliticianPage() {
     };
     fetchMetrics();
   }, [decodedName]);
-
 
   // Fetch trade volume data
   useEffect(() => {
@@ -127,10 +111,8 @@ function PoliticianPage() {
       }
     };
 
-
     fetchTradeVolumeData();
   }, [decodedName]);
-
 
   // Fetch sector activity data
   useEffect(() => {
@@ -150,10 +132,8 @@ function PoliticianPage() {
       }
     };
 
-
     fetchSectorData();
   }, [decodedName]);
-
 
   // Fetch portfolio composition data
   useEffect(() => {
@@ -166,7 +146,6 @@ function PoliticianPage() {
           }
         );
 
-
         setPortfolioCompData(response.data);
       } catch (error) {
         console.error("Error fetching portfolio composition data:", error);
@@ -175,10 +154,8 @@ function PoliticianPage() {
       }
     };
 
-
     fetchPortfolioData();
   }, [decodedName]);
-
 
   // Calculate total trade volume
   const totalTradeVolume = tradeVolumeData.reduce(
@@ -186,8 +163,7 @@ function PoliticianPage() {
     0
   );
 
-
-   useEffect(() => {
+  useEffect(() => {
     if (politicianData && totalTradeVolume) {
       const updatedData = {
         ...politicianData,
@@ -200,11 +176,9 @@ function PoliticianPage() {
     }
   }, [politicianData, totalTradeVolume]);
 
-
   // Calculate average quarterly trade volume
   const averageQuarterlyVolume =
     tradeVolumeData.length > 0 ? totalTradeVolume / tradeVolumeData.length : 0;
-
 
   const formatNumber = (number) => {
     if (number >= 1000000) {
@@ -216,11 +190,9 @@ function PoliticianPage() {
     return number.toFixed(2);
   };
 
-
   // State for the follow button
   const [isFollowing, setIsFollowing] = useState(false);
   const [showCopyInvestorBox, setShowCopyInvestorBox] = useState(false);
-
 
   const handleFollowClick = () => {
     if (!isFollowing) {
@@ -236,16 +208,13 @@ function PoliticianPage() {
     }
   };
 
-
   const handleCloseCopyInvestorBox = () => {
     setShowCopyInvestorBox(false);
   };
 
-
   const handleInvest = (investmentData) => {
     setIsFollowing(true);
     setShowCopyInvestorBox(false);
-
 
     const politicianInvestment = {
       politicianName: politicianData.politician,
@@ -257,17 +226,14 @@ function PoliticianPage() {
       stopLossAmount: investmentData.stopLossAmount,
     };
 
-
     // Get existing investments from localStorage
     let existingInvestments =
       JSON.parse(localStorage.getItem("investments")) || [];
-
 
     // Check if politician already followed
     const isAlreadyInvested = existingInvestments.some(
       (inv) => inv.politicianName === politicianInvestment.politicianName
     );
-
 
     if (!isAlreadyInvested) {
       // Add new investment
@@ -281,14 +247,11 @@ function PoliticianPage() {
       );
     }
 
-
     // Save updated investments to localStorage
     localStorage.setItem("investments", JSON.stringify(existingInvestments));
 
-
     navigate("/following");
   };
-
 
   if (!politicianData) {
     return (
@@ -299,7 +262,6 @@ function PoliticianPage() {
       </div>
     );
   }
-  
 
   return (
     <div className="politician-page">
@@ -377,57 +339,63 @@ function PoliticianPage() {
       </div>
 
       <div className="transactions-section">
-  <h2>Recent Transactions</h2>
-  {loadingTransactions ? (
-    <div>Loading transactions...</div>
-  ) : transactions.length > 0 ? (
-    <table className="transactions-table">
-      <thead>
-        <tr>
-          <th>Symbol</th>
-          <th>Asset Name</th>
-          <th>Transaction Type</th>
-          <th>~Transaction Volume</th>
-          <th>Transaction Date</th>
-        </tr>
-      </thead>
-      <tbody>
-  {transactions.map((transaction, index) => {
-    let className = "";
-    if (
-      transaction.transactionType.toLowerCase().includes("buy") ||
-      transaction.transactionType.toLowerCase().includes("purchase") ||
-      transaction.transactionType.toLowerCase().includes("Receive")
-    ) {
-      className = "positive";
-    } else if (
-      transaction.transactionType.toLowerCase().includes("sell") ||
-      transaction.transactionType.toLowerCase().includes("exchange") ||
-      transaction.transactionType.toLowerCase().includes("sale")
-    ) {
-      className = "negative";
-    }
+        <h2>Recent Transactions</h2>
+        {loadingTransactions ? (
+          <div>Loading transactions...</div>
+        ) : transactions.length > 0 ? (
+          <table className="transactions-table">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Asset Name</th>
+                <th>Transaction Type</th>
+                <th>~Transaction Volume</th>
+                <th>Transaction Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((transaction, index) => {
+                let className = "";
+                if (
+                  transaction.transactionType.toLowerCase().includes("buy") ||
+                  transaction.transactionType
+                    .toLowerCase()
+                    .includes("purchase") ||
+                  transaction.transactionType.toLowerCase().includes("Receive")
+                ) {
+                  className = "positive";
+                } else if (
+                  transaction.transactionType.toLowerCase().includes("sell") ||
+                  transaction.transactionType
+                    .toLowerCase()
+                    .includes("exchange") ||
+                  transaction.transactionType.toLowerCase().includes("sale")
+                ) {
+                  className = "negative";
+                }
 
-    return (
-      <tr key={index}>
-        <td>{transaction.symbol}</td>
-        <td>{transaction.assetName}</td>
-        <td>{transaction.transactionType}</td>
-        <td className={className}>
-          ${parseFloat(transaction.averagePrice).toFixed(2)}
-        </td>
-        <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
-      </tr>
-    );
-  })}
-</tbody>
-
-
-    </table>
-  ) : (
-    <div>No transactions found for this politician.</div>
-  )}
-</div>
+                return (
+                  <tr key={index}>
+                    <td>{transaction.symbol}</td>
+                    <td>{transaction.assetName}</td>
+                    <td>{transaction.transactionType}</td>
+                    <td className={className}>
+                      ${parseFloat(transaction.averagePrice).toFixed(2)}
+                    </td>
+                    <td>
+                      {new Date(
+                        transaction.transactionDate
+                      ).toLocaleDateString()}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div>No transactions found for this politician.</div>
+        )}
+      </div>
 
       {/* Render the CopyInvestorBox as a popup when showCopyInvestorBox is true */}
       {showCopyInvestorBox && (

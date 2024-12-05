@@ -304,22 +304,22 @@ app.get('/api/portfolio-composition', async (req, res) => {
     try {
         // Query trades that adjusts for the selected politician page
         const [trades] = await pool.query(`
-            SELECT symbol 
+            SELECT symbol, assetName
             FROM trades
             WHERE politicianName = ?
             ORDER BY transactionDate DESC 
         `, [politicianName]);
 
-        // Object to store the symbol counts
+        // Object to store the symbol counts and asset names
         const symbolCounts = {};
 
-        // Count each symbol that's retrieved
+        // Count each symbol that's retrieved and store the asset name
         trades.forEach((trade) => {
-            const symbol = trade.symbol;
+            const { symbol, assetName } = trade;
             if (!symbolCounts[symbol]) {
-                symbolCounts[symbol] = 0;
+                symbolCounts[symbol] = { count: 0, assetName: assetName || "Unknown Asset" };
             }
-            symbolCounts[symbol]++;
+            symbolCounts[symbol].count++;
         });
 
         // Convert the count object to an array 
@@ -327,7 +327,8 @@ app.get('/api/portfolio-composition', async (req, res) => {
         const sortedData = Object.keys(symbolCounts)
             .map((symbol) => ({
                 symbol,
-                count: symbolCounts[symbol],
+                count: symbolCounts[symbol].count,
+                assetName: symbolCounts[symbol].assetName,
             }))
             .sort((a, b) => b.count - a.count); 
 
@@ -339,6 +340,7 @@ app.get('/api/portfolio-composition', async (req, res) => {
         res.status(500).json({ error: "An error has occurred when attempting to retrieve the portfolio stock composition data." });
     }
 });
+
 
 // Route to obtain the sector activity data
 // Each symbol is assigned to their respective stock sector using the sectorMapping array

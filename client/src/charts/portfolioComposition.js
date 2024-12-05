@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pie } from "react-chartjs-2"; 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function PortfolioCompositionChart() {
-  // Sample data for testing purposes
-  const data = [
-    { symbol: "AAPL", count: 50 },
-    { symbol: "GOOGL", count: 30 },
-    { symbol: "AMZN", count: 20 },
-    { symbol: "MSFT", count: 40 },
-    { symbol: "TSLA", count: 10 }
-  ];
+function PortfolioCompositionChart({ data }) {
+  useEffect(() => {
+  }, [data]);
+
+  if (!data || data.length === 0) {
+    return <div>No portfolio composition data available.</div>;
+  }
 
   const totalStocks = data.reduce((total, item) => total + item.count, 0);
 
@@ -41,9 +39,13 @@ function PortfolioCompositionChart() {
       },
       tooltip: {
         callbacks: {
-          label: function(tooltipItem) {
-            const percentage = ((tooltipItem.raw / totalStocks) * 100).toFixed(2); 
-            return `${percentage}%`; 
+          label: function (tooltipItem) {
+            const dataIndex = tooltipItem.dataIndex;
+            const asset = data[dataIndex];
+            const percentage = ((tooltipItem.raw / totalStocks) * 100).toFixed(2);
+            const assetName = asset && asset.assetName && asset.assetName.trim() !== "" ? asset.assetName : "Unknown Asset";
+
+            return `${assetName}:\n ${percentage}%`;
           },
         },
       },
@@ -51,9 +53,12 @@ function PortfolioCompositionChart() {
   };
 
   return (
-    <div className="portfolio-composition-chart" style={{position: 'relative', width: '300px', height: '300px' }}>
+    <div
+      className="portfolio-composition-chart"
+      style={{ position: "relative", width: "300px", height: "300px" }}
+    >
       <h3 className="chart-header">Most Traded Issuers</h3>
-      <Pie data={chartData} options={options} /> 
+      <Pie data={chartData} options={options} />
     </div>
   );
 }
