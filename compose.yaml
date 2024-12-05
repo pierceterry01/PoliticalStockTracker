@@ -49,7 +49,7 @@ services:
         -  3303:3306
     volumes:
         - db-data:/var/lib/mysql
-        - ./sql-files:/root/sql-files
+        - ./sql-files:/docker-entrypoint-initdb.d
 
 volumes:
   db-data:
