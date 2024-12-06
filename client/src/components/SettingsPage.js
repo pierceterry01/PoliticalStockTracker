@@ -79,42 +79,11 @@ function SettingsPage() {
               />
             )}
           </div>
-          <div className="settings-item">
-            <label htmlFor="timeZone">Time Zone</label>
-            <select
-              id="timeZone"
-              className="custom-input"
-              value={timeZone}
-              onChange={(e) => setTimeZone(e.target.value)}
-            >
-              <option value="GMT">GMT</option>
-              <option value="PST">PST</option>
-              <option value="EST">EST</option>
-              <option value="CET">CET</option>
-              <option value="IST">IST</option>
-            </select>
-          </div>
-          {/* Confirm Changes Button */}
-          <div className="confirm-changes-section">
-            <button className="confirm-changes-btn" onClick={handleConfirmChanges}>
-              Confirm Changes
-            </button>
-          </div>
         </section>
 
         {/* Account Security */}
         <section className="settings-section">
           <h2>Account Security</h2>
-          <div className="settings-item">
-            <label htmlFor="email">Change Email</label>
-            <input
-              type="email"
-              id="email"
-              className="custom-input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
           <div className="settings-item">
             <label htmlFor="password">Change Password</label>
             <input
@@ -125,9 +94,12 @@ function SettingsPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className="delete-account-btn" onClick={handleDeleteAccount}>
-            Delete Account
-          </button>
+          {/* Confirm Changes Button */}
+          <div className="confirm-changes-section">
+            <button className="confirm-changes-btn" onClick={handleConfirmChanges}>
+              Confirm Changes
+            </button>
+          </div>
         </section>
         <div className="privacy-disclaimer">
           <h2>Privacy Policy</h2>
@@ -137,7 +109,6 @@ function SettingsPage() {
             If you no longer wish for us to retain your data, you can delete your account using the option found above.
           </p>
         </div>
-        
       </main>
     </div>
   );
