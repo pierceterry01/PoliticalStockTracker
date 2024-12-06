@@ -8,6 +8,7 @@ const axios = require('axios');
 const cron = require('node-cron');
 const portfolioRoutes = require('./routes/portfolioRoutes');
 const sectorRoutes = require('./routes/sectorRoutes');
+const jwt = require('jsonwebtoken');
 
 
 const app = express();
@@ -100,7 +101,7 @@ const registerValidator = [
 ];
 
 const loginValidator = [
-    body('user.username', 'Username field cannot be empty.').not().isEmpty(),
+    body('user.email', 'Email field cannot be empty.').not().isEmpty(),
     body('user.password', 'Password field cannot be empty.').not().isEmpty(),
 ];
 
@@ -129,51 +130,54 @@ app.post('/auth/register', registerValidator, async (req, res) => {
     }
 });
 
-
 app.post('/auth/login', loginValidator, async (req, res) => {
     const errors = validationResult(req);
 
-    if (errors.isEmpty()) {
-        try {
-            const [rows] = await pool.execute('SELECT id, password FROM users WHERE username = ?', [req.body.user.username]);
-            if (rows.length === 0) {
-                return res.status(422).send();
-            }
-
-            const user = rows[0];
-            const match = await bcrypt.compare(req.body.user.password, user.password);
-
-            if (match) {
-                const jwt = require('jsonwebtoken');
-                const token = jwt.sign({ username: req.body.user.username, id: user.id }, secret);
-                res.status(200).json({ token: token });
-            } else {
-                res.status(401).send();
-            }
-        } catch (err) {
-            console.error(err);
-            res.status(500).send();
-        }
-    } else {
-        res.status(422).json({ errors: errors.array()});
-    }
-});
-
-app.post('/auth', async (req, res) => {
-    if (!req.headers["x-auth"]) {
-        return res.status(401).send();
+    if (!errors.isEmpty()) {
+        console.error('Validation errors:', errors.array());
+        return res.status(422).json({ errors: errors.array() });
     }
 
-    const token = req.headers["x-auth"];
     try {
-        const jwt = require('jsonwebtoken');
-        const decoded = jwt.verify(token, secret);
-        res.status(200).json(decoded);
+        const email = req.body.user.email;
+        const password = req.body.user.password;
+
+        if (typeof email !== 'string' || typeof password !== 'string') {
+            console.error('Invalid input types:', { email, password });
+            return res.status(400).json({ error: 'Invalid input format' });
+        }
+
+        const [rows] = await pool.execute('SELECT id, password FROM users WHERE email = ?', [email]);
+
+        if (rows.length === 0) {
+            console.error('No user found for email:', email);
+            return res.status(422).json({ error: 'Invalid email or password' });
+        }
+
+        // Extract user only after ensuring rows is not empty
+        const user = rows[0];
+
+        // Convert binary password to string if necessary
+        const hashedPassword = Buffer.isBuffer(user.password)
+            ? user.password.toString('utf8') 
+            : user.password;
+
+        const match = await bcrypt.compare(password, hashedPassword);
+        if (!match) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        const token = jwt.sign({ username: email, id: user.id }, secret, { expiresIn: '1h' });
+
+        console.log(`Login successful for user: ${email} (ID: ${user.id})`);
+
+        return res.status(200).json({ token });
     } catch (err) {
-        console.error(err);
-        res.status(401).send();
+        console.error('Error during login:', err.message);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 const fetchTradesAndUpdateDB = async () => {
     const symbols = [
