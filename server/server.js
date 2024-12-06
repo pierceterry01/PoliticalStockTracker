@@ -110,18 +110,25 @@ app.post('/auth/register', registerValidator, async (req, res) => {
         const user = req.body.user;
 
         try {
+            // Check if username already exists
+            const [rows] = await pool.execute('SELECT id FROM users WHERE username = ?', [user.username]);
+            if (rows.length > 0) {
+                return res.status(409).json({ error: 'Username already exists' }); // HTTP 409 Conflict
+            }
+
+            // Insert new user
             const hash = await bcrypt.hash(user.password, 16);
-            await pool.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-                [user.username, user.email, hash]);
-            res.status(200).send();
+            await pool.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [user.username, user.email, hash]);
+            res.status(200).json({ message: 'User registered successfully!' });
         } catch (err) {
             console.error(err);
-            res.status(400).send();
+            res.status(500).json({ error: 'Internal server error' });
         }
     } else {
         res.status(422).json({ errors: errors.array() });
     }
 });
+
 
 app.post('/auth/login', loginValidator, async (req, res) => {
     const errors = validationResult(req);
