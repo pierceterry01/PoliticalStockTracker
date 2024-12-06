@@ -79,21 +79,6 @@ function SettingsPage() {
               />
             )}
           </div>
-          <div className="settings-item">
-            <label htmlFor="timeZone">Time Zone</label>
-            <select
-              id="timeZone"
-              className="custom-input"
-              value={timeZone}
-              onChange={(e) => setTimeZone(e.target.value)}
-            >
-              <option value="GMT">GMT</option>
-              <option value="PST">PST</option>
-              <option value="EST">EST</option>
-              <option value="CET">CET</option>
-              <option value="IST">IST</option>
-            </select>
-          </div>
           {/* Confirm Changes Button */}
           <div className="confirm-changes-section">
             <button className="confirm-changes-btn" onClick={handleConfirmChanges}>
