@@ -83,3 +83,12 @@
     padding: 20px;
   }
 }
+
+.privacy-disclaimer {
+  background-color: #4B2E83;
+  height: 200px;
+  padding: 12px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 1.4rem;
+}

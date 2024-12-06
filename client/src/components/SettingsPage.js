@@ -129,7 +129,14 @@ function SettingsPage() {
             Delete Account
           </button>
         </section>
-
+        <div className="privacy-disclaimer">
+          <h2>Privacy Policy</h2>
+          <p>Outsider Trading is committed to maintaining security and integrity when it comes to the data of our users.
+            We adhere to stringent privacy standards and will never share personal information with outside parties.
+            Our privacy policies are designed to prioritize your security and transparency.
+            If you no longer wish for us to retain your data, you can delete your account using the option found above.
+          </p>
+        </div>
         
       </main>
     </div>
