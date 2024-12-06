@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "../styles/PortfolioPage.css";
 import "../styles/chartSectionPortfolio.css";
 import SectorsAllocationsChart from "../charts/sectorAllocations.js";
+import PortfolioCompositionChart from "../charts/portfolioComposition.js";
 
 function PortfolioPage() {
-  const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalPortfolioValue, setTotalPortfolioValue] = useState(900000); // Total value of the portfolio
-  const [totalInvestments, setTotalInvestments] = useState(0); 
-  const [followingCount, setFollowingCount] = useState(0); 
+  const [totalPortfolioValue, setTotalPortfolioValue] = useState(0);
+  const [totalInvestments, setTotalInvestments] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const [averageInvestment, setAverageInvestment] = useState(0);
-  const [investments, setInvestments] = useState([]); 
-  const [aggregatedSectors, setAggregatedSectors] = useState([]); 
+  const [investments, setInvestments] = useState([]);
+  const [aggregatedSectors, setAggregatedSectors] = useState([]);
+  const [aggregatedComposition, setAggregatedComposition] = useState([]);
+  const [stocksHeld, setStocksHeld] = useState([]); // State to hold stocks
 
-  // Function to fetch all trades
-  const fetchAllTrades = async () => {
+  // Function to fetch all stocks held by politicians being copied
+  const fetchStocksHeld = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3001/api/trades");
+      const response = await axios.get("http://localhost:3001/api/stocks-held?politicians=Nancy%20Pelosi,Dean%20Phillips");
       if (response.status === 200 && response.data) {
-        setTrades(response.data);
+        setStocksHeld(response.data);
+        console.log("Stocks Held:", response.data);
       } else {
-        setTrades([]);
+        setStocksHeld([]);
       }
     } catch (error) {
-      console.error("Error fetching trades:", error);
-      setTrades([]);
+      console.error("Error fetching stocks held:", error);
+      setStocksHeld([]);
     } finally {
       setLoading(false);
     }
@@ -34,26 +38,36 @@ function PortfolioPage() {
 
   // Get the number of politicians the user is following
   const fetchFollowingCount = () => {
-    const followedPoliticians = JSON.parse(localStorage.getItem("investments")) || [];
+    const followedPoliticians =
+      JSON.parse(localStorage.getItem("investments")) || [];
     setFollowingCount(followedPoliticians.length);
   };
 
   // Function to get the total investments made by the user
-  const calculateTotalInvestments = () => {
-    const investmentsData = JSON.parse(localStorage.getItem("investments")) || [];
-    setInvestments(investmentsData); 
-    const total = investmentsData.reduce((sum, inv) => sum + (inv.investAmount || 0), 0);
+  const calculateTotalInvestments = useCallback(() => {
+    const investmentsData =
+      JSON.parse(localStorage.getItem("investments")) || [];
+    console.log("Investments Data in calculateTotalInvestments:", investmentsData);
+
+    setInvestments(investmentsData);
+    const total = investmentsData.reduce(
+      (sum, inv) => sum + (inv.investAmount || 0),
+      0
+    );
     setTotalInvestments(total);
-    
+    setTotalPortfolioValue(total);
+
     // Calculate the average investment amount based on the total
-    const average = investmentsData.length > 0 ? total / investmentsData.length : 0;
-    setAverageInvestment(average); 
-  
+    const average =
+      investmentsData.length > 0 ? total / investmentsData.length : 0;
+    setAverageInvestment(average);
+
     localStorage.setItem("totalInvestment", total.toString());
 
-    // Aggregate sector data here
     aggregateSectorAllocations(investmentsData);
-  };
+
+    aggregatePortfolioComposition(investmentsData);
+  }, []);
 
   // Function to aggregate sector allocations
   const aggregateSectorAllocations = (investmentsData) => {
@@ -61,10 +75,13 @@ function PortfolioPage() {
 
     investmentsData.forEach((investment) => {
       const { sectorAllocations } = investment;
-      Object.keys(sectorAllocations).forEach((sector) => {
-        const allocation = sectorAllocations[sector];
-        sectorAggregates[sector] = (sectorAggregates[sector] || 0) + allocation;
-      });
+      if (sectorAllocations) {
+        Object.keys(sectorAllocations).forEach((sector) => {
+          const allocation = sectorAllocations[sector];
+          sectorAggregates[sector] =
+            (sectorAggregates[sector] || 0) + allocation;
+        });
+      }
     });
 
     setAggregatedSectors(
@@ -75,12 +92,32 @@ function PortfolioPage() {
     );
   };
 
+  const aggregatePortfolioComposition = (investmentsData) => {
+    const composition = {};
+    investmentsData.forEach((inv) => {
+      if (inv.politicianName) {
+        composition[inv.politicianName] =
+          (composition[inv.politicianName] || 0) + inv.investAmount;
+      }
+    });
+    const aggregated = Object.entries(composition).map(([name, value]) => ({
+      symbol: name,
+      count: value,
+    }));
+    console.log("Aggregated Composition Data:", aggregated);
+    setAggregatedComposition(aggregated);
+  };
+
   // Fetch data on component mount
   useEffect(() => {
-    fetchAllTrades();
     fetchFollowingCount();
     calculateTotalInvestments();
-  }, []);
+    fetchStocksHeld(); 
+  }, [calculateTotalInvestments]);
+
+  useEffect(() => {
+    console.log("Aggregated Composition Updated:", aggregatedComposition);
+  }, [aggregatedComposition]);
 
   const formatNumber = (number) => {
     if (number >= 1000000) {
@@ -91,110 +128,108 @@ function PortfolioPage() {
     }
     return number.toFixed(2);
   };
-  
+
+  // Extract unique politicians from investments
+  const uniquePoliticians = Array.from(
+    new Set(investments.map((inv) => inv.politicianName))
+  ).filter(Boolean);
 
   return (
-     <div className="portfolio-page">
+    <div className="portfolio-page">
       <div className="portfolio-content">
         <aside className="sidebar">
           {/* Total Assets */}
           <div className="total-assets">
             <h2>Total Assets:</h2>
             <p className="assets-value">
-              $ {totalPortfolioValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              $
+              {totalPortfolioValue.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </p>
           </div>
 
-          {/* Stock Returns */}
-          <div className="sidebar-section">
-            <h3>Stock Returns</h3>
-            <ul className="stock-returns-list">
-              <li>MSFT</li>
-              <li>NVDA</li>
-              <li>TSLA</li>
-            </ul>
+          {/* Portfolio Stats styled as before in light grey boxes */}
+          <div className="sidebar-section metrics-portfolio">
+            <h3 className="metrics-header">Portfolio Stats</h3>
+            <div className="box following">Following: {followingCount}</div>
+            <div className="box total-investments">
+              Total Investments: ${formatNumber(totalInvestments)}
+            </div>
+            <div className="box average-investment-amount">
+              Avg. Investment: ${formatNumber(averageInvestment)}
+            </div>
           </div>
 
-          {/* Politician Returns */}
-          <div className="sidebar-section">
-            <h3>Politician Returns</h3>
+          {/* Copied Politicians */}
+          <div className="sidebar-section metrics-portfolio">
+            <h3 className="metrics-header">Copied Politicians</h3>
             <ul className="politician-returns-list">
-              <li>
-                <img src="https://via.placeholder.com/40" alt="Politician 1" className="politician-photo" />
-                <span>Politician 1</span>
-              </li>
-              <li>
-                <img src="https://via.placeholder.com/40" alt="Politician 2" className="politician-photo" />
-                <span>Politician 2</span>
-              </li>
+              {uniquePoliticians.length > 0 ? (
+                uniquePoliticians.map((pol, idx) => (
+                  <li key={idx} className="box politician-list-item">
+                    <Link to={`/politician/${encodeURIComponent(pol)}`} className="politician-link">
+                      {pol}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li className="box">No politicians followed.</li>
+              )}
             </ul>
           </div>
         </aside>
 
-        {/* Main Area */}
         <main className="main-content">
-        <div className="chart-section-portfolio">
-          <div className="left-side-portfolio">
-            {/* User Metrics Boxes */}
-            <div className="metrics-portfolio">
-              <h1 className="metrics-header">Portfolio Overview</h1>
-              <div className="box following">
-                Following:&nbsp;{followingCount}
-              </div>
-              <div className="box total-investments">
-                Total Investments: ${formatNumber(totalInvestments)}
-              </div>
-              <div className="box average-investment-amount">
-                Avg. Investment Amount: ${formatNumber(averageInvestment)}
+          <div className="chart-section-portfolio">
+            <div className="left-side-portfolio">
+              {console.log("Rendering PortfolioCompositionChart with data:", aggregatedComposition)}
+              {aggregatedComposition && aggregatedComposition.length > 0 ? (
+                <PortfolioCompositionChart data={aggregatedComposition} />
+              ) : (
+                <p>No portfolio composition data available.</p>
+              )}
+            </div>
+
+            <div className="right-side-portfolio">
+              <div className="SectorAllocationsChart">
+                {aggregatedSectors.length > 0 && (
+                  <SectorsAllocationsChart
+                    aggregatedSectors={aggregatedSectors}
+                  />
+                )}
               </div>
             </div>
           </div>
 
-          <div className="right-side-portfolio">
-            {/* Sector Allocations Chart */}
-            <div className="SectorAllocationsChart">
-              {aggregatedSectors.length > 0 && <SectorsAllocationsChart aggregatedSectors={aggregatedSectors} />}
-            </div>
-          </div>
-        </div>
-
-          {/* Trades Details Table */}
-          <div id="trades">
-            <h3>All Trades</h3>
+          {/* Stocks Held by Politicians */}
+          <div id="stocks">
+            <h3>Stocks Copied From Politicians</h3>
             {loading ? (
-              <div className="loading">Loading trades...</div>
-            ) : trades.length > 0 ? (
-              <table id="tradesTable">
+              <div className="loading">Loading stocks...</div>
+            ) : stocksHeld.length > 0 ? (
+              <table id="stocksTable">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Symbol</th>
+                    <th>Stock Symbol</th>
                     <th>Asset Name</th>
-                    <th>Type</th>
-                    <th>Amount Range</th>
-                    <th>Stock Price</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {trades.map((trade, index) => (
-                    <tr key={index}>
-                      <td>{trade.transactionDate}</td>
-                      <td>{trade.symbol}</td>
-                      <td>{trade.assetName}</td>
-                      <td className={["buy", "purchase"].includes(trade.transactionType.toLowerCase()) ? "buy-type" : "sell-type"}>
-                        {trade.transactionType}
-                      </td>
-                      <td>
-                        ${trade.amountFrom.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - 
-                        ${trade.amountTo.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                      </td>
-                      <td>$0.00</td>
-                    </tr>
-                  ))}
+                  {stocksHeld.map((stock, index) => {
+                    console.log("Rendering Stock:", stock); // Debugging log
+                    return (
+                      <tr key={index}>
+                        <td>{stock.symbol}</td>
+                        <td>{stock.assetName}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             ) : (
-              <div className="no-data">No trades found.</div>
+              <div className="no-data">No stocks found.</div>
             )}
           </div>
         </main>

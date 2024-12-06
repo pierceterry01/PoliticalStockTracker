@@ -268,3 +268,104 @@
     height: 200px;
   }
 }
+/* Stocks Held Section Styling */
+#stocks {
+  margin-top: 40px;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+}
+
+#stocks h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+#stocksTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#stocksTable th,
+#stocksTable td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #444444; 
+}
+
+#stocksTable thead {
+  background-color: #333333;
+}
+
+#stocksTable th {
+  color: #ffffff;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+#stocksTable tbody tr {
+  border-bottom: 1px solid #444444;
+}
+
+#stocksTable tbody tr:nth-of-type(even) {
+  background-color: #2a2a2a;
+}
+
+#stocksTable tbody tr:nth-of-type(odd) {
+  background-color: #1e1e1e;
+}
+
+#stocksTable tbody tr:hover {
+  background-color: #3a3a3a;
+}
+
+#stocksTable td {
+  color: #e6e6e6;
+  font-size: 1rem;
+}
+
+.stock-symbol {
+  font-weight: bold;
+  color: #00ff7f; 
+}
+
+.stock-asset-name {
+  font-style: italic;
+  color: #cccccc;
+}
+
+.loading,
+.no-data {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 20px 0;
+  color: #e6e6e6; 
+}
+
+
+.politician-returns-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.politician-list-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f0f0f0; 
+  border-radius: 8px;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 60px;
+}
+
+.politician-link {
+  text-decoration: none;
+  color: inherit; 
+  font-weight: bold;
+}

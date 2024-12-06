@@ -4,6 +4,53 @@ const router = express.Router();
 module.exports = (pool) => {
 
 
+// GET /api/stocks-held
+router.get('/stocks-held', async (req, res) => {
+  try {
+    const { politicians } = req.query;
+
+    if (!politicians) {
+      return res.status(400).json({ error: "Politicians parameter is required." });
+    }
+
+    const followedPoliticians = politicians.split(',');
+
+    if (followedPoliticians.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    const placeholders = followedPoliticians.map(() => '?').join(',');
+
+    const query = `
+      SELECT politicianName, symbol, assetName
+      FROM trades
+      WHERE politicianName IN (${placeholders})
+    `;
+
+    const [results] = await pool.query(query, followedPoliticians);
+
+    const uniqueStocks = {};
+    results.forEach((stock) => {
+      if (!uniqueStocks[stock.symbol]) {
+        uniqueStocks[stock.symbol] = {
+          symbol: stock.symbol,
+          assetName: stock.assetName,
+          politicianName: stock.politicianName,
+        };
+      }
+    });
+
+    const uniqueStockArray = Object.values(uniqueStocks).slice(0, 15);
+
+    console.log("Final unique stocks:", uniqueStockArray);
+
+    res.status(200).json(uniqueStockArray);
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
   // Endpoint to fetch trade volume data
   router.get("/trade-volume", async (req, res) => {
     const { politicianName } = req.query;
