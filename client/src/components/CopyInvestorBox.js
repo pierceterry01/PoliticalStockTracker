@@ -37,8 +37,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     isEditing ? investorData.sectorAllocations : {}
   );
 
-
-  // Synchronize sectorAllocations with selectedSectors
   useEffect(() => {
     setSectorAllocations((prevAllocations) => {
       const newAllocations = {};
@@ -46,43 +44,12 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
         if (prevAllocations.hasOwnProperty(sector)) {
           newAllocations[sector] = prevAllocations[sector];
         } else {
-          // Assign default allocation (0 or equal allocation)
           newAllocations[sector] = 0;
         }
       });
       return newAllocations;
     });
   }, [selectedSectors]);
-
-
-  // Initialize allocations when entering Step 3
-  useEffect(() => {
-    if (step === 3) {
-      if (Object.keys(sectorAllocations).length === 0) {
-        // Initialize allocations to equal percentages
-        const equalAllocation = (100 / selectedSectors.length).toFixed(2);
-        const allocations = {};
-        selectedSectors.forEach((sector) => {
-          allocations[sector] = parseFloat(equalAllocation);
-        });
-        setSectorAllocations(allocations);
-      } else {
-        // Adjust allocations to sum up to 100%
-        const total = Object.values(sectorAllocations).reduce(
-          (acc, val) => acc + parseFloat(val || 0),
-          0
-        );
-        if (total !== 100) {
-          const adjustedAllocations = {};
-          selectedSectors.forEach((sector) => {
-            adjustedAllocations[sector] =
-              (sectorAllocations[sector] / total) * 100;
-          });
-          setSectorAllocations(adjustedAllocations);
-        }
-      }
-    }
-  }, [step, selectedSectors, sectorAllocations]);
 
 
   const handleNextClick = () => {
@@ -105,6 +72,15 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       );
       if (Math.round(totalAllocation) !== 100) {
         alert('Allocations must sum up to 100%.');
+        return;
+      }
+
+      // Check if selected sector allocation is zero
+      const hasZeroAllocation = selectedSectors.some(
+        (sector) => parseFloat(sectorAllocations[sector]) === 0
+      );
+      if (hasZeroAllocation) {
+        alert('Each sector allocation must be greater than 0%.');
         return;
       }
     }
@@ -162,7 +138,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       case 1:
         return (
           <>
-            {/* Invest Amount */}
             <div className="invest-amount">
               <label htmlFor="invest-amount-input">Amount to invest:</label>
               <div className="amount-input-group">
@@ -179,7 +154,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
             </div>
 
 
-            {/* Stop-Loss Amount */}
             <div className="stop-loss-setting">
               <label htmlFor="stop-loss-amount-input">
                 Close this investment if its value drops below:
@@ -219,12 +193,10 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
           </>
         );
       case 3:
-        // Calculate total allocation for selected sectors
         const totalAllocation = selectedSectors.reduce(
           (acc, sector) => acc + parseFloat(sectorAllocations[sector] || 0),
           0
         );
-
 
         return (
           <>
@@ -264,13 +236,11 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
 
   return (
     <div className="copy-investor-box">
-      {/* Close Button */}
       <button className="close-button" onClick={onClose} aria-label="Close">
         &times;
       </button>
 
 
-      {/* Header Section */}
       <div className="header-section">
         <h2>{isEditing ? 'Edit Investment' : 'Copy this Investor'}</h2>
         <div className="investor-info">
@@ -285,11 +255,9 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       </div>
 
 
-      {/* Body Section */}
       <div className="body-section">{renderStepContent()}</div>
 
 
-      {/* Footer Section */}
       <div className="footer-section">
         {step > 1 && (
           <button className="back-button" onClick={handleBackClick}>

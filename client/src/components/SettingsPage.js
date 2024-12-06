@@ -1,4 +1,3 @@
-// src/components/SettingsPage.js
 import React, { useState, useContext } from 'react';
 import '../styles/SettingsPage.css';
 import UserContext from './UserContext';

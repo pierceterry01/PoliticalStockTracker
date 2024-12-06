@@ -57,20 +57,21 @@
   align-items: center; 
 }
 
-.politician-info {
+.politician-info-sv {
   display: flex;
   align-items: center; 
 }
 
-.politician-image {
-  width: 50px; 
-  height: 50px;
+.politician-image-sv {
+  width: 80px; 
+  height: 80px;
   border-radius: 50%; 
   object-fit: cover; 
   margin-right: 15px; 
+  border: 3px solid #4B2E83;
 }
 
-.politician-name {
+.politician-name-sv {
   font-weight: bold;
   color: white;
   text-decoration: none;
@@ -78,19 +79,19 @@
 }
 
 
-.politician-name.democrat {
+.politician-name-sv.democrat {
   color: #3b9eff; /* Blue for Democrats */
 }
 
-.politician-name.democrat:hover {
+.politician-name-sv.democrat:hover {
   color: #9accff; 
 }
 
-.politician-name.republican {
+.politician-name-sv.republican {
   color: #ff4b4b; /* Red for Republicans */
 }
 
-.politician-name.republican:hover {
+.politician-name-sv.republican:hover {
   color: #ff7979; 
 }
 

@@ -58,7 +58,6 @@
   margin-bottom: 20px;
 }
 
-/* Decorative line below Login */
 .header-line {
   width: 60px;
   height: 3px;
@@ -75,7 +74,6 @@
   width: 100%;
 }
 
-/* Label styling */
 .login-label {
   font-size: 1rem;
   color: #ddd; 

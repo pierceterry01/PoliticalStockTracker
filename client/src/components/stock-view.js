@@ -206,15 +206,15 @@ function StockViewPage() {
               pageData.map((row, index) => (
                 <tr key={index}>
                   <td className="image-name-cell">
-                    <div className="politician-info">
+                    <div className="politician-info-sv">
                       <img
                         src={row.imgSrc}
                         alt={row.politician}
-                        className="politician-image"
+                        className="politician-image-sv"
                       />
                       <Link
                         to={`/politician/${encodeURIComponent(row.politician)}`}
-                        className={`politician-name ${row.party.toLowerCase()}`}
+                        className={`politician-name-sv ${row.party.toLowerCase()}`}
                       >
                         {row.politician}
                       </Link>
