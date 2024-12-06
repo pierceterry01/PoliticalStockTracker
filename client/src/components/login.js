@@ -1,14 +1,62 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/LoginPage.css';
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/LoginPage.css'; // Ensure this imports LoginPage.css
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  // Frontend Validation Function
+  const validateInputs = () => {
+    if (!email) {
+      setError('Username field cannot be empty.');
+      return false;
+    }
+    if (!password) {
+      setError('Password field cannot be empty.');
+      return false;
+    }
+    setError(''); // Clear errors if validation passes
+    return true;
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // LOGIN LOGIC CAN GO HERE
+
+    // Validate inputs before sending the request
+    if (!validateInputs()) return;
+
+    try {
+      const response = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: {
+            email: email.trim(),
+            password: password,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      } else if (response.status === 401) {
+        setError('Invalid username or password.');
+      } else if (response.status === 422) {
+        setError('Invalid input.');
+      } else {
+        setError('An unexpected error occurred.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Failed to connect to the server.');
+    }
   };
 
   return (
@@ -21,6 +69,7 @@ function LoginPage() {
         <div className="login-form-content">
           <h2>Login</h2>
           <div className="header-line"></div>
+          {error && <p className="error-message">{error}</p>}
           <form onSubmit={handleLogin}>
             <div className="login-form-group">
               <label className="login-label" htmlFor="email">Email</label>
