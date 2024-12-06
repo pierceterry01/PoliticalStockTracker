@@ -1,4 +1,3 @@
-// PlaceholderPage.js
 import React from 'react';
 
 function PlaceholderPage({ pageName }) {

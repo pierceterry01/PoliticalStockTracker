@@ -1,4 +1,3 @@
-/* Container */
 .copy-investor-box {
   position: relative;
   max-width: 500px;
@@ -11,7 +10,6 @@
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
 }
 
-/* Center CopyInvestorBox within viewport */
 .copy-investor-container {
   position: fixed;
   top: 50%;
@@ -22,7 +20,6 @@
   width: 90%; 
 }
 
-/* Close Button */
 .close-button {
   position: absolute;
   top: 15px;
@@ -38,7 +35,6 @@
   color: #fff;
 }
 
-/* Header Section */
 .header-section {
   text-align: center;
   margin-bottom: 25px;
@@ -94,13 +90,20 @@
   text-align: center;
 }
 
-/* Adding margin between input fields */
+.invest-amount label[for="invest-amount-input"] {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #fff;
+}
+
 .amount-input-group,
 .allocation-input-group {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;  
+  margin-bottom: 10px;
 }
 
 .amount-input-group .input-prefix,
@@ -149,7 +152,7 @@
 }
 
 .sector-item {
-  margin: 8px;
+  margin: 4px;
   font-size: 16px;
   color: #ccc;
   display: flex;
@@ -201,7 +204,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   padding: 0 20px;
 }
 
@@ -219,13 +222,11 @@
 }
 
 label[for="invest-amount-input"] {
-  margin-left: 37%;
-  margin-bottom: 10px;
+  margin-left: 0;
 }
 
 label[for="stop-loss-amount-input"] {
-  margin-left: 18%;
-  
+  margin-left: 10%;
 }
 
 .allocation-input-group input {
@@ -235,7 +236,7 @@ label[for="stop-loss-amount-input"] {
   font-size: 16px;
   margin-right: 5px;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .allocation-input-group span {
@@ -257,15 +258,6 @@ label[for="stop-loss-amount-input"] {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-}
-/* Move labels further to the right */
-.amount-input-group label,
-.allocation-input-group label {
-  text-align: left;  
-  font-size: 18px;
-  color: #ccc;
-  margin-left: 100px;  
-  margin-bottom: 5px; 
 }
 
 .progress-step {

@@ -1,4 +1,4 @@
-.politician-card {
+.pc-politician-card {
   background-color: #1e1e1e;
   padding: 20px;
   border-radius: 10px;
@@ -7,155 +7,148 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
   color: white;
+  height: 575px;
 }
 
-.politician-header {
-  text-align: center; 
-  margin-bottom: 15px; 
+.pc-politician-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 0px;
 }
 
-.politician-image {
+.pc-politician-image {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   border: 3px solid #4B2E83;
   display: block;
   object-fit: cover;
-  margin: 0 auto 10px auto; 
+  margin: 0 auto 0px auto;
 }
 
-.politician-info {
+.pc-politician-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  margin-bottom: 0px;
 }
 
-.politician-info h2 {
+.pc-politician-name {
   font-size: 1.5rem;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
-.politician-party {
+.pc-politician-party {
   font-size: 1rem;
   color: #ccc;
 }
 
 /* Main Content */
-.politician-content {
-  flex-grow: 1; 
+.pc-politician-content {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: stretch;
   width: 100%;
 }
 
-/* Investment Info Section */
-.investment-info {
-  width: 100%;
-  margin-top: 10px;
+.pc-decorative-line {
+  width: 50px;
+  height: 2px;
+  background-color: #4B2E83;
+  margin: 8px auto;
 }
 
-.investment-item {
+/* Investment Section */
+.pc-investment-section {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+.pc-investment-section h3 {
+  font-size: 1.2rem;
+  margin: 0px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.pc-investment-list {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0px;
+}
+
+.pc-investment-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
-.investment-item .label {
+.pc-label {
   font-size: 0.9rem;
   color: #aaa;
+  margin-bottom: 5px;
 }
 
-.investment-item .value {
-  font-size: 1rem;
+.pc-value {
+  font-size: 1.5rem; 
   font-weight: bold;
   color: #fff;
 }
 
-/* Sectors List */
-.sectors-list {
-  height: 60px; 
-  overflow-y: auto; /* Enable scrolling if content overflows */
-  padding: 5px;
-  background-color: #2b2b2b;
-  border-radius: 5px;
-  margin-top: 5px;
-  font-size: 0.9rem;
-  text-align: left; 
-}
-
-.sectors-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sectors-list::-webkit-scrollbar-thumb {
-  background-color: #4B2E83;
-  border-radius: 3px;
-}
-
-.sectors-list span {
-  display: block;
-  color: #ccc;
-  line-height: 1.5;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; 
-}
-
-/* Performance */
-.performance-section {
-  margin-top: 15px;
-  text-align: center; 
-}
-
-.performance-title {
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 10px;
-}
-
-.performance-values {
-  display: flex;
-  gap: 10px;
-  justify-content: center; /* Center metrics under title */
-}
-
-.performance-item {
+/* Sectors Section */
+.pc-sectors-section {
   text-align: center;
+  margin-top: 0%;
+  margin-bottom: 15px;
 }
 
-.performance-item .time-frame {
-  display: block;
-  font-size: 0.9rem;
-  color: #aaa;
-}
-
-.performance-item .percent-change {
-  font-size: 1rem;
+.pc-sectors-section h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #fff;
   font-weight: bold;
 }
 
-.percent-change.positive {
-  color: #28a745; 
+.pc-sectors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
-.percent-change.negative {
-  color: #dc3545; 
+.pc-sector-badge {
+  background: #4B2E83;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 /* Card Actions */
-.card-actions {
+.pc-card-actions {
   display: flex;
   gap: 10px;
-  width: 100%; 
-  margin-top: auto; 
+  width: 100%;
+  margin-top: auto;
 }
 
-.edit-button,
-.unfollow-button {
+.pc-edit-button,
+.pc-unfollow-button {
   flex: 1;
   padding: 10px 0;
   background: linear-gradient(45deg, #6C429A, #4B2E83);
@@ -168,23 +161,23 @@
   text-align: center;
 }
 
-.edit-button:hover,
-.unfollow-button:hover {
+.pc-edit-button:hover,
+.pc-unfollow-button:hover {
   transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
-  .politician-card {
+  .pc-politician-card {
     width: 100%;
   }
 
-  .card-actions {
+  .pc-card-actions {
     flex-direction: column;
     gap: 10px;
   }
 
-  .edit-button,
-  .unfollow-button {
+  .pc-edit-button,
+  .pc-unfollow-button {
     width: 100%;
   }
 }
