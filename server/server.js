@@ -434,11 +434,10 @@ app.get('/api/trade-count', async (req, res) => {
         const recentChange = recentResult[0] ? recentResult[0].recentChange : 0;
         const transactionType = recentResult[0] ? recentResult[0].transactionType : null;
         
-        const percentage = totalChange > 0 
-    ? parseFloat(((recentChange / totalChange) * 100).toFixed(2)) 
-    : 0;
+        const percentage = totalChange > 0 ? parseFloat(((recentChange / totalChange) * 100).toFixed(2)) : 0;
 
         res.json({ politicianName, changedollar: recentChange, percentage, transactionType });
+
     } catch (error) {
         res.status(500).json({ error: "An error has occurred when attempting to retrieve the change dollar percentage." });
     }
@@ -463,6 +462,36 @@ app.get('/api/issuer-count', async (req, res) => {
         res.status(500).json({ error: "An error has occurred when attempting to retrieve the unique symbol count." });
     }
 });
+
+// Route to get the position (Senate or House of Representatives) for a given politician
+app.get('/api/politician-position', async (req, res) => {
+    const { politicianName } = req.query;
+  
+    if (!politicianName) {
+      return res.status(400).json({ error: 'Politician name is required' });
+    }
+  
+    try {
+      const [result] = await pool.query(`
+        SELECT position
+        FROM trades
+        WHERE politicianName = ?
+      `, [politicianName]);
+  
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'Politician not found' });
+      }
+      
+      let position = result[0].position;
+  
+      res.json({ politicianName, position });
+    } catch (error) {
+      console.error("Error fetching politician position:", error);
+      res.status(500).json({ error: "An error occurred while retrieving the politician's position." });
+    }
+  });
+  
+
 app.get('/api/updated-stocks', async (req, res) => {
     const { politicianName } = req.query;
     if (!politicianName) {

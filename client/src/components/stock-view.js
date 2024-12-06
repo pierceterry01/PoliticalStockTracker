@@ -9,13 +9,15 @@ function StockViewPage() {
   const [sortKey, setSortKey] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
   // Format number function
   const formatNumber = (number) => {
+    if (number === undefined || number === null) {
+      return "0";  
+    }
+  
     if (number >= 1000000) {
       return (number / 1000000).toFixed(1) + "M";
     }
@@ -35,7 +37,6 @@ function StockViewPage() {
         );
         const latestTradeData = latestTradeResponse.data;
 
-
         // Create a map of politician names to their last traded date
         const tradeDateMap = latestTradeData.reduce((acc, item) => {
           acc[item.politicianName] = item.lastTraded;
@@ -46,12 +47,12 @@ function StockViewPage() {
         const updatedData = await Promise.all(
           stockData.map(async (politician) => {
             try {
+              // Fetch trade volume data
               const response = await axios.get(
                 "http://localhost:3001/api/trade-volume",
                 { params: { politicianName: politician.politician } }
               );
 
-              // Calculate total trade volume
               const totalTradeVolume = response.data.reduce(
                 (total, item) => total + item.purchaseVolume + item.saleVolume,
                 0
@@ -62,7 +63,25 @@ function StockViewPage() {
                 { params: { politicianName: politician.politician } }
               );
               
-              const { changedollar = 0, percentage = 0, transactionType } = changePercentResponse.data; 
+
+              const { changedollar = 0, percentage = 0, transactionType } = changePercentResponse.data;
+
+              // Fetch position of the politician
+              const positionResponse = await axios.get(
+                "http://localhost:3001/api/politician-position",
+                { params: { politicianName: politician.politician } }
+              );
+              let position = positionResponse.data.position;
+              
+              // Apply mapping for different position name
+              // Apply mapping for different position names, ensuring lowercase comparisons
+              if (position && position.toLowerCase() === "senator") {
+                position = "Senate";
+              } else if (position && position.toLowerCase() === "representative") {
+                position = "House";
+              } else {
+                position = position ? position.charAt(0).toUpperCase() + position.slice(1) : "N/A";
+              }
 
               return {
                 ...politician,
@@ -71,10 +90,11 @@ function StockViewPage() {
                 changeDollar: changedollar,
                 changePercent: percentage,
                 transactionType,
+                position,  
               };
             } catch (error) {
               console.error(
-                `Error fetching trade volume for ${politician.politician}:`,
+                `Error fetching data for ${politician.politician}:`,
                 error
               );
               return {
@@ -84,6 +104,7 @@ function StockViewPage() {
                 changeDollar: 0,
                 changePercent: 0,
                 transactionType: null,
+                position: "N/A",  
               };
             }
           })
@@ -118,12 +139,10 @@ function StockViewPage() {
 
   // Update filteredData and sort the displayData accordingly
   const getFilteredAndSortedData = () => {
-    // Filter based on search query
     let filteredData = displayData.filter((item) =>
       item.politician.toLowerCase().includes(searchQuery)
     );
 
-    // Sort the filtered data
     if (sortKey) {
       filteredData.sort((a, b) => {
         let res;
@@ -136,7 +155,7 @@ function StockViewPage() {
         } else if (sortKey === "changeDollar") {
           res = a.changeDollar - b.changeDollar;
         } else if (sortKey === "changePercent") {
-          res = a.changePercent - b.changePercent;        
+          res = a.changePercent - b.changePercent;
         } else {
           res = a[sortKey] - b[sortKey];
         }
@@ -149,7 +168,7 @@ function StockViewPage() {
 
   const filteredData = getFilteredAndSortedData();
 
-  // Pagination logic
+  // Page change logic
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const pageData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
@@ -158,9 +177,7 @@ function StockViewPage() {
 
   return (
     <div className="stock-view-page">
-      {/* Main Content Section */}
       <div className="stock-view-content">
-        {/* Search Bar */}
         <div className="search-bar">
           <input
             type="text"
@@ -176,6 +193,7 @@ function StockViewPage() {
           <thead>
             <tr>
               <th onClick={() => handleSort("politician")}>Politician</th>
+              <th>Position</th> 
               <th onClick={() => handleSort("changeDollar")}>Change $</th>
               <th onClick={() => handleSort("changePercent")}>Change %</th>
               <th onClick={() => handleSort("copiers")}>Copiers</th>
@@ -202,33 +220,38 @@ function StockViewPage() {
                       </Link>
                     </div>
                   </td>
-                   <td>${formatNumber(row.changeDollar)}</td>
-                   <td
+                  <td>
+                    {row.position}
+                  </td> 
+                  <td>${formatNumber(row.changeDollar)}</td>
+                  <td
                     className={`percent-change ${
-                      row.transactionType === "Purchase" || row.transactionType === "buy" ? "positive" : 
-                      row.transactionType === "Sale" || row.transactionType === "Sale (Partial)" || row.transactionType === "sell"
-                      || row.transactionType === "Sale (Full)" || row.transactionType === "Sell (PARTIAL)" ? "negative" : ""
+                      row.transactionType === "Purchase" ||
+                      row.transactionType === "buy" ||
+                      row.transactionType === "Recieve"
+                        ? "positive"
+                        : row.transactionType === "Sale" ||
+                          row.transactionType === "Sale (Partial)" ||
+                          row.transactionType === "sell" ||
+                          row.transactionType === "Sale (Full)" ||
+                          row.transactionType === "Sell (PARTIAL)"
+                        ? "negative"
+                        : ""
                     }`}
                   >
-                    {row.changePercent !== undefined ? `${row.changePercent}%` : "N/A"}
+                    {row.changePercent !== undefined ? `${row.changePercent}%` : "0"}
                   </td>
 
                   <td>{row.copiers}</td>
                   <td>
-                    {row.lastTraded
-                      ? new Date(row.lastTraded).toLocaleDateString()
-                      : "N/A"}
+                    {row.lastTraded ? new Date(row.lastTraded).toLocaleDateString() : "N/A"}
                   </td>
-                  <td>
-                    {row.totalVolume !== undefined
-                      ? row.totalVolume.toLocaleString()
-                      : "N/A"}
-                  </td>
+                  <td>${formatNumber(row.totalVolume)}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="no-results">
+                <td colSpan="7" className="no-results">
                   No politicians match your search.
                 </td>
               </tr>
@@ -248,9 +271,7 @@ function StockViewPage() {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
-              className={`page-button ${
-                currentPage === index + 1 ? "active" : ""
-              }`}
+              className={`page-button ${currentPage === index + 1 ? "active" : ""}`}
               onClick={() => setCurrentPage(index + 1)}
             >
               {index + 1}
