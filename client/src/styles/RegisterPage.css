@@ -50,6 +50,8 @@
     margin-bottom: 20px;
 }
 
+
+
 /* Decorative line below "Create Your Account" */
 .header-line {
     width: 60px;
@@ -71,6 +73,7 @@
     font-size: 1rem;
     color: #ddd;
     margin-bottom: 5px;
+    align-self: flex-start;
 }
 
 /* Input field */

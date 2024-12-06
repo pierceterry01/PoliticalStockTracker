@@ -5,6 +5,7 @@ import "../styles/PortfolioPage.css";
 import "../styles/chartSectionPortfolio.css";
 import SectorsAllocationsChart from "../charts/sectorAllocations.js";
 import PortfolioCompositionChart from "../charts/portfolioComposition.js";
+import sectorMapping from "../data/sectorMapping-client.js";
 
 function PortfolioPage() {
   const [loading, setLoading] = useState(true);
@@ -16,15 +17,38 @@ function PortfolioPage() {
   const [aggregatedSectors, setAggregatedSectors] = useState([]);
   const [aggregatedComposition, setAggregatedComposition] = useState([]);
   const [stocksHeld, setStocksHeld] = useState([]); // State to hold stocks
+  const [selectedSectors, setSelectedSectors] = useState([]); 
 
-  // Function to fetch all stocks held by politicians being copied
+  // Function to fetch all stocks held by followed politicians dynamically
   const fetchStocksHeld = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3001/api/stocks-held?politicians=Nancy%20Pelosi,Dean%20Phillips");
+
+      const followedPoliticians = JSON.parse(localStorage.getItem("investments")) || [];
+
+      // Get the names of followed politicians
+      const politicians = Array.from(new Set(followedPoliticians.map((inv) => inv.politicianName)));
+      if (politicians.length === 0) {
+        setStocksHeld([]);
+        setLoading(false);
+        return;
+      }
+
+      // Construct the query string dynamically
+      const politicianName = encodeURIComponent(politicians.join(","));
+      const response = await axios.get(`http://localhost:3001/api/stocks-held?politicians=${politicianName}`);
+
       if (response.status === 200 && response.data) {
-        setStocksHeld(response.data);
-        console.log("Stocks Held:", response.data);
+        const stocks = response.data;
+
+        // Filter stocks by selected sectors
+        const filteredStocks = stocks.filter((stock) => {
+          const sector = sectorMapping[stock.symbol]; 
+          return selectedSectors.length === 0 || selectedSectors.includes(sector);
+        });
+
+        setStocksHeld(filteredStocks);
+        console.log("Filtered Stocks Held:", filteredStocks);
       } else {
         setStocksHeld([]);
       }
@@ -35,6 +59,7 @@ function PortfolioPage() {
       setLoading(false);
     }
   };
+
 
   // Get the number of politicians the user is following
   const fetchFollowingCount = () => {
@@ -212,17 +237,22 @@ function PortfolioPage() {
               <table id="stocksTable">
                 <thead>
                   <tr>
-                    <th>Stock Symbol</th>
-                    <th>Asset Name</th>
+                  <th>Name</th> 
+                  <th>Stock Symbol</th>
+                  <th>Asset Name</th>
+                  <th>Sector</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stocksHeld.map((stock, index) => {
+                    const sector = sectorMapping[stock.symbol] || "N/A";
                     console.log("Rendering Stock:", stock); // Debugging log
                     return (
                       <tr key={index}>
+                        <td>{stock.politicianName}</td> 
                         <td>{stock.symbol}</td>
                         <td>{stock.assetName}</td>
+                        <td>{sector}</td> 
                       </tr>
                     );
                   })}
