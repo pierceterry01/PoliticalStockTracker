@@ -5,7 +5,6 @@ import "../styles/PortfolioPage.css";
 import "../styles/chartSectionPortfolio.css";
 import SectorsAllocationsChart from "../charts/sectorAllocations.js";
 import PortfolioCompositionChart from "../charts/portfolioComposition.js";
-import sectorMapping from "../data/sectorMapping-client.js";
 
 function PortfolioPage() {
   const [loading, setLoading] = useState(true);
@@ -23,9 +22,9 @@ function PortfolioPage() {
   const fetchStocksHeld = async () => {
     try {
       setLoading(true);
-
+  
       const followedPoliticians = JSON.parse(localStorage.getItem("investments")) || [];
-
+  
       // Get the names of followed politicians
       const politicians = Array.from(new Set(followedPoliticians.map((inv) => inv.politicianName)));
       if (politicians.length === 0) {
@@ -33,22 +32,20 @@ function PortfolioPage() {
         setLoading(false);
         return;
       }
-
+  
       // Construct the query string dynamically
       const politicianName = encodeURIComponent(politicians.join(","));
       const response = await axios.get(`http://localhost:3001/api/stocks-held?politicians=${politicianName}`);
-
+  
       if (response.status === 200 && response.data) {
         const stocks = response.data;
-
+  
         // Filter stocks by selected sectors
         const filteredStocks = stocks.filter((stock) => {
-          const sector = sectorMapping[stock.symbol]; 
-          return selectedSectors.length === 0 || selectedSectors.includes(sector);
+          return selectedSectors.length === 0 || selectedSectors.includes(stock.sector);
         });
-
+  
         setStocksHeld(filteredStocks);
-        console.log("Filtered Stocks Held:", filteredStocks);
       } else {
         setStocksHeld([]);
       }
@@ -59,8 +56,7 @@ function PortfolioPage() {
       setLoading(false);
     }
   };
-
-
+  
   // Get the number of politicians the user is following
   const fetchFollowingCount = () => {
     const followedPoliticians =
@@ -139,6 +135,21 @@ function PortfolioPage() {
     calculateTotalInvestments();
     fetchStocksHeld(); 
   }, [calculateTotalInvestments]);
+
+  // For fetching sector data
+  useEffect(() => {
+    const getSectors = JSON.parse(localStorage.getItem("investments"))
+      .map((inv) => inv.sectors)
+      .flat();
+    
+    setSelectedSectors(getSectors);
+  }, []);
+  
+  useEffect(() => {
+    if (selectedSectors.length > 0) {
+      fetchStocksHeld(); 
+    }
+  }, [selectedSectors]);
 
   useEffect(() => {
     console.log("Aggregated Composition Updated:", aggregatedComposition);
@@ -237,22 +248,21 @@ function PortfolioPage() {
               <table id="stocksTable">
                 <thead>
                   <tr>
-                  <th>Name</th> 
-                  <th>Stock Symbol</th>
-                  <th>Asset Name</th>
-                  <th>Sector</th>
+                    <th>Name</th>
+                    <th>Stock Symbol</th>
+                    <th>Asset Name</th>
+                    <th>Sector</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stocksHeld.map((stock, index) => {
-                    const sector = sectorMapping[stock.symbol] || "N/A";
-                    console.log("Rendering Stock:", stock); // Debugging log
+                    // No sector mapping now
                     return (
                       <tr key={index}>
                         <td>{stock.politicianName}</td> 
                         <td>{stock.symbol}</td>
                         <td>{stock.assetName}</td>
-                        <td>{sector}</td> 
+                        <td>{stock.sector || "N/A"}</td> 
                       </tr>
                     );
                   })}

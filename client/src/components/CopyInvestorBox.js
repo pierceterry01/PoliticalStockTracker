@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/CopyInvestorBox.css';
 
-
 function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
   const [step, setStep] = useState(1);
-
 
   // Initialize state w/ existing data if editing
   const [investAmount, setInvestAmount] = useState(
@@ -14,21 +12,19 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     isEditing ? investorData.stopLossAmount : 900
   );
 
-
   const allSectors = {
-    Energy: 'ENGY',
-    Materials: 'MATR',
-    Industrials: 'INDU',
+    'Energy': 'ENGY',
+    'Materials': 'MATR',
+    'Industrials': 'INDU',
     'Consumer Discretionary': 'CDIS',
     'Consumer Staples': 'CSTP',
     'Health Care': 'HLTH',
-    Financials: 'FINL',
+    'Financials': 'FINL',
     'Information Technology': 'INFT',
     'Communication Services': 'CMNC',
-    Utilities: 'UTIL',
+    'Utilities': 'UTIL',
     'Real Estate': 'REAL',
   };
-
 
   const [selectedSectors, setSelectedSectors] = useState(
     isEditing ? investorData.sectors : Object.keys(allSectors)
@@ -50,7 +46,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       return newAllocations;
     });
   }, [selectedSectors]);
-
 
   const handleNextClick = () => {
     if (step === 1) {
@@ -91,13 +86,11 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     }
   };
 
-
   const handleBackClick = () => {
     if (step > 1) {
       setStep((prev) => prev - 1);
     }
   };
-
 
   const handleInvestClick = () => {
     const investmentData = {
@@ -112,7 +105,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     onInvest(investmentData);
   };
 
-
   const toggleSector = (sector) => {
     setSelectedSectors((prev) => {
       if (prev.includes(sector)) {
@@ -123,7 +115,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     });
   };
 
-
   const handleAllocationChange = (sector, value) => {
     const val = parseFloat(value) || 0;
     setSectorAllocations((prev) => ({
@@ -131,7 +122,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
       [sector]: val,
     }));
   };
-
 
   const renderStepContent = () => {
     switch (step) {
@@ -152,7 +142,6 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
                 />
               </div>
             </div>
-
 
             <div className="stop-loss-setting">
               <label htmlFor="stop-loss-amount-input">
@@ -233,13 +222,11 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     }
   };
 
-
   return (
     <div className="copy-investor-box">
       <button className="close-button" onClick={onClose} aria-label="Close">
         &times;
       </button>
-
 
       <div className="header-section">
         <h2>{isEditing ? 'Edit Investment' : 'Copy this Investor'}</h2>
@@ -254,9 +241,7 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
         </div>
       </div>
 
-
       <div className="body-section">{renderStepContent()}</div>
-
 
       <div className="footer-section">
         {step > 1 && (
@@ -271,6 +256,5 @@ function CopyInvestorBox({ investorData, onClose, onInvest, isEditing }) {
     </div>
   );
 }
-
 
 export default CopyInvestorBox;
