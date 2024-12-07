@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function SettingsPage() {
   const { user, setUser } = useContext(UserContext);
-  const [displayName, setDisplayName] = useState(user.displayName);
+  const [displayName, setDisplayName] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
   const [timeZone, setTimeZone] = useState('GMT');

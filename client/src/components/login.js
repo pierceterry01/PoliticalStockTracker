@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css'; // Ensure this imports LoginPage.css
+import UserContext from './UserContext'; // Import UserContext
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext); // Access setUser from UserContext
 
   // Frontend Validation Function
   const validateInputs = () => {
     if (!email) {
-      setError('Username field cannot be empty.');
+      setError('Email field cannot be empty.');
       return false;
     }
     if (!password) {
@@ -24,10 +26,10 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     // Validate inputs before sending the request
     if (!validateInputs()) return;
-
+  
     try {
       const response = await fetch('http://localhost:3001/auth/login', {
         method: 'POST',
@@ -36,18 +38,19 @@ function LoginPage() {
         },
         body: JSON.stringify({
           user: {
-            email: email.trim(),
+            email: email,
             password: password,
           },
         }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
+        setUser({ username: data.username });
         navigate('/portfolio');
       } else if (response.status === 401) {
-        setError('Invalid username or password.');
+        setError('Invalid email or password.');
       } else if (response.status === 422) {
         setError('Invalid input.');
       } else {
@@ -58,6 +61,7 @@ function LoginPage() {
       setError('Failed to connect to the server.');
     }
   };
+  
 
   return (
     <div className="login-body">
