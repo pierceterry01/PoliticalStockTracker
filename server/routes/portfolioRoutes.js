@@ -1,95 +1,55 @@
 const express = require("express");
 const router = express.Router();
 
-const sectorMapping = {
-  "AAPL": "Information Technology", "MSFT": "Information Technology", "NVDA": "Information Technology",
-  "CSCO": "Information Technology", "INTC": "Information Technology", "ORCL": "Information Technology",
-  "ADBE": "Information Technology", "AMD": "Information Technology", "IBM": "Information Technology",
-  "QCOM": "Information Technology", "TXN": "Information Technology", "AVGO": "Information Technology",
-  "HPE": "Information Technology", "MU": "Information Technology", "SNOW": "Information Technology",
-  "SHOP": "Information Technology", "TWLO": "Information Technology", "DOCU": "Information Technology",
-  "TTD": "Information Technology", "U": "Information Technology", "PINS": "Information Technology",
-  "TSLA": "Consumer Discretionary", "AMZN": "Consumer Discretionary", "NFLX": "Consumer Discretionary",
-  "DIS": "Consumer Discretionary", "BABA": "Consumer Discretionary", "HD": "Consumer Discretionary",
-  "NKE": "Consumer Discretionary", "SBUX": "Consumer Discretionary", "MCD": "Consumer Discretionary",
-  "TGT": "Consumer Discretionary", "RCL": "Consumer Discretionary", "MAR": "Consumer Discretionary",
-  "NCLH": "Consumer Discretionary", "WYNN": "Consumer Discretionary", "MGM": "Consumer Discretionary",
-  "GM": "Consumer Discretionary", "F": "Consumer Discretionary", "EBAY": "Consumer Discretionary",
-  "ETSY": "Consumer Discretionary", "LYFT": "Consumer Discretionary", "UBER": "Consumer Discretionary",
-  "DAL": "Consumer Discretionary", "UAL": "Consumer Discretionary",
-  "GOOGL": "Communications Services", "META": "Communications Services", "VZ": "Communications Services",
-  "CMCSA": "Communications Services", "ATVI": "Communications Services", "RBLX": "Communications Services",
-  "ROKU": "Communications Services", "ZM": "Communications Services",
-  "JPM": "Financials", "V": "Financials", "MA": "Financials", "BRK.B": "Financials", "BAC": "Financials",
-  "C": "Financials", "GS": "Financials", "MS": "Financials", "USB": "Financials", "BLK": "Financials",
-  "BK": "Financials", "AXP": "Financials", "SPGI": "Financials",
-  "UNH": "Health Care", "JNJ": "Health Care", "PFE": "Health Care", "MRK": "Health Care", "ABT": "Health Care",
-  "CVS": "Health Care", "ABBV": "Health Care", "MDT": "Health Care", "DHR": "Health Care", "ISRG": "Health Care",
-  "SYK": "Health Care", "ZTS": "Health Care", "LLY": "Health Care", "CI": "Health Care", "ANTM": "Health Care",
-  "HUM": "Health Care", "ELV": "Health Care", "MOH": "Health Care", "CNC": "Health Care", "GILD": "Health Care",
-  "PG": "Consumer Staples", "KO": "Consumer Staples", "PEP": "Consumer Staples", "WMT": "Consumer Staples",
-  "MDLZ": "Consumer Staples", "TAP": "Consumer Staples", "GIS": "Consumer Staples", "CPB": "Consumer Staples",
-  "K": "Consumer Staples", "SJM": "Consumer Staples", "HSY": "Consumer Staples", "MKC": "Consumer Staples",
-  "CL": "Consumer Staples", "CLX": "Consumer Staples", "STZ": "Consumer Staples", "MNST": "Consumer Staples",
-  "XOM": "Energy", "CVX": "Energy", "NEE": "Energy",
-  "BA": "Industrials", "CAT": "Industrials", "GE": "Industrials", "MMM": "Industrials", "HON": "Industrials",
-  "RTX": "Industrials", "UPS": "Industrials",
-  "LIN": "Materials",
-  "DUK": "Utilities", "AEP": "Utilities",
-  "AMT": "Real Estate", "PLD": "Real Estate"
-};
-
 module.exports = (pool) => {
 
-  // GET /api/stocks-held
-  router.get('/stocks-held', async (req, res) => {
-    try {
-      const { politicians } = req.query;
 
-      if (!politicians) {
-        return res.status(400).json({ error: "Politicians parameter is required." });
-      }
+// GET /api/stocks-held
+router.get('/stocks-held', async (req, res) => {
+  try {
+    const { politicians } = req.query;
 
-      const followedPoliticians = politicians.split(',');
-
-      if (followedPoliticians.length === 0) {
-        return res.status(200).json([]);
-      }
-
-      const placeholders = followedPoliticians.map(() => '?').join(',');
-
-      const query = `
-        SELECT politicianName, symbol, assetName
-        FROM trades
-        WHERE politicianName IN (${placeholders})
-      `;
-
-      const [results] = await pool.query(query, followedPoliticians);
-
-      const uniqueStocks = {};
-      results.forEach((stock) => {
-        if (!uniqueStocks[stock.symbol]) {
-          uniqueStocks[stock.symbol] = {
-            symbol: stock.symbol,
-            assetName: stock.assetName,
-            politicianName: stock.politicianName,
-            sector: sectorMapping[stock.symbol] || "N/A"  
-          };
-        }
-      });
-
-      const uniqueStockArray = Object.values(uniqueStocks).slice(0, 15);
-
-      console.log("Final unique stocks:", uniqueStockArray);
-
-      res.status(200).json(uniqueStockArray);
-    } catch (error) {
-      console.error('Server error:', error);
-      res.status(500).json({ error: 'Server error' });
+    if (!politicians) {
+      return res.status(400).json({ error: "Politicians parameter is required." });
     }
-  });
 
+    const followedPoliticians = politicians.split(',');
 
+    if (followedPoliticians.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    const placeholders = followedPoliticians.map(() => '?').join(',');
+
+    const query = `
+      SELECT politicianName, symbol, assetName
+      FROM trades
+      WHERE politicianName IN (${placeholders})
+    `;
+
+    const [results] = await pool.query(query, followedPoliticians);
+
+    const uniqueStocks = {};
+    results.forEach((stock) => {
+      if (!uniqueStocks[stock.symbol]) {
+        uniqueStocks[stock.symbol] = {
+          symbol: stock.symbol,
+          assetName: stock.assetName,
+          politicianName: stock.politicianName,
+        };
+      }
+    });
+
+    const uniqueStockArray = Object.values(uniqueStocks).slice(0, 15);
+
+    console.log("Final unique stocks:", uniqueStockArray);
+
+    res.status(200).json(uniqueStockArray);
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
   // Endpoint to fetch trade volume data
   router.get("/trade-volume", async (req, res) => {

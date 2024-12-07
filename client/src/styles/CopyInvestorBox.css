@@ -197,14 +197,14 @@
 .allocation-list {
   max-height: 200px;
   overflow-y: auto;
-  margin-bottom: 0px;
+  margin-bottom: 20px;
 }
 
 .allocation-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0px;
+  margin-bottom: 8px;
   padding: 0 20px;
 }
 
@@ -213,7 +213,7 @@
   color: #ccc;
   flex: 1;
   text-align: center;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
 }
 
 .allocation-input-group {
