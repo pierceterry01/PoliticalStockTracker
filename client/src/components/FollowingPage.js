@@ -8,8 +8,8 @@ function FollowingPage() {
   const [followingData, setFollowingData] = useState([]);
   const [showCopyInvestorBox, setShowCopyInvestorBox] = useState(false);
   const [selectedPolitician, setSelectedPolitician] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // Added searchTerm state
-  const [aggregatedSectors, setAggregatedSectors] = useState([]); // Add this line to define the state for aggregated sectors
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [aggregatedSectors, setAggregatedSectors] = useState([]); 
 
   useEffect(() => {
     // Fetch the following data HERE
