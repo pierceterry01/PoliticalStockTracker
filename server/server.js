@@ -142,36 +142,36 @@ app.post('/auth/login', loginValidator, async (req, res) => {
         const email = req.body.user.email;
         const password = req.body.user.password;
 
+        // Validate input types
         if (typeof email !== 'string' || typeof password !== 'string') {
             console.error('Invalid input types:', { email, password });
             return res.status(400).json({ error: 'Invalid input format' });
         }
 
-        const [rows] = await pool.execute('SELECT id, password FROM users WHERE email = ?', [email]);
+        // Query user from the database
+        const [rows] = await pool.execute('SELECT id, username, password FROM users WHERE email = ?', [email]);
 
         if (rows.length === 0) {
             console.error('No user found for email:', email);
             return res.status(422).json({ error: 'Invalid email or password' });
         }
 
-        // Extract user only after ensuring rows is not empty
         const user = rows[0];
 
-        // Convert binary password to string if necessary
         const hashedPassword = Buffer.isBuffer(user.password)
-            ? user.password.toString('utf8') 
+            ? user.password.toString('utf8')
             : user.password;
 
+        // Compare passwords
         const match = await bcrypt.compare(password, hashedPassword);
         if (!match) {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ username: email, id: user.id }, secret, { expiresIn: '1h' });
-
-        console.log(`Login successful for user: ${email} (ID: ${user.id})`);
-
-        return res.status(200).json({ token });
+        // Generate JWT and include username
+        const token = jwt.sign({ username: user.username, id: user.id }, secret, { expiresIn: '1h' });
+        console.log(`Login successful for user: ${user.username}`);
+        return res.status(200).json({ token, username: user.username });
     } catch (err) {
         console.error('Error during login:', err.message);
         res.status(500).json({ error: 'Internal server error' });

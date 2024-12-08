@@ -27,7 +27,7 @@ function NavBar() {
           ) : (
             <span className="profile-icon">&#128100;</span>
           )}
-          <span className="profile-name">{user.displayName}</span>
+          <span className="profile-name">{user.username}</span>
         </Link>
       </div>
     </header>
