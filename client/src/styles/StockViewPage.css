@@ -1,0 +1,162 @@
+@import './common.css';
+
+.stock-view-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #141414;
+  color: white;
+}
+
+/* Content */
+.stock-view-content {
+  padding: 40px 60px;
+  flex-grow: 1;
+}
+
+/* Search Bar */
+.search-bar {
+  margin-bottom: 20px;
+}
+
+/* Data Table */
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 25px;
+  text-align: left;
+  vertical-align: middle; 
+}
+
+.stock-table th {
+  background-color: #4B2E83;
+  color: white;
+  cursor: pointer;
+}
+
+.stock-table tr:nth-child(even) {
+  background-color: #1e1e1e;
+}
+
+.stock-table tr:nth-child(odd) {
+  background-color: #2e2e2e;
+}
+
+.stock-table td {
+  color: white;
+  height: 70px; 
+}
+
+/* Make sure all images are in the same position */
+.image-name-cell {
+  display: flex;
+  align-items: center; 
+}
+
+.politician-info-sv {
+  display: flex;
+  align-items: center; 
+}
+
+.politician-image-sv {
+  width: 80px; 
+  height: 80px;
+  border-radius: 50%; 
+  object-fit: cover; 
+  margin-right: 15px; 
+  border: 3px solid #4B2E83;
+}
+
+.politician-name-sv {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+
+.politician-name-sv.democrat {
+  color: #3b9eff; /* Blue for Democrats */
+}
+
+.politician-name-sv.democrat:hover {
+  color: #9accff; 
+}
+
+.politician-name-sv.republican {
+  color: #ff4b4b; /* Red for Republicans */
+}
+
+.politician-name-sv.republican:hover {
+  color: #ff7979; 
+}
+
+.percent-change.positive {
+  color: #28a745; /* Green for GAINING MONEY!! LETS GO!! */
+}
+
+.percent-change.negative {
+  color: #dc3545; /* Red for LOSING MONEY!! */
+}
+
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .stock-view-content {
+    padding: 50px;
+  }
+
+  
+
+  .politician-image {
+    width: 40px;
+    height: 40px;
+  }
+
+}
+
+/* Page Change Controls */
+.page-change-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 10px; 
+}
+
+.page-button {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #4B2E83; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.page-button:hover {
+  background-color: #6C429A; 
+  transform: scale(1.05); 
+}
+
+
+.page-button:disabled {
+  background-color: #cccccc; 
+  cursor: not-allowed;
+}
+
+.page-button.active {
+  background-color: #b167ff; 
+  color: White;
+}
+

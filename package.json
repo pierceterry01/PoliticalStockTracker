@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.1.2",
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "@shadcn/ui": "^0.0.4",
+    "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.3",
+    "jsonwebtoken": "^9.0.2",
+    "shadcn-ui": "^0.9.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14"
+  }
+}

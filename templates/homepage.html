@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Home</title>
+</head>
+<body id="homepageBody">
+    <header id="homepageHeader">
+        <h1>Outsider Trading</h1>
+        <img src="/static/images/Washington.png" alt="Logo" id="headerImage" />
+
+        <div class="menu-container">
+            <!-- Account Menu: Contains the Login and Create Account options -->
+            <div class="account-menu" onclick="toggleAccountMenu()">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <ul class="account-dropdown" id="account-menu">
+                    <li><a href="{{ url_for('createAccount') }}">Create Account</a></li>
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                </ul>
+            </div>
+            <!-- Hamburger Menu: TBD -->
+            <div class="hamburger-menu" id="hamburger" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="menu" id="menu">
+                <li><a href="">About</a></li>
+                <li><a href="">TEST</a></li>
+                <li><a href="">TEST</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

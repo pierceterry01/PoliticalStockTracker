@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Account Creation</title>
+</head>
+<body class="create-account-body">
+    <a href="{{ url_for('home') }}" class="back-arrow">&#8592;</a> 
+    <header class="create-account-header">
+        <h1>Outsider Trading</h1>
+    </header>
+    <div class="create-account-forms">
+        <h1>Create Account</h1>
+        <div class="header-line"></div>
+        <div class="create-account-form-content">
+            <form>
+                <div class="create-account-form-group">
+                    <label for="username" class="create-account-label">Username</label>
+                    <input class="create-account-input" type="text" id="username" name="username">
+                </div>
+                <div class="create-account-form-group">
+                    <label for="email" class="create-account-label">Email</label>
+                    <input class="create-account-input" type="text" id="email" name="email">
+                </div>
+                <div class="create-account-form-group">
+                    <label for="password" class="create-account-label">Password</label>
+                    <input class="create-account-input" type="password" id="password" name="password">
+                </div>
+                <div class="create-account-form-group">
+                    <input type="submit" value="Create Account" class="create-account-button"> 
+                </div>
+                <div class="create-account-form-group">
+                    <a href="/login" class="login-link">Sign in here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+@import './common.css';
+
+.following-page {
+  padding: 40px 60px;
+  background-color: #141414;
+  color: white;
+  min-height: 100vh;
+}
+
+.following-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Search Bar */
+.search-bar {
+  margin-bottom: 30px;
+}
+
+/* Politician List */
+.politician-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  justify-items: center; 
+}
+
+/* CopyInvestorBox Popup Styles */
+.copy-investor-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; 
+}
+
+.copy-investor-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.copy-investor-container {
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  z-index: 1001; 
+  max-width: 500px;
+  width: 90%; 
+}
+
+.copy-investor-box {
+  width: 100%;
+}

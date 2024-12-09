@@ -1,0 +1,279 @@
+.politician-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #141414;
+    color: white;
+    overflow-x: hidden;
+    margin: 0; /* Remove any default margin from body */
+    padding: 0;
+  }
+  
+  /* Content */
+  .politician-content {
+    padding: 40px 60px;
+    flex-grow: 1;
+  }
+  
+  .back-button {
+    color: #4B2E83;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+  }
+  
+  .back-button:hover {
+    text-decoration: underline;
+  }
+  
+  /* Politician Info */
+  .politician-info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .politician-details {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Image Size */
+  .politician-page .politician-image {
+    width: 200px; /* Set a larger size for the politician-page */
+    height: 200px; /* Set the height accordingly */
+    object-fit: cover; /* Ensures the image maintains its aspect ratio */
+    border-radius: 50%;
+    border: 6px solid #4B2E83;
+    margin-right: 40px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+  }
+  
+  .politician-details-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .politician-details-text h1 {
+    font-size: 2.8rem; 
+    margin-bottom: -10px;
+  }
+  
+  .politician-party {
+    font-size: 1.4rem; 
+    margin-bottom: 20px;
+    color: #ccc;
+  }
+  
+  .follow-button {
+    padding: 12px 24px;
+    background: linear-gradient(45deg, #6C429A, #4B2E83);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(108, 66, 154, 0.5);
+    margin-left: -10px;
+  }
+  
+  .follow-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(108, 66, 154, 0.7);
+  }
+  
+  .follow-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(108, 66, 154, 0.5);
+  }
+  
+  .follow-button.following {
+    background: linear-gradient(45deg, #FF5F6D, #FFC371);
+  }
+  
+  .follow-button.following:hover {
+    box-shadow: 0 6px 15px rgba(255, 95, 109, 0.7);
+  }
+  
+  /* Politician Stats */
+  .politician-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .stat-label {
+    display: block;
+    font-size: 1.4rem;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .stat-value.positive {
+    color: #28a745;
+  }
+  
+  .stat-value.negative {
+    color: #dc3545;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .politician-content {
+      padding: 20px;
+    }
+  
+    .politician-details {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .politician-image {
+      margin-right: 0;
+      margin-bottom: 20px;
+      width: 250px;
+      height: 250px;
+    }
+  
+    .politician-details-text {
+      align-items: center;
+    }
+  
+    .politician-details-text h1 {
+      font-size: 2.4rem;
+      text-align: center;
+    }
+  
+    .politician-party {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  }
+  
+  .copy-investor-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+  }
+  
+  .copy-investor-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .copy-investor-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .transactions-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #1e1e1e; /* Matches chart section background */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width:98% ;
+  }
+  
+  .transactions-section h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto; /* Center align the table */
+  }
+  
+  .transactions-table th,
+  .transactions-table td {
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  
+  .transactions-table th {
+    background-color: #4B2E83; /* Purple for headers */
+    color: white;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+  }
+  
+  .transactions-table td {
+    color: white;
+  }
+  
+  .transactions-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e; /* Darker row background */
+  }
+  
+  .transactions-table tbody tr:nth-child(odd) {
+    background-color: #2e2e2e; /* Alternate row color */
+  }
+  
+  .transactions-table tbody tr:hover {
+    background-color: #3a3a3a; /* Hover effect */
+    cursor: pointer;
+  }
+  
+  .transactions-table .amount-cell {
+    font-weight: bold;
+  }
+  
+  .transactions-table .positive {
+    color: #28a745; /* Green for positive values */
+  }
+  
+  .transactions-table .negative {
+    color: #dc3545; /* Red for negative values */
+  }
+  
+  .loading,
+  .no-transactions {
+    text-align: center;
+    color: #ccc;
+    font-size: 1.2rem;
+    margin: 20px 0;
+  }
+  
+  @media (max-width: 768px) {
+    .transactions-section {
+      padding: 15px;
+    }
+  
+    .transactions-table th,
+    .transactions-table td {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+  
+    .transactions-section h2 {
+      font-size: 1.5rem;
+    }
+  }
+  

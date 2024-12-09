@@ -1,0 +1,129 @@
+.register-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    background-color: #141414; 
+    color: white; 
+}
+
+/* Back arrow styling */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1.2rem;
+    color: #4B2E83;
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.back-arrow:hover {
+    box-shadow: 0 5px 15px rgba(108, 66, 154, 0.5); 
+}
+
+/* Register container */
+.register-container {
+    background-color: #222; 
+    padding: 40px;
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+    width: 100%;
+    max-width: 400px; /* Limit width for smaller screens */
+    text-align: center;
+}
+
+/* Header */
+.register-header h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px; 
+    margin-bottom: 30px; 
+}
+
+/* "Create Your Account" */
+.register-form-content h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+}
+
+
+
+/* Decorative line below "Create Your Account" */
+.header-line {
+    width: 60px;
+    height: 3px;
+    background-color: #4B2E83; 
+    margin: 0 auto 20px auto;
+}
+
+/* Form group */
+.register-form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Label styling */
+.register-label {
+    font-size: 1rem;
+    color: #ddd;
+    margin-bottom: 5px;
+    align-self: flex-start;
+}
+
+/* Input field */
+.register-input {
+    padding: 12px;
+    width: 100%; 
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 2px solid #4B2E83; 
+    background-color: #333; 
+    color: white;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Includes padding and border in width calculation */
+    margin: 0; /* Removes extra margin that might cause misalignment */
+}
+
+.register-input:focus {
+    border-color: #6C429A;
+    box-shadow: 0 0 10px rgba(108, 66, 154, 0.5); 
+    outline: none;
+}
+
+/* Register button */
+.register-button {
+    width: 100%; 
+    padding: 15px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 20px; 
+    background-color: #4B2E83; 
+    color: white;
+    cursor: pointer; 
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 20px;
+}
+
+.register-button:hover {
+    background-color: #6C429A; 
+    box-shadow: 0 5px 15px rgba(108, 66, 154, 0.5); 
+}
+
+/* Link to sign-in page for existing users */
+.login-link {
+    color: #007bff; /* Blue color */
+    text-decoration: none;
+    transition: color 0.3s ease; 
+    text-align: center;
+}
+
+.login-link:hover {
+    color: #0056b3; 
+    text-decoration: underline; 
+}

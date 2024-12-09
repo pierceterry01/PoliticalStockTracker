@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Login</title>
+</head>
+<body class="login-body">
+    <a href="{{ url_for('home') }}" class="back-arrow">&#8592;</a> 
+    <header class="login-header">
+        <h1>Outsider Trading</h1>
+    </header>
+    <div class="sign-in-forms">
+        <h1>Login</h1>
+        <div class="header-line"></div>
+        <div class="login-form-content">
+            <form>
+                <div class="login-form-group">
+                    <label for="email" class="login-label">Email</label>
+                    <input class="login-input" type="text" id="email" name="email">
+                </div>
+                <div class="login-form-group">
+                    <label for="password" class="login-label">Password</label>
+                    <input class="login-input" type="password" id="password" name="password">
+                </div>
+                <div class="login-form-group">
+                    <input type="submit" value="Log in" class="login-button"> 
+                </div>
+                <div class="loginform-group">
+                    <a href="/createAccount" class="create-account-link">Create an Account here</a> 
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

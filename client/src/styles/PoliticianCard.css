@@ -1,0 +1,183 @@
+.pc-politician-card {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #4B2E83;
+  width: 250px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  height: 575px;
+}
+
+.pc-politician-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.pc-politician-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #4B2E83;
+  display: block;
+  object-fit: cover;
+  margin: 0 auto 0px auto;
+}
+
+.pc-politician-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.pc-politician-name {
+  font-size: 1.5rem;
+  margin-bottom: 0px;
+}
+
+.pc-politician-party {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* Main Content */
+.pc-politician-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+}
+
+.pc-decorative-line {
+  width: 50px;
+  height: 2px;
+  background-color: #4B2E83;
+  margin: 8px auto;
+}
+
+/* Investment Section */
+.pc-investment-section {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+.pc-investment-section h3 {
+  font-size: 1.2rem;
+  margin: 0px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.pc-investment-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0px;
+}
+
+.pc-investment-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.pc-label {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.pc-value {
+  font-size: 1.5rem; 
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Sectors Section */
+.pc-sectors-section {
+  text-align: center;
+  margin-top: 0%;
+  margin-bottom: 15px;
+}
+
+.pc-sectors-section h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #fff;
+  font-weight: bold;
+}
+
+.pc-sectors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pc-sector-badge {
+  background: #4B2E83;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Card Actions */
+.pc-card-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.pc-edit-button,
+.pc-unfollow-button {
+  flex: 1;
+  padding: 10px 0;
+  background: linear-gradient(45deg, #6C429A, #4B2E83);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.pc-edit-button:hover,
+.pc-unfollow-button:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+  .pc-politician-card {
+    width: 100%;
+  }
+
+  .pc-card-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pc-edit-button,
+  .pc-unfollow-button {
+    width: 100%;
+  }
+}

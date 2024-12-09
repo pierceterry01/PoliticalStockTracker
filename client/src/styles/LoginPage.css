@@ -1,0 +1,113 @@
+@import './common.css';
+
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  background-color: #141414; 
+  color: white; 
+}
+
+/* Back arrow */
+.back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 16px !important;
+  color: white !important;
+  background-color: #4B2E83;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: color 0.3s ease; 
+}
+
+
+.back-arrow:hover {
+  background-color: #6C429A;
+  cursor: pointer;
+}
+
+/* Login container */
+.login-container {
+  background-color: #222; 
+  padding: 40px;
+  border-radius: 10px; 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+  width: 100%;
+  max-width: 400px; /* Limit width for smaller screens */
+  text-align: center; 
+  box-sizing: border-box; 
+}
+
+/* Header styling */
+.login-header h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  margin-bottom: 30px; 
+}
+
+/* Login */
+.login-form-content h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.header-line {
+  width: 60px;
+  height: 3px;
+  background-color: #4B2E83; 
+  margin: 0 auto 20px auto; 
+}
+
+/* Form group */
+.login-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.login-label {
+  font-size: 1rem;
+  color: #ddd; 
+  margin-bottom: 5px;
+}
+
+/* Login button */
+.login-button {
+  width: 100%; 
+  padding: 15px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 20px; 
+  background-color: #4B2E83; 
+  color: white;
+  cursor: pointer; 
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background-color: #6C429A; 
+  box-shadow: 0 5px 15px rgba(108, 66, 154, 0.5); 
+}
+
+/* Create account link */
+.create-account-link {
+  color: #007bff; 
+  text-decoration: none;
+  transition: color 0.3s ease; 
+}
+
+.create-account-link:hover {
+  color: #0056b3; 
+  text-decoration: underline; 
+}

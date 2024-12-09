@@ -1,0 +1,94 @@
+@import './common.css';
+
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #1e1e1e;
+  color: #ffffff;            
+}
+
+/* Content */
+.settings-main {
+  flex-grow: 1;
+  padding: 40px 60px;
+  background-color: #1e1e1e; 
+}
+
+.settings-section {
+  margin-bottom: 40px;
+}
+
+.settings-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #4B2E83;
+  padding-bottom: 10px;
+}
+
+.settings-item {
+  margin-bottom: 20px;
+}
+
+.settings-item label {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+/* Profile Picture Preview */
+.profile-preview {
+  margin-top: 10px;
+  max-width: 100px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Confirm Changes Button */
+.confirm-changes-section { 
+  margin-top: 20px;
+}
+
+.confirm-changes-btn {
+  background-color: #4B2E83; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-changes-btn:hover {
+  background-color: #6A4BB5;
+}
+
+/* Delete Account Button */
+.delete-account-btn {
+  background-color: #ff4b4b;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-account-btn:hover {
+  background-color: #ff6b6b;
+}
+
+@media (max-width: 768px) {
+  .settings-main {
+    padding: 20px;
+  }
+}
+
+.privacy-disclaimer {
+  background-color: #4B2E83;
+  height: 200px;
+  padding: 12px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 1.4rem;
+}

@@ -1,0 +1,72 @@
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: #4B2E83;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+}
+
+.nav-links a:hover {
+  text-decoration: none;
+  background-color: #6C429A;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(108, 66, 154, 0.7);
+  border-radius: 10px;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+.profile:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(108, 66, 154, 0.7);
+}
+
+.profile-icon {
+  font-size: 1.5rem;
+  margin-right: 8px;
+}
+
+.profile-name {
+  font-size: 1.1rem;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 8px;
+}
