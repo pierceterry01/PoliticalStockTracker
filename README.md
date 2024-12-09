@@ -4,11 +4,31 @@ Outsider Trading is a web application where users can copy investments made by p
 ### Team Members
 - Dorion Massengil - API, Database Management
 - Jacob Tham - Project Design and Planning
-- Albert Zhou - Backend Development, Database Management, Website Security and Hosting
+- Albert Zhou - Backend Development, Database Management
 - Andrew Veach - Front End Design, UI/UX
 - Pierce Terry - Data Visualization, Frontend/Backend Support
 
 ### Resources
 - [Finnhub Congressional Trading API](https://finnhub.io/docs/api/congressional-trading)
 
+
+### How to Run Locally
+1. Clone the Repository
+2. In the server directory, create an .env file containing following:
+
+        FINNHUB_API_KEY=crvdanhr01qkji45ia40crvdanhr01qkji45ia4g
+        JWT_SECRET=somestring
+        DB_HOST=localhost
+        DB_USER=root
+        DB_PASSWORD=root
+        DB_NAME=stock-tracker-db
+        PORT=3001
+3. In the project directory, run the following Docker command:
+
+        docker-compose up --build
+
+4. Once the container is running, go to the following URL in your browser:
+
+        http://localhost:3000/
+        
 
