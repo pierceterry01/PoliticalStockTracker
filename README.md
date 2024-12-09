@@ -5,8 +5,8 @@ Outsider Trading is a web application where users can copy investments made by p
 - Dorion Massengil (Dorion-M) - API, Database Management
 - Jacob Tham (JNTGYV) - Project Design and Planning
 - Albert Zhou (azfcf) - Backend Development, Database Management
-- Andrew Veach (androodle)- Front End Design, UI/UX
-- Pierce Terry (pierceterry01)- Data Visualization, Frontend/Backend Support
+- Andrew Veach (androodle) - Front End Design, UI/UX
+- Pierce Terry (pierceterry01) - Data Visualization, Frontend/Backend Support
 
 ### Resources
 - [Finnhub Congressional Trading API](https://finnhub.io/docs/api/congressional-trading)
