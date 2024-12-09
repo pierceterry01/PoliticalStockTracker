@@ -4,7 +4,7 @@ Outsider Trading is a web application where users can copy investments made by p
 ### Team Members
 - Dorion Massengil - API, Database Management
 - Jacob Tham - Project Design and Planning
-- Albert Zhou - Backend Development, Database Management
+- Albert Zhou - Backend Development, Database Management, Website Security and Hosting
 - Andrew Veach - Front End Design, UI/UX
 - Pierce Terry - Data Visualization, Frontend/Backend Support
 
