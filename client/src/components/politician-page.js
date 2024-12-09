@@ -296,10 +296,10 @@ function PoliticianPage() {
               Issuers: {issuerCount !== null ? issuerCount : "Loading..."}
             </div>
             <div className="box total-volume">
-              Total Volume: {formatNumber(totalTradeVolume)}
+              ~Total Volume: {formatNumber(totalTradeVolume)}
             </div>
             <div className="box avg-quarterly-volume">
-              Avg. Quarterly Volume: {formatNumber(averageQuarterlyVolume)}
+              ~Avg. Quarterly Volume: {formatNumber(averageQuarterlyVolume)}
             </div>
           </div>
           <div className="chart-content-politician">

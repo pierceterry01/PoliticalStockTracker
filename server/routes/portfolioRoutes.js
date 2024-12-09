@@ -4,7 +4,7 @@ const router = express.Router();
 module.exports = (pool) => {
 
 
-// GET /api/stocks-held
+// Gets the unique stock symbols for for a given politician in the data
 router.get('/stocks-held', async (req, res) => {
   try {
     const { politicians } = req.query;

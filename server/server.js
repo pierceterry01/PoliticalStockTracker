@@ -105,6 +105,7 @@ const loginValidator = [
     body('user.password', 'Password field cannot be empty.').not().isEmpty(),
 ];
 
+// Endpoint for user registration
 app.post('/auth/register', registerValidator, async (req, res) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
@@ -130,6 +131,7 @@ app.post('/auth/register', registerValidator, async (req, res) => {
     }
 });
 
+// Endpoint for user login
 app.post('/auth/login', loginValidator, async (req, res) => {
     const errors = validationResult(req);
 
@@ -178,7 +180,7 @@ app.post('/auth/login', loginValidator, async (req, res) => {
     }
 });
 
-
+// Fetch the trade data for the list of symbols and store in array (trades)
 const fetchTradesAndUpdateDB = async () => {
     const symbols = [
         'WFC','TSLA', 'NVDA', 'AMZN', 'AAPL', 'MSFT', 'NFLX', 'DIS', 'PYPL',
@@ -207,6 +209,8 @@ const fetchTradesAndUpdateDB = async () => {
     ];
         const trades = [];
 
+    // Fetch the trade data for specific stock symbols
+    // Date range set from 2020 to 2024
     const fetchTradesForSymbol = async (symbol) => {
         try {
             const response = await axios.get('https://finnhub.io/api/v1/stock/congressional-trading', {
@@ -224,6 +228,7 @@ const fetchTradesAndUpdateDB = async () => {
         }
     };
 
+    // Fetch the symbol data in batches
     const fetchTradesInBatches = async () => {
         for (const symbol of symbols) {
             const symbolTrades = await fetchTradesForSymbol(symbol);

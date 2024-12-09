@@ -6,9 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function SettingsPage() {
   const { user, setUser } = useContext(UserContext);
   const [displayName, setDisplayName] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
-  const [timeZone, setTimeZone] = useState('GMT');
   const [profilePicture, setProfilePicture] = useState(user.profilePicture);
 
   const navigate = useNavigate();
@@ -25,26 +23,11 @@ function SettingsPage() {
     setUser({
       ...user,
       displayName,
-      email,
       profilePicture,
     });
 
-    // SHOULD PROBABLY ADD FUNCTIONS TO HANDLE PASSWORD AND TIME CHANGE UPDATES
-
     alert('Changes have been saved.');
     navigate('/'); // Redirect if desired
-  };
-
-  const handleDeleteAccount = () => {
-    if (window.confirm('Are you sure you want to delete your account?')) {
-      setUser({
-        displayName: '',
-        email: '',
-        profilePicture: null,
-      });
-      localStorage.removeItem('user');
-      navigate('/');
-    }
   };
 
   return (
@@ -105,8 +88,7 @@ function SettingsPage() {
           <h2>Privacy Policy</h2>
           <p>Outsider Trading is committed to maintaining security and integrity when it comes to the data of our users.
             We adhere to stringent privacy standards and will never share personal information with outside parties.
-            Our privacy policies are designed to prioritize your security and transparency.
-            If you no longer wish for us to retain your data, you can delete your account using the option found above.
+            Our privacy policies are designed to prioritize your security and transparency, as well as to adhere to present standards.
           </p>
         </div>
       </main>
