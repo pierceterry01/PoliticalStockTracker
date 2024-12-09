@@ -16,7 +16,7 @@ Outsider Trading is a web application where users can copy investments made by p
 1. Clone the Repository
 2. In the server directory, create an .env file containing following:
 
-        FINNHUB_API_KEY=crvdanhr01qkji45ia40crvdanhr01qkji45ia4g
+        FINNHUB_API_KEY=your_api_key
         JWT_SECRET=somestring
         DB_HOST=localhost
         DB_USER=root
